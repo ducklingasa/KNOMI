@@ -217,9 +217,9 @@
 #define TFT_MOSI 23 // In some display driver board, it might be written as "SDA" and so on.
 #define TFT_SCLK 18
 #define TFT_CS   5  // Chip select control pin
-#define TFT_DC   19  // Data Command control pin
-#define TFT_RST  4  // Reset pin (could connect to Arduino RESET pin)
-#define TFT_BL   21   // LED back-light
+#define TFT_DC   26 // Data Command control pin
+#define TFT_RST  33 // Reset pin (could connect to Arduino RESET pin)
+#define TFT_BL   21 // LED back-light
 
 //#define TOUCH_CS 21     // Chip select pin (T_CS) of touch screen
 
