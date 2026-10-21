@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<!--
+  KNOMI WebSocket capture tool (CREALITY_WEBSOCKET_PLAN.md §4.2, Phase 0.4).
+  Open this file directly in a desktop browser (Chrome/Edge/Firefox); no server or install needed.
+  Records every WebSocket event with a timestamp and saves it as a knomi-ws-capture JSONL file,
+  which tools/derive_prototype.py, the native fixture tests, and tools/fake_printer.py replay.
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KNOMI WebSocket capture</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            color: #222;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background: #eee;
+        }
+
+        header, .capturebar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 10px;
+        }
+
+        header {
+            background: #dadada;
+            border-bottom: 3px solid #999;
+        }
+
+        header h1 {
+            margin: 0 10px 0 0;
+            font-size: 18px;
+            color: #777;
+        }
+
+        .capturebar {
+            background: #f6f6f6;
+            border-bottom: 1px solid #ccc;
+        }
+
+        input[type=text], input[type=search], input:not([type]) {
+            padding: 4px 6px;
+            font: inherit;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+        }
+
+        #url { width: 260px; font-family: Consolas, "Courier New", monospace; }
+        #scenario { width: 190px; }
+        .grow { flex: 1; display: flex; gap: 6px; align-items: center; min-width: 220px; }
+        .grow input { flex: 1; }
+
+        button {
+            padding: 4px 10px;
+            font: inherit;
+            cursor: pointer;
+            border: 1px solid #888;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        button:disabled { opacity: .45; cursor: default; }
+        button.primary { background: #c02f30; border-color: #902020; color: #fff; font-weight: bold; }
+
+        .pill {
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #fff;
+            background: #808080;
+        }
+
+        .pill.open { background: #5da910; }
+        .pill.connecting, .pill.waiting { background: #f0a020; }
+
+        #saveState.dirty { color: #c02f30; font-weight: bold; }
+
+        main {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+
+        .logpane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background: #2b2b2b;
+        }
+
+        .logtools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            padding: 6px 10px;
+            color: #ddd;
+            background: #333;
+        }
+
+        .logtools input[type=search] { width: 200px; }
+        #shown { color: #999; }
+
+        .log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 0;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12px;
+            color: #9be564;
+        }
+
+        .ln {
+            padding: 0 10px;
+            white-space: pre;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .ln:hover { background: #3a3a3a; }
+        .ln.sel { background: #44506a; }
+        .ln .t { color: #888; }
+        .ln .n { color: #aaa; }
+        .ln .sz { color: #888; }
+        .ln.tx { color: #6fd3ff; }
+        .ln.big { color: #ffb347; }
+        .ln.sys { color: #ddd; font-weight: bold; }
+        .ln.fail, .ln.err { color: #ff6b6b; }
+        .ln.note { color: #222; background: #ffe066; font-weight: bold; }
+        .ln.note:hover { background: #ffd43b; }
+
+        aside {
+            width: 380px;
+            overflow-y: auto;
+            padding: 8px;
+            border-left: 1px solid #bbb;
+        }
+
+        .card {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .card h2 {
+            margin: 0 0 6px;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        .kv {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2px 10px;
+            margin: 0;
+        }
+
+        .kv dt { color: #777; }
+        .kv dd { margin: 0; font-family: Consolas, "Courier New", monospace; overflow-wrap: anywhere; }
+        .kv dd.warn { color: #c02f30; font-weight: bold; }
+        .kv dd.chg { background: #fff3a0; transition: none; }
+        .kv dd.fade { transition: background 1.5s; }
+
+        .quick { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+        .row { display: flex; gap: 6px; }
+        .row input { flex: 1; min-width: 0; }
+        small { color: #777; }
+
+        #inspectMeta { margin-bottom: 4px; color: #555; }
+
+        #inspect {
+            max-height: 320px;
+            overflow: auto;
+            margin: 0 0 6px;
+            padding: 6px;
+            background: #f4f4f4;
+            font-size: 11px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>KNOMI WebSocket capture</h1>
+        <input id="url" type="text" list="recentUrls" spellcheck="false" placeholder="ws://192.168.0.55:9999/" title="Printer WebSocket URL (port 9999)">
+        <datalist id="recentUrls"></datalist>
+        <button id="connect" class="primary">Connect</button>
+        <label title="Reconnect automatically when the printer closes the connection or reboots (recorded as close/open events)"><input type="checkbox" id="autoReconnect" checked> Auto-reconnect</label>
+        <label title="Reply to {&quot;ModeCode&quot;:&quot;heart_beat&quot;} with ok, as the KNOMI firmware does"><input type="checkbox" id="autoOk" checked> Answer heartbeat</label>
+        <label title="Stop the computer from sleeping while a capture is running"><input type="checkbox" id="keepAwake" checked> Keep screen awake</label>
+        <span id="linkState" class="pill">Disconnected</span>
+    </header>
+
+    <div class="capturebar">
+        <label>Scenario <input id="scenario" list="scenarios" spellcheck="false" placeholder="pick or type…"></label>
+        <datalist id="scenarios">
+            <option value="idle-connect">Connect while the printer is idle</option>
+            <option value="idle-reconnect">Disconnect and reconnect twice while idle</option>
+            <option value="full-print">Print with calibration (self-test) until completed</option>
+            <option value="just-print">Print without calibration until completed</option>
+            <option value="pause-resume-stop">Print, pause, resume, then stop</option>
+            <option value="connect-during-print">Connect while a print is running, until completed</option>
+            <option value="cancel-printer-screen">Cancel a print from the printer screen</option>
+            <option value="cancel-self-test">Cancel during the self-test</option>
+            <option value="error">Filament runout or forced error</option>
+            <option value="printer-reboot">Printer reboot while connected</option>
+        </datalist>
+        <label class="grow">Notes <input id="notes" spellcheck="false" placeholder="filament, calibration on/off, other clients connected, anything unusual"></label>
+        <button id="save" disabled>Save capture (.jsonl)</button>
+        <button id="clear" disabled title="Start a new, empty capture (only while disconnected)">New capture</button>
+        <span id="saveState"></span>
+    </div>
+
+    <main>
+        <section class="logpane">
+            <div class="logtools">
+                <label><input type="checkbox" id="follow" checked> Follow</label>
+                <label title="Display only; every frame is still recorded"><input type="checkbox" id="hideTemps"> Hide temperature-only deltas</label>
+                <input id="filter" type="search" placeholder="Filter display…" spellcheck="false">
+                <span id="shown"></span>
+            </div>
+            <div id="log" class="log"></div>
+        </section>
+
+        <aside>
+            <section class="card">
+                <h2>Capture</h2>
+                <dl id="stats" class="kv"></dl>
+            </section>
+
+            <section class="card">
+                <h2>Printer (merged deltas)</h2>
+                <dl id="live" class="kv"></dl>
+            </section>
+
+            <section class="card">
+                <h2>Markers</h2>
+                <div class="quick">
+                    <button data-note="Print started">Print started</button>
+                    <button data-note="Pause pressed">Pause</button>
+                    <button data-note="Resume pressed">Resume</button>
+                    <button data-note="Stop pressed">Stop</button>
+                    <button data-note="Error triggered">Error triggered</button>
+                    <button data-note="Printer rebooting">Printer reboot</button>
+                    <button data-prefix="Printer screen: ">Screen shows…</button>
+                </div>
+                <div class="row">
+                    <input id="note" spellcheck="false" placeholder="What happened / what the printer screen shows">
+                    <button id="addNote">Add</button>
+                </div>
+                <small>Markers are saved in the capture at the current time. Press Enter to add.</small>
+            </section>
+
+            <section class="card">
+                <h2>Send</h2>
+                <div class="row">
+                    <input id="message" spellcheck="false" placeholder='{"method":"get","params":{"ReqPrinterPara":1}}' disabled>
+                    <button id="send" disabled>Send</button>
+                </div>
+                <div class="quick" style="margin-top:6px">
+                    <button id="probe" disabled title="The only request KNOMI itself sends (silence probe)">Send ReqPrinterPara probe</button>
+                </div>
+                <small>Sent messages are recorded. KNOMI is read-only, so avoid <code>"set"</code> commands in captures.</small>
+            </section>
+
+            <section class="card">
+                <h2>Inspector</h2>
+                <div id="inspectMeta">Click a log line to see the full message.</div>
+                <pre id="inspect"></pre>
+                <button id="copy" disabled>Copy</button>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        'use strict';
+
+        const FORMAT = 'knomi-ws-capture';
+        const FORMAT_VERSION = 1;
+        const MAX_FRAME = 4096;          // firmware buffer: larger frames are skipped by KNOMI
+        const SILENCE_WARN_MS = 10000;   // firmware silence probe threshold
+        const MAX_DOM_LINES = 2000;
+        const PREVIEW_CHARS = 400;
+        const TEMP_KEYS = new Set(['nozzleTemp', 'bedTemp0', 'bedTemp1', 'bedTemp2', 'boxTemp']);
+        const PROBE = '{"method":"get","params":{"ReqPrinterPara":1}}';
+
+        const $ = id => document.getElementById(id);
+        const utf8 = new TextEncoder();
+        const logEl = $('log');
+
+        // ---- capture state ---------------------------------------------------------------
+        let events = [];            // file events; keys starting with "_" are UI-only and not saved
+        let t0 = null;              // performance.now() of the first event
+        let startEpoch = null;      // Date.now() of the first event
+        let savedCount = 0;
+        let stats = newStats();
+        let printer = { model: '', hostname: '', fw: '', modelVersion: '' };
+        let live = {};
+
+        // ---- connection state -------------------------------------------------------------
+        let socket = null;
+        let opened = false;
+        let wantConnected = false;
+        let currentUrl = '';
+        let reconnectTimer = null;
+        let reconnectAt = 0;
+        let backoff = 1000;
+        let wakeLock = null;
+
+        function newStats() {
+            return { connections: 0, failed: 0, rx: 0, rxJson: 0, rxBytes: 0, large: 0, maxLen: 0, tx: 0, notes: 0, lastRx: null, recent: [] };
+        }
+
+        function now() {
+            if (t0 === null) {
+                t0 = performance.now();
+                startEpoch = Date.now();
+            }
+            return Math.round(performance.now() - t0);
+        }
+
+        function record(type, fields) {
+            const ev = Object.assign({ t: now(), type: type }, fields);
+            events.push(ev);
+            queueLine(events.length - 1);
+            scheduleStats();
+            return ev;
+        }
+
+        // ---- WebSocket ---------------------------------------------------------------------
+        function connect() {
+            const url = $('url').value.trim();
+            if (!/^wss?:\/\/[^/\s]+/i.test(url)) {
+                alert('Enter a WebSocket URL such as ws://192.168.0.55:9999/');
+                return;
+            }
+            rememberUrl(url);
+            currentUrl = url;
+            wantConnected = true;
+            backoff = 1000;
+            openSocket();
+            acquireWakeLock();
+        }
+
+        function disconnect() {
+            wantConnected = false;
+            clearTimeout(reconnectTimer);
+            reconnectTimer = null;
+            if (socket) {
+                const ws = socket;
+                socket = null;
+                ws.onopen = ws.onmessage = ws.onerror = ws.onclose = null;
+                if (opened) {
+                    record('close', { code: 1000, reason: '', clean: true, by: 'client' });
+                }
+                ws.close(1000);
+            }
+            opened = false;
+            releaseWakeLock();
+            updateControls();
+        }
+
+        function openSocket() {
+            clearTimeout(reconnectTimer);
+            reconnectTimer = null;
+            opened = false;
+            let ws;
+            try {
+                ws = new WebSocket(currentUrl);
+            } catch (e) {
+                record('connect_failed', { url: currentUrl, error: String(e && e.message || e) });
+                wantConnected = false;
+                releaseWakeLock();
+                updateControls();
+                return;
+            }
+            ws.binaryType = 'arraybuffer';
+            socket = ws;
+
+            ws.onopen = () => {
+                if (ws !== socket) return;
+                opened = true;
+                live = {};
+                stats.connections++;
+                record('open', { url: currentUrl });
+                renderLive(true);
+                updateControls();
+            };
+            ws.onmessage = e => {
+                if (ws !== socket) return;
+                backoff = 1000;
+                onMessage(e.data);
+            };
+            ws.onerror = () => {
+                if (ws !== socket || !opened) return;   // errors before open are reported as connect_failed
+                record('error', {});
+            };
+            ws.onclose = e => {
+                if (ws !== socket) return;
+                socket = null;
+                if (opened) {
+                    record('close', { code: e.code, reason: e.reason, clean: e.wasClean });
+                } else {
+                    stats.failed++;
+                    record('connect_failed', { url: currentUrl, code: e.code });
+                }
+                opened = false;
+                if (wantConnected && $('autoReconnect').checked) {
+                    scheduleReconnect();
+                } else {
+                    wantConnected = false;
+                    releaseWakeLock();
+                }
+                updateControls();
+            };
+            updateControls();
+        }
+
+        function scheduleReconnect() {
+            const delay = Math.round(backoff * (0.8 + Math.random() * 0.4));
+            backoff = Math.min(backoff * 1.8, 30000);
+            reconnectAt = Date.now() + delay;
+            reconnectTimer = setTimeout(openSocket, delay);
+        }
+
+        function onMessage(data) {
+            if (typeof data !== 'string') {
+                const bytes = new Uint8Array(data);
+                stats.rx++;
+                stats.rxBytes += bytes.length;
+                stats.maxLen = Math.max(stats.maxLen, bytes.length);
+                stats.lastRx = Date.now();
+                record('rx', { len: bytes.length, b64: toBase64(bytes) });
+                return;
+            }
+
+            const len = utf8.encode(data).length;
+            const fields = { len: len, data: data };
+            let obj = null;
+            const body = data.trim();
+            if (body.startsWith('{')) {
+                fields._n = ++stats.rxJson;      // same numbering as derive_prototype.py (#n)
+                try {
+                    obj = JSON.parse(body);
+                } catch (e) {
+                    fields._bad = true;
+                }
+                if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+                    const keys = Object.keys(obj);
+                    fields._key = keys[0] || '';
+                    fields._tempOnly = keys.length > 0 && keys.every(k => TEMP_KEYS.has(k));
+                } else {
+                    obj = null;
+                }
+            }
+
+            stats.rx++;
+            stats.rxBytes += len;
+            stats.maxLen = Math.max(stats.maxLen, len);
+            if (len > MAX_FRAME) stats.large++;
+            stats.lastRx = Date.now();
+            stats.recent.push(stats.lastRx);
+            record('rx', fields);
+
+            if (!obj) return;
+            if (obj.ModeCode === 'heart_beat') {
+                if ($('autoOk').checked) sendText('ok', true);
+                return;
+            }
+            if (len <= MAX_FRAME) mergeLive(obj);
+        }
+
+        function sendText(text, auto) {
+            if (!socket || !opened) return false;
+            socket.send(text);
+            stats.tx++;
+            const fields = { len: utf8.encode(text).length, data: text };
+            if (auto) fields.auto = true;
+            record('tx', fields);
+            return true;
+        }
+
+        function sendFromInput() {
+            const input = $('message');
+            const text = input.value;
+            if (!text) return;
+            if (/"method"\s*:\s*"set"/i.test(text) &&
+                !confirm('This is a "set" command: it changes the printer and is not part of a read-only capture. Send anyway?')) {
+                return;
+            }
+            if (sendText(text, false)) input.value = '';
+        }
+
+        // ---- markers -----------------------------------------------------------------------
+        function addNote(text) {
+            text = text.trim();
+            if (!text) return;
+            stats.notes++;
+            record('note', { text: text });
+        }
+
+        // ---- printer state panel -------------------------------------------------------------
+        function firmwareOf(modelVersion) {
+            if (typeof modelVersion !== 'string') return '';
+            const sw = /printer sw ver:([^;]*)/.exec(modelVersion);
+            const dwin = /DWIN sw ver:([^;]*)/.exec(modelVersion);
+            return (sw && sw[1].trim()) || (dwin && dwin[1].trim()) || '';
+        }
+
+        function mergeLive(obj) {
+            Object.assign(live, obj);
+            for (const key of ['model', 'hostname', 'modelVersion']) {
+                if (typeof obj[key] === 'string' && obj[key]) printer[key] = obj[key];
+            }
+            const fw = firmwareOf(obj.modelVersion);
+            if (fw) printer.fw = fw;
+            scheduleLive();
+        }
+
+        function temp(actual, target) {
+            const a = Number(live[actual]);
+            const t = Number(live[target]);
+            if (live[actual] === undefined || live[actual] === '' || isNaN(a)) return '--';
+            return a.toFixed(1) + '°' + (live[target] === undefined ? '' : ' / ' + (t ? t + '°' : '–'));
+        }
+
+        function val(key) {
+            const v = live[key];
+            return v === undefined || v === '' ? '--' : String(v);
+        }
+
+        function duration(seconds) {
+            const s = Number(seconds);
+            if (!isFinite(s) || s <= 0) return '--';
+            const h = Math.floor(s / 3600);
+            const m = Math.floor(s % 3600 / 60);
+            return h ? h + 'h ' + m + 'm' : m ? m + 'm ' + Math.floor(s % 60) + 's' : Math.floor(s) + 's';
+        }
+
+        const LIVE_ROWS = [
+            ['connect', () => val('connect')],
+            ['state', () => val('state')],
+            ['deviceState', () => val('deviceState')],
+            ['withSelfTest', () => val('withSelfTest')],
+            ['progress', () => live.printProgress === undefined ? '--' : live.printProgress + ' %'],
+            ['time left', () => duration(live.printLeftTime)],
+            ['job time', () => duration(live.printJobTime)],
+            ['layer', () => val('layer') + ' / ' + val('TotalLayer')],
+            ['nozzle', () => temp('nozzleTemp', 'targetNozzleTemp')],
+            ['bed', () => temp('bedTemp0', 'targetBedTemp0')],
+            ['chamber', () => temp('boxTemp', 'targetBoxTemp')],
+            ['file', () => val('printFileName')],
+            ['err', () => live.err ? 'code ' + live.err.errcode + ' · key ' + live.err.key : '--'],
+            ['model', () => printer.model || '--'],
+            ['hostname', () => printer.hostname || '--'],
+            ['firmware', () => printer.fw || '--'],
+            ['update offered', () => live.linuxOtaInfo && live.linuxOtaInfo.version || '--'],
+            ['clients', () => val('connectionCount')],
+        ];
+        const liveCells = [];
+
+        function buildKv(container, rows, cells) {
+            for (const [label] of rows) {
+                const dt = document.createElement('dt');
+                dt.textContent = label;
+                const dd = document.createElement('dd');
+                container.append(dt, dd);
+                cells.push(dd);
+            }
+        }
+
+        let liveQueued = false;
+        function scheduleLive() {
+            if (liveQueued) return;
+            liveQueued = true;
+            requestAnimationFrame(() => { liveQueued = false; renderLive(false); });
+        }
+
+        function renderLive(silent) {
+            LIVE_ROWS.forEach(([, get], i) => {
+                const cell = liveCells[i];
+                const text = get();
+                if (cell.textContent === text) return;
+                cell.textContent = text;
+                if (silent) return;
+                cell.classList.remove('fade');
+                cell.classList.add('chg');
+                requestAnimationFrame(() => {
+                    cell.classList.add('fade');
+                    cell.classList.remove('chg');
+                });
+            });
+        }
+
+        // ---- capture statistics -------------------------------------------------------------
+        const STAT_ROWS = ['elapsed', 'connections', 'received', 'JSON frames', 'large (> 4 KB)', 'largest', 'rate', 'last frame', 'sent', 'markers', 'unsaved'];
+        const statCells = [];
+
+        let statsQueued = false;
+        function scheduleStats() {
+            if (statsQueued) return;
+            statsQueued = true;
+            requestAnimationFrame(() => { statsQueued = false; renderStats(); });
+        }
+
+        function renderStats() {
+            const nowMs = Date.now();
+            stats.recent = stats.recent.filter(t => nowMs - t <= 10000);
+            const silence = stats.lastRx === null ? null : nowMs - stats.lastRx;
+            const unsaved = events.length - savedCount;
+            const values = [
+                t0 === null ? '--' : clock(performance.now() - t0).slice(0, 8),
+                stats.connections + (stats.failed ? ' (' + stats.failed + ' failed attempts)' : ''),
+                stats.rx + ' · ' + bytes(stats.rxBytes),
+                String(stats.rxJson),
+                String(stats.large),
+                stats.maxLen ? bytes(stats.maxLen) : '--',
+                (stats.recent.length / 10).toFixed(1) + ' frames/s',
+                silence === null ? '--' : (silence / 1000).toFixed(1) + ' s ago',
+                String(stats.tx),
+                String(stats.notes),
+                String(unsaved),
+            ];
+            values.forEach((v, i) => { if (statCells[i].textContent !== v) statCells[i].textContent = v; });
+            statCells[7].classList.toggle('warn', opened && silence !== null && silence > SILENCE_WARN_MS);
+
+            const state = $('saveState');
+            state.textContent = events.length === 0 ? '' : unsaved ? unsaved + ' unsaved events' : 'All saved';
+            state.classList.toggle('dirty', unsaved > 0);
+            $('save').disabled = events.length === 0;
+            $('clear').disabled = events.length === 0 || wantConnected;
+        }
+
+        function updateControls() {
+            const link = $('linkState');
+            let label = 'Disconnected';
+            let cls = '';
+            if (socket && opened) { label = 'Connected'; cls = 'open'; }
+            else if (socket) { label = 'Connecting…'; cls = 'connecting'; }
+            else if (reconnectTimer) { label = 'Reconnecting…'; cls = 'waiting'; }
+            link.textContent = label;
+            link.className = 'pill ' + cls;
+
+            $('connect').textContent = wantConnected ? 'Disconnect' : 'Connect';
+            $('url').disabled = wantConnected;
+            for (const id of ['message', 'send', 'probe']) $(id).disabled = !opened;
+            renderStats();
+        }
+
+        setInterval(() => {
+            renderStats();
+            if (reconnectTimer) {
+                $('linkState').textContent = 'Reconnecting in ' + Math.max(0, Math.ceil((reconnectAt - Date.now()) / 1000)) + ' s';
+            }
+        }, 500);
+
+        // ---- log display ------------------------------------------------------------------
+        let pending = [];
+        let renderQueued = false;
+        let shownCount = 0;
+        let selected = null;
+
+        function queueLine(index) {
+            pending.push(index);
+            if (renderQueued) return;
+            renderQueued = true;
+            requestAnimationFrame(flushLines);
+        }
+
+        function flushLines() {
+            renderQueued = false;
+            const frag = document.createDocumentFragment();
+            for (const i of pending) {
+                if (matches(events[i])) frag.append(lineFor(events[i], i));
+            }
+            pending = [];
+            logEl.append(frag);
+            while (logEl.childElementCount > MAX_DOM_LINES) logEl.firstChild.remove();
+            updateShown();
+            if ($('follow').checked) logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function rerender() {
+            pending = [];
+            logEl.textContent = '';
+            const indices = [];
+            for (let i = events.length - 1; i >= 0 && indices.length < MAX_DOM_LINES; i--) {
+                if (matches(events[i])) indices.push(i);
+            }
+            const frag = document.createDocumentFragment();
+            for (let k = indices.length - 1; k >= 0; k--) frag.append(lineFor(events[indices[k]], indices[k]));
+            logEl.append(frag);
+            updateShown();
+            if ($('follow').checked) logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function updateShown() {
+            shownCount = logEl.childElementCount;
+            $('shown').textContent = events.length ? 'showing ' + shownCount + ' of ' + events.length + ' events' : '';
+        }
+
+        function matches(ev) {
+            if ($('hideTemps').checked && ev._tempOnly) return false;
+            const filter = $('filter').value.trim().toLowerCase();
+            if (!filter) return true;
+            const text = (ev.data || ev.text || ev.url || '') + ' ' + ev.type;
+            return text.toLowerCase().includes(filter);
+        }
+
+        function span(cls, text) {
+            const s = document.createElement('span');
+            s.className = cls;
+            s.textContent = text;
+            return s;
+        }
+
+        function lineFor(ev, index) {
+            const div = document.createElement('div');
+            div.dataset.i = index;
+            let cls = 'sys';
+            let num = '';
+            let dir = '==';
+            let size = '';
+            let body = '';
+            switch (ev.type) {
+                case 'rx':
+                    cls = ev.len > MAX_FRAME ? 'big' : '';
+                    num = ev._n ? '#' + ev._n : '';
+                    dir = '<-';
+                    size = bytes(ev.len);
+                    if (ev.b64 !== undefined) {
+                        body = '[binary] ' + ev.b64;
+                    } else if (ev.len > MAX_FRAME) {
+                        body = 'LARGE ' + (ev._key || '') + ' (skipped by KNOMI)  ' + ev.data.slice(0, 160);
+                    } else {
+                        body = ev.data;
+                    }
+                    break;
+                case 'tx':
+                    cls = 'tx';
+                    dir = '->';
+                    size = bytes(ev.len);
+                    body = ev.data + (ev.auto ? '   (auto heartbeat reply)' : '');
+                    break;
+                case 'open':
+                    body = 'CONNECTED ' + ev.url;
+                    break;
+                case 'close':
+                    body = 'CLOSED code ' + ev.code + (ev.reason ? ' "' + ev.reason + '"' : '') + (ev.by ? ' by ' + ev.by : '');
+                    break;
+                case 'connect_failed':
+                    cls = 'fail';
+                    body = 'CONNECT FAILED ' + ev.url + (ev.error ? ' ' + ev.error : '');
+                    break;
+                case 'error':
+                    cls = 'err';
+                    body = 'WebSocket error';
+                    break;
+                case 'note':
+                    cls = 'note';
+                    dir = '**';
+                    body = ev.text;
+                    break;
+            }
+            if (body.length > PREVIEW_CHARS) body = body.slice(0, PREVIEW_CHARS) + '…';
+            div.className = 'ln ' + cls + (index === selected ? ' sel' : '');
+            div.append(span('t', clock(ev.t) + ' '), span('n', num.padStart(6) + ' '), dir + ' ',
+                span('sz', size.padStart(8) + '  '), document.createTextNode(body));
+            return div;
+        }
+
+        function inspect(index) {
+            selected = index;
+            logEl.querySelectorAll('.sel').forEach(el => el.classList.remove('sel'));
+            const line = logEl.querySelector('[data-i="' + index + '"]');
+            if (line) line.classList.add('sel');
+
+            const ev = events[index];
+            const parts = ['+' + clock(ev.t), ev.type];
+            if (ev._n) parts.unshift('#' + ev._n);
+            if (ev.len !== undefined) parts.push(bytes(ev.len) + (ev.len > MAX_FRAME ? ' (larger than the 4 KB KNOMI buffer)' : ''));
+            if (ev._key) parts.push('first key: ' + ev._key);
+            $('inspectMeta').textContent = parts.join(' · ');
+
+            let text;
+            if (ev.data !== undefined) {
+                text = ev.data;
+                try { text = JSON.stringify(JSON.parse(ev.data), null, 2); } catch (e) { /* not JSON, e.g. "ok" */ }
+            } else {
+                text = JSON.stringify(ev, saveReplacer, 2);
+            }
+            $('inspect').textContent = text;
+            $('copy').disabled = false;
+        }
+
+        // ---- save / new capture --------------------------------------------------------------
+        function saveReplacer(key, value) {
+            return key.startsWith('_') ? undefined : value;
+        }
+
+        function slug(text, fallback) {
+            const s = String(text || '').toLowerCase().replace(/[^a-z0-9.]+/g, '-').replace(/^-+|-+$/g, '');
+            return s || fallback;
+        }
+
+        function fileName() {
+            const d = new Date(startEpoch);
+            const p = n => String(n).padStart(2, '0');
+            const stamp = d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes());
+            return [slug(printer.model, 'printer').replace(/[-.]/g, ''), slug(printer.fw, 'fw'),
+                slug($('scenario').value, 'capture'), stamp].join('_') + '.jsonl';
+        }
+
+        function save() {
+            if (!events.length) return;
+            const meta = {
+                type: 'meta',
+                format: FORMAT,
+                version: FORMAT_VERSION,
+                tool: 'tools/WebSocketLogger.html',
+                started: new Date(startEpoch).toISOString(),
+                saved: new Date().toISOString(),
+                url: currentUrl,
+                scenario: $('scenario').value.trim(),
+                notes: $('notes').value.trim(),
+                printer: printer,
+                counts: { connections: stats.connections, rx: stats.rx, rx_json: stats.rxJson, rx_large: stats.large, rx_bytes: stats.rxBytes, tx: stats.tx, notes: stats.notes },
+                user_agent: navigator.userAgent,
+            };
+            const lines = [JSON.stringify(meta)];
+            for (const ev of events) lines.push(JSON.stringify(ev, saveReplacer));
+            const blob = new Blob([lines.join('\n') + '\n'], { type: 'application/x-ndjson' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = fileName();
+            document.body.append(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+            savedCount = events.length;
+            renderStats();
+        }
+
+        function newCapture() {
+            if (wantConnected) return;
+            if (events.length > savedCount && !confirm('Discard ' + (events.length - savedCount) + ' unsaved events?')) return;
+            events = [];
+            t0 = startEpoch = null;
+            savedCount = 0;
+            stats = newStats();
+            printer = { model: '', hostname: '', fw: '', modelVersion: '' };
+            live = {};
+            selected = null;
+            $('inspectMeta').textContent = 'Click a log line to see the full message.';
+            $('inspect').textContent = '';
+            $('copy').disabled = true;
+            renderLive(true);
+            rerender();
+            renderStats();
+        }
+
+        // ---- helpers -------------------------------------------------------------------------
+        function clock(ms) {
+            ms = Math.max(0, Math.round(ms));
+            const p = (n, w) => String(n).padStart(w || 2, '0');
+            return p(Math.floor(ms / 3600000)) + ':' + p(Math.floor(ms / 60000) % 60) + ':' + p(Math.floor(ms / 1000) % 60) + '.' + p(ms % 1000, 3);
+        }
+
+        function bytes(n) {
+            return n < 1024 ? n + ' B' : (n / 1024).toFixed(1) + ' KB';
+        }
+
+        function toBase64(u8) {
+            let s = '';
+            for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+            return btoa(s);
+        }
+
+        function store(key, value) {
+            try { localStorage.setItem('knomiCapture.' + key, JSON.stringify(value)); } catch (e) { /* storage unavailable */ }
+        }
+
+        function load(key, fallback) {
+            try {
+                const v = localStorage.getItem('knomiCapture.' + key);
+                return v === null ? fallback : JSON.parse(v);
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function rememberUrl(url) {
+            const recent = [url].concat(load('recentUrls', []).filter(u => u !== url)).slice(0, 8);
+            store('recentUrls', recent);
+            renderRecentUrls(recent);
+        }
+
+        function renderRecentUrls(recent) {
+            const list = $('recentUrls');
+            list.textContent = '';
+            for (const u of recent) {
+                const o = document.createElement('option');
+                o.value = u;
+                list.append(o);
+            }
+        }
+
+        async function acquireWakeLock() {
+            if (!$('keepAwake').checked || wakeLock || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            } catch (e) {
+                wakeLock = null;
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock) wakeLock.release();
+            wakeLock = null;
+        }
+
+        // ---- wiring --------------------------------------------------------------------------
+        buildKv($('stats'), STAT_ROWS.map(l => [l]), statCells);
+        buildKv($('live'), LIVE_ROWS, liveCells);
+        renderLive(true);
+
+        const recentUrls = load('recentUrls', []);
+        renderRecentUrls(recentUrls);
+        $('url').value = recentUrls[0] || 'ws://192.168.0.55:9999/';
+        $('scenario').value = load('scenario', '');
+        for (const id of ['autoReconnect', 'autoOk', 'keepAwake', 'hideTemps']) {
+            $(id).checked = load(id, $(id).checked);
+            $(id).addEventListener('change', () => store(id, $(id).checked));
+        }
+        $('scenario').addEventListener('change', () => store('scenario', $('scenario').value.trim()));
+
+        $('connect').addEventListener('click', () => (wantConnected ? disconnect() : connect()));
+        $('url').addEventListener('keydown', e => { if (e.key === 'Enter' && !wantConnected) connect(); });
+        $('autoReconnect').addEventListener('change', () => {
+            if (!$('autoReconnect').checked && reconnectTimer) disconnect();
+        });
+        $('keepAwake').addEventListener('change', () => ($('keepAwake').checked && wantConnected ? acquireWakeLock() : releaseWakeLock()));
+        document.addEventListener('visibilitychange', () => { if (wantConnected) acquireWakeLock(); });
+
+        $('save').addEventListener('click', save);
+        $('clear').addEventListener('click', newCapture);
+
+        $('send').addEventListener('click', sendFromInput);
+        $('message').addEventListener('keydown', e => { if (e.key === 'Enter') sendFromInput(); });
+        $('probe').addEventListener('click', () => sendText(PROBE, false));
+
+        $('addNote').addEventListener('click', () => { addNote($('note').value); $('note').value = ''; });
+        $('note').addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            addNote($('note').value);
+            $('note').value = '';
+        });
+        document.querySelectorAll('.quick [data-note]').forEach(b => b.addEventListener('click', () => addNote(b.dataset.note)));
+        document.querySelectorAll('.quick [data-prefix]').forEach(b => b.addEventListener('click', () => {
+            const input = $('note');
+            input.value = b.dataset.prefix;
+            input.focus();
+        }));
+
+        $('filter').addEventListener('input', rerender);
+        $('hideTemps').addEventListener('change', rerender);
+        $('follow').addEventListener('change', () => { if ($('follow').checked) logEl.scrollTop = logEl.scrollHeight; });
+        logEl.addEventListener('wheel', e => { if (e.deltaY < 0) $('follow').checked = false; });
+        logEl.addEventListener('click', e => {
+            const line = e.target.closest('.ln');
+            if (line) inspect(Number(line.dataset.i));
+        });
+
+        $('copy').addEventListener('click', () => {
+            const text = $('inspect').textContent;
+            if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => { });
+        });
+
+        window.addEventListener('beforeunload', e => {
+            if (events.length > savedCount) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        updateControls();
+    </script>
+</body>
+
+</html>
