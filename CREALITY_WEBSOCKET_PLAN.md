@@ -1,6 +1,6 @@
 # KNOMI → Creality K-series WebSocket display: rework plan
 
-Status: **planning complete, ready for implementation** · Last update: 2026-10-19 (GIF set switched to the green `gif_*_green` variants and `gif_creality` replaces `gif_voron`; sizes re-measured, §3.3)
+Status: **planning complete, ready for implementation** · Last update: 2026-11-05 (protocol plan reconciled with the checked-in K1 Max fixtures)
 
 Related documents:
 
@@ -26,15 +26,11 @@ Related documents:
   * Update platform and libraries which are kept if possible
 
 * The project will run on a custom built hardware
-  * ESP32 Wemos D1 mini (ESP32-WROOM-32)
+  * ESP32 Wemos D1 mini32 (ESP32-WROOM-32), 4 MiB flash, no PSRAM
   * 1.28 inch TFT round LCD 240x240 GC9A01 driver
-  * Wiring:
-    * TFT_MOSI 23
-    * TFT_SCLK 18
-    * TFT_CS 5
-    * TFT_DC 26
-    * TFT_RST 33
-    * LCD back-light pin hard wired on
+  * Tested production wiring with serial logging disabled: SCK 16, MOSI 17, DC 21, CS 22, RST 3; MISO is not connected
+  * Optional serial-debug wiring: SCK 18, MOSI 23, DC 26, CS 5, RST 33
+  * LCD backlight is hard-wired on; GPIO signals are 3.3 V even if the display module accepts 5 V power
 
 * Change partition table to fit into the 4MB flash
 
@@ -51,16 +47,15 @@ Related documents:
 | GUI library | **LVGL 8.4.0** (last v8; its GIF decoder needs ~20 % less RAM than v9) |
 | Web page security | **No admin password.** The device is LAN-only; risk accepted (see §11). |
 | Language / units | English, °C, 24 h time (defaults; no answer given) |
-| Reference captures | Owner's **K1 Max**: full print with calibration, print without calibration, pause → resume → stop, connect during a print (DWIN sw 1.3.3.8 / 1.3.3.29), plus **idle connect on the latest firmware 1.3.5.19**. Location: `C:\D_Drive\Linde\A5 - Private\Creality\`. These are the primary evidence for the protocol doc. |
-| Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x stays supported because its captures are the print-scenario fixtures |
+| Reference captures | Owner's **K1 Max** legacy sessions: full print with calibration, print without calibration, pause → resume → stop, connect during a print (DWIN sw 1.3.3.8 / 1.3.3.29), plus idle connect on 1.3.5.19. In addition, `test/fixtures/` now contains 11 timed K1 Max 1.3.5.19 JSONL captures covering idle/reconnect/reboot, print, connect mid-print, pause/resume, cancel/stop, and recovery/runout scenarios. These combined sources inform the protocol doc; fixture gaps remain (see §10, Phase 0.4). |
+| Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x remains a compatibility target based on legacy owner captures, which are not checked in as fixtures |
 | Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (default; no answer given) |
 
 ## 3. Findings from the code review
 
 The repository is the BTT KNOMI firmware: `knomiv2` (ESP32-S3, touch, sensors) and `knomiv1` (ESP32 **with 8 MB PSRAM**).
 It uses SquareLine-generated LVGL 8.3.7 screens, polls Moonraker over HTTP, and provides an AsyncWebServer setup page.
-`d:\Linde\A5 - Private\ESP32\Knomi_good` is the original BTT v1 firmware. It is proven on this exact hardware
-(`wemos_d1_mini32`, TFT pins DC 26 / RST 33, SPI 27 MHz, 10-line LVGL buffer, GIFs ≤ 210×125, 3.0 MB firmware image).
+The tested ESP-IDF network-clock reference project confirms the current 240×240 GC9A01 wiring, 40 MHz write-only SPI, and 4 MiB flash setup documented in §1 and §6. Its default production pin map uses GPIO3 for display reset, so the UART console and bootloader logs are disabled; the ROM can still emit an initial boot message. Its alternate pin map keeps GPIO3 free for serial logging.
 
 ### 3.1 Blockers for the target hardware (must fix)
 
@@ -69,11 +64,13 @@ It uses SquareLine-generated LVGL 8.3.7 screens, polls Moonraker over HTTP, and 
 | B1 | LVGL heap uses `ps_malloc`, which returns NULL without PSRAM | `include/lv_conf.h` `LV_MEM_CUSTOM_ALLOC` | Use `malloc`/`free`/`realloc` on the internal heap |
 | B2 | Full-frame 240×240 draw buffer (115 KB) from PSRAM | `lvgl_hal.cpp` | Two 240×24-line DMA buffers (2×11.5 KB) |
 | B3 | Board `esp32r8` declares PSRAM and 16 MB flash; `spiffs_16MB.csv` | `buildroot/boards`, `platformio.ini` | Board `wemos_d1_mini32` (4 MB, no PSRAM) plus the new partition table (§6) |
-| B4 | v1 pins differ from the hardware (DC 19→**26**, RST 4→**33**, BL 2 → none) | `pinout_knomi_v1.h` | New `board_pins.h` |
+| B4 | v1 pins differ from the tested target wiring; the tested project's default uses GPIO3 for reset and requires UART logging off | `pinout_knomi_v1.h`, tested network-clock reference | `board_pins.h` uses the production map by default and switches to the alternate map only in the serial-debug build |
 | B5 | `gif_print_ok` is 240×240 → the GIF decoder needs 4·W·H ≈ **225 KB RAM** | `src/gif/gif_print_ok.c` | Re-render at ≤ 150×150 |
 | B6 | Two GIF objects alive at the same time (welcome + main) → ~150 KB RAM | `lvgl_usr.cpp` | Exactly **one** GIF object in the whole UI (§8.4) |
 | B7 | Fonts are generated at **1 bpp** (jagged) | `src/ui/fonts` | Regenerate at 4 bpp with the needed glyphs |
 | B8 | LVGL 8.3.7 needs a manual `lv_disp.c` patch (PR 4487) | `platformio.ini` comment, `lv_disp_(bugfix_backup).c` | LVGL 8.4.0 contains the fix; delete the backup file |
+
+**Tested display-bus reference:** the ESP-IDF project runs the GC9A01 in SPI mode 0 at 40 MHz, with no MISO, software-controlled CS, and `SPI_DEVICE_NO_DUMMY` for write-only transfers. Its panel init sets MADCTL (`0x36`) to `0x48` and RGB565 pixel format (`0x3A`) to `0x55`. Phase 0.1 must confirm the equivalent TFT_eSPI orientation/color configuration; do not assume the ESP-IDF driver's `NO_DUMMY` option maps directly to TFT_eSPI.
 
 ### 3.2 Defects in the existing design (avoid re-implementing them)
 
@@ -95,6 +92,7 @@ It uses SquareLine-generated LVGL 8.3.7 screens, polls Moonraker over HTTP, and 
 
 - Internal DRAM is about 320 KB. With Wi-Fi, lwIP, and AsyncTCP running, expect roughly **150–190 KB free** and a **largest free block of about 100–110 KB**. Phase 0.3 measures the real numbers.
 - LVGL 8 GIF decoder (16-bit color) RAM: `4·W·H` (canvas and frame) plus a transient LZW table of up to ~24 KB.
+- The tested direct-SPI clock project uses a full 240×240 RGB565 framebuffer (115,200 bytes). **Do not copy that buffer into KNOMI**; keep the two 240×24-line DMA draw buffers in B2 for LVGL on the no-PSRAM target.
 - Assets (re-measured 2026-10-19 from the GIF streams inside `src/gif/*.c`). KB = 1024 bytes. All of them loop forever, and the C arrays are `LV_IMG_CF_RAW_CHROMA_KEYED`. **Green variants are used wherever one exists** (§2). `gif_wifi` (white, neutral) and `gif_print_ok` (already green) have no `_green` file and are kept as they are.
 
 | GIF (used) | Replaces | Size | Frames × delay = loop | Flash | RAM (4·W·H) | Use |
@@ -174,7 +172,7 @@ lib/creality_model/           PrinterModel: merge, coercion, state derivation (n
 lib/ws_stream/                RFC 6455 client-side frame parser/encoder (no Arduino deps) + thin WiFiClient adapter
 web/index.html                editable source of the settings page
 test/test_creality_model/     Unity tests (native)
-test/fixtures/*.jsonl         captured printer traces + *.expected.txt state sequences (Phase 0.4)
+test/fixtures/*.jsonl         captured printer traces; *.expected.txt replay baselines are to be added (Phase 0.4 / 4.3)
 tools/WebSocketLogger.html    ✅ browser capture tool: records timed WS events + markers → capture file (§4.2)
 tools/convert_capture.py      legacy owner captures ("MESSAGE <- {json}" / "> RECEIVED: {json}") → capture file without timing (§4.2)
 tools/derive_prototype.py     ✅ reference implementation of the state rules (replays capture files and legacy captures)
@@ -232,7 +230,7 @@ Each following line is one event. `t` is milliseconds since the capture start (m
 Rules:
 
 - **Exact text:** `data` is stored exactly as received, never re-serialized. This preserves the byte size (the 4 KB skip limit), number formats (`"27.050000"`), and key order. `len` is the UTF-8 byte count and is informational only; readers recompute it.
-- **Frame numbers:** `#n` counts the `rx` messages whose text starts with `{`, from 1 to the end of the file across reconnects. The same numbers appear in protocol doc §5.5, in `*.expected.txt`, and in the logger display.
+- **Frame numbers:** `#n` counts the `rx` messages whose text starts with `{`, from 1 to the end of the file across reconnects. These numbers appear in `*.expected.txt` and in the logger display. The protocol doc's legacy frame references are from separate captures and are not fixture replay baselines.
 - **Legacy captures:** converted legacy captures have no `t`. Replays then use a fixed spacing of 250 ms (the printing frame rate).
 - **Compatibility:** readers ignore unknown event types and fields. `version` changes only on incompatible changes.
 - **Limitation:** the browser API delivers whole messages, not wire frames. Fragmentation, ping/pong, and the handshake are not recorded; the fake printer scripts these (Phase 4.5).
@@ -247,7 +245,7 @@ Rules:
 | LVGL | 8.3.7 + manual patch | **8.4.0** | Delete `lv_disp_(bugfix_backup).c` |
 | TFT_eSPI | 2.5.0 | **2.5.43** | Core 3.x compatibility is verified in Phase 0.1. **Fallback:** LovyanGFX 1.2.x (same HAL interface). |
 | ArduinoJson | ^6.19.4 | **7.4.3** | Use `JsonDocument` with a `DeserializationOption::Filter` |
-| WebSocket client | – (HTTPClient) | **Own minimal streaming client** (`lib/ws_stream`, ≈ 400 LOC) over `WiFiClient` | The K1 Max pushes large list frames unsolicited: **78 KB `retGcodeFileInfo2` twice after every connect on FW 1.3.5.19**, and 20–28.5 KB `historyList`/`elapseVideoList` at job start/end. `links2004/WebSockets` 2.7.2 closes the connection (1009) above `WEBSOCKETS_MAX_DATA_SIZE` (it would never stay connected on 1.3.5.x) and `malloc`s whole frames. Our client uses a static 4 KB buffer and stream-discards larger frames (protocol doc §4). |
+| WebSocket client | – (HTTPClient) | **Own minimal streaming client** (`lib/ws_stream`, ≈ 400 LOC) over `WiFiClient` | Checked-in K1 Max 1.3.5.19 fixtures contain unsolicited 23.4 KB `historyList` and up to 28.7 KB `elapseVideoList` frames around job events. An earlier capture showed a 78 KB `retGcodeFileInfo2` file list after connect, but this was not reproduced in the fixtures and must not be assumed on every connection. `links2004/WebSockets` 2.7.2 closes the connection (1009) above `WEBSOCKETS_MAX_DATA_SIZE` (15 KB default) and `malloc`s whole frames. Our client uses a static 4 KB buffer and stream-discards larger frames (protocol doc §4). |
 | Web server | ottowinter ESPAsyncWebServer-esphome 3.0 | **ESP32Async/ESPAsyncWebServer 3.12.1** + **ESP32Async/AsyncTCP 3.5.0** | Maintained fork (3.12.1 requires AsyncTCP ^3.5.0) |
 | OTA | bigtreetech/AsyncElegantOTA | **removed** | USB-only decision |
 | LIS2DW12, Adafruit_SHT4X, CST816S | v2 only | **removed** | |
@@ -310,11 +308,12 @@ build_flags = -std=gnu++17
 
 ## 6. Partition table (4 MB, USB-only)
 
-Replace `spiffs_16MB.csv` with `partitions_4MB.csv`:
+Replace `spiffs_16MB.csv` with `partitions_4MB.csv`. Keep the tested reference project's NVS (`0x9000`) and PHY (`0xf000`) offsets; reserve the final 64 KiB for KNOMI coredumps, so the app partition is 64 KiB smaller than the reference project's full-size factory app:
 
 ```csv
 # Name,   Type, SubType,  Offset,   Size,     Flags
-nvs,      data, nvs,      0x9000,   0x7000,
+nvs,      data, nvs,      0x9000,   0x6000,
+phy_init, data, phy,      0xf000,   0x1000,
 factory,  app,  factory,  0x10000,  0x3E0000,
 coredump, data, coredump, 0x3F0000, 0x10000,
 # total 0x400000 (4 MB)
@@ -478,7 +477,7 @@ BOOT ─▶ no ssid ────────────────────
   - JSON with `ModeCode:"heart_beat"` → send `ok` (not seen on the K1 Max; kept for other firmware).
   - Any other JSON → deserialize with the filter, then `PrinterModel::merge`.
 - ArduinoJson uses a **custom allocator on a static 8 KB arena**, so parsing never touches the heap.
-- Silence watchdog: 10 s → send the `ReqPrinterPara` probe; 30 s → disconnect. The idle K1 Max sends about 1 frame/s.
+- Silence watchdog: 10 s → send the `ReqPrinterPara` probe; 30 s → disconnect. Idle traffic observed is about 1 frame/s on 1.3.3.x and 1 frame every 5 s on 1.3.5.19; the 10 s probe leaves margin for current-firmware jitter.
 - On (re)connect: `PrinterModel::reset()` so that stale keys do not stick.
 - **Read-only guarantee:** the client exposes no API other than sending `ok` and the `ReqPrinterPara` get. A unit test greps the source for `"set"` and fails if found.
 - A snapshot is published at most every 100 ms (coalescing bursts) and immediately on a logical state change.
@@ -508,10 +507,10 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 | # | Task | Size | Exit criteria |
 |---|---|---|---|
-| 0.1 | Toolchain spike: pioarduino 55.03.312 + `wemos_d1_mini32` + TFT_eSPI 2.5.43 + LVGL 8.4.0 "hello" with DMA flush on the real panel | M | Colors, orientation, and inversion correct; no crash for 10 min. If TFT_eSPI fails on core 3.x, try LovyanGFX, then the official `espressif32@7.1.3` fallback. Record the decision in `docs/ARCHITECTURE.md`. |
-| 0.2 | SPI speed: try 80 MHz (IOMUX pins 18/23/5), fall back to 40 MHz | S | No artifacts for 10 min of GIF playback |
+| 0.1 | Toolchain spike: pioarduino 55.03.312 + `wemos_d1_mini32` + TFT_eSPI 2.5.43 + LVGL 8.4.0 "hello" with DMA flush on the real panel, using the tested production wiring | M | Colors, orientation, and inversion correct; no crash for 10 min. If TFT_eSPI fails on core 3.x, try LovyanGFX, then the official `espressif32@7.1.3` fallback. Record the decision in `docs/ARCHITECTURE.md`. |
+| 0.2 | SPI speed: use the tested 40 MHz baseline; optionally test 80 MHz only if the selected driver and wiring are stable at 40 MHz | S | No artifacts for 10 min of GIF playback at 40 MHz; keep 40 MHz if faster operation is unstable |
 | 0.3 | Heap budget: Wi-Fi STA + AsyncWebServer + WS client connected to the printer + one GIF; log `heap_caps_get_free_size`/`get_largest_free_block`/`get_minimum_free_size` every 5 s | M | Numbers recorded in `docs/ARCHITECTURE.md`. Decide on downscaling `gif_print_green` and `gif_creality` (both 87.9 KB canvases, §3.3). |
-| 0.4 | Protocol capture. **K1 Max: done** (5 owner sessions, see §2; print scenarios on 1.3.3.x, idle on 1.3.5.19). Steps:<br>• Convert the legacy captures with `tools/convert_capture.py` into `test/fixtures/k1max_<fw>_<scenario>.jsonl` (§4.2, no timing). Write `*.expected.txt` from protocol doc §5.5.<br>• Record all new captures with **`tools/WebSocketLogger.html`** (§4.2):<br>&nbsp;&nbsp;– Pick the scenario from the list and keep auto-reconnect and keep-awake on.<br>&nbsp;&nbsp;– Add a marker for every action on the printer.<br>&nbsp;&nbsp;– Use "Screen shows…" to record what the printer screen shows, especially the **self-test step names**.<br>&nbsp;&nbsp;– Note in the notes field whether other clients (Creality Print, Home Assistant) were connected.<br>&nbsp;&nbsp;– Save, then copy the file to `test/fixtures/`.<br>• **Highest priority: repeat the print scenarios on 1.3.5.19** (`full-print`, `pause-resume-stop`, `connect-during-print`, `idle-reconnect`, i.e. reconnect twice while idle).<br>• Then record the same scenarios on the **K2 family** (and K1/K1C if available).<br>• Add: `cancel-printer-screen`, `cancel-self-test`, `error` (runout or forced error), and `printer-reboot` (auto-reconnect records the gap). | M | K1 Max fixtures in the repo, **including at least one 1.3.5.x print**. ≥ 1 K2 trace per scenario. Every new capture has timing and markers. Protocol doc §7 answered (self-test step names confirmed from the screen markers). |
+| 0.4 | Protocol capture and fixture baseline. **K1 Max evidence now includes 11 checked-in 1.3.5.19 JSONL captures** plus separate legacy owner captures (print scenarios on 1.3.3.x; idle on 1.3.5.19).<br>• Inventory the checked-in captures and generate reviewed `*.expected.txt` replay baselines with `tools/derive_prototype.py`; protocol doc §5.5 describes legacy sequences and is not the expected output for these files.<br>• Convert legacy owner captures with `tools/convert_capture.py` only when available and needed for explicit 1.3.3.x compatibility coverage; they are not currently checked in.<br>• Record further captures with **`tools/WebSocketLogger.html`** (§4.2): keep auto-reconnect/keep-awake on, mark printer actions, record screen text (especially self-test labels), and note other connected clients.<br>• Remaining K1 Max evidence gaps: placeholder dump after boot, when/if `retGcodeFileInfo2` is pushed, and a naturally occurring nonzero `errcode`. The existing `error` fixture's simulated recovery/runout flows keep `errcode:0`; do not force a fault only to test it.<br>• Capture the K2 family scenarios (and K1/K1C if available); retain unknown results as explicit open points in protocol doc §7. | M | All checked-in fixtures have reviewed replay baselines; current K1 Max print/pause/stop/connect-mid-print paths are covered. ≥ 1 K2 trace per supported scenario where available. Every new capture has timing and markers. Remaining protocol questions are answered or explicitly deferred in §7. |
 | 0.5 | Asset prep: re-render `gif_print_ok` ≤ 150×150 (gifsicle `--resize-fit 150x150 -O3 --colors 64`, keep the green palette); `tools/bin2c.py`; generate 4 bpp fonts (`tools/fonts.md`) | S | Assets compile; RAM per GIF ≤ 90 KB; GIF flash total ≤ 470 KB (§3.3) |
 
 ### Phase 1: Cleanup (remove everything not required)
@@ -555,7 +554,7 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 |---|---|---|
 | 2.1 | `platformio.ini` per §5.1; `partitions_4MB.csv` per §6; `lv_conf.h` per §5.2 | S |
 | 2.2 | `board_pins.h`, `tft_setup.h` (GC9A01, pins 23/18/5/26/33, no MISO, no BL, SPI frequency from Phase 0.2, color order and inversion from Phase 0.1) | S |
-| 2.3 | `display_hal`: `tft.begin()`, `initDMA()`, two 240×24 DMA buffers (`heap_caps_malloc(MALLOC_CAP_DMA)`), flush via `pushImageDMA`, rotation from settings (`tft.setRotation`) | M |
+| 2.3 | `display_hal`: `tft.begin()`, `initDMA()`, two 240×24 DMA buffers (`heap_caps_malloc(MALLOC_CAP_DMA)`), flush via `pushImageDMA`, rotation from settings (`tft.setRotation`); use the tested production pin map by default and the alternate map only for serial debugging | M |
 | 2.4 | `ui_task` skeleton on core 1: `lv_timer_handler()` loop with `vTaskDelay(5 ms)`; splash S0 | S |
 
 ### Phase 3: Settings, Wi-Fi, web portal
@@ -574,9 +573,9 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 |---|---|---|
 | 4.1 | `lib/creality_model`: `PrinterModel` struct with `has_value` flags; `coerce_number()`; `merge(JsonObjectConst)`; `connect` valid flag; chamber capability by late discovery (protocol doc §3); filename basename plus UTF-8-safe truncation (≤ 63 bytes); model/board-code detection; firmware string parsing; offered printer update (`linuxOtaInfo.version`) | M |
 | 4.2 | `derive_state()` per protocol doc §5.4/5.5, including the sub-label, debounce, freshness, error acknowledgement, and new-job detection | M |
-| 4.3 | Unit tests (`test/test_creality_model`): coercion (number / string / "" / null / "007"), delta merge, every rule in protocol doc §5.4, and **replay of each fixture against its expected state sequence**. The K1 Max sequences are already defined in protocol doc §5.5; the Python reference `tools/derive_prototype.py` is the behavioural oracle. The C++ port must produce the identical sequence for every fixture.<br>The replay harness reads §4.2 files with ArduinoJson:<br>• Each `rx` text goes through the same ≤ 4 KB limit as the client.<br>• The injected clock advances to each event's `t` (250 ms steps for legacy files), so debounce and freshness are tested with the real timing.<br>• A `close` event acts as a disconnect: `reset()`, then `OFFLINE`, as `derive_prototype.py` does. | M |
+| 4.3 | Unit tests (`test/test_creality_model`): coercion (number / string / "" / null / "007"), delta merge, every rule in protocol doc §5.4, and **replay of each fixture against a reviewed `*.expected.txt` sequence**. The protocol doc §5.5 legacy sequences are not the fixture baselines; generate the baselines from the checked-in 1.3.5.19 JSONL with `tools/derive_prototype.py`, review them, and commit them during Phase 0.4. The C++ port must produce the identical sequence for every fixture.<br>The replay harness reads §4.2 files with ArduinoJson:<br>• Each `rx` text goes through the same ≤ 4 KB limit as the client.<br>• The injected clock advances to each event's `t` (250 ms steps for legacy files), so debounce and freshness are tested with the real timing.<br>• A `close` event acts as a disconnect: `reset()`, then `OFFLINE`, as `derive_prototype.py` does. | M |
 | 4.4 | `lib/ws_stream` frame parser/encoder + native unit tests (protocol doc §4, plan §9.2), then the `creality_client` adapter: connect/resolve, handshake, heartbeat, silence watchdog, backoff, JSON filter with the static arena, snapshot publish, statistics (frames, skipped large frames with their first key, reconnects, max frame size) exposed in `/api/status` | L |
-| 4.5 | `tools/fake_printer.py`: replays §4.2 capture files at 1–50× speed, **including the real 20–28 KB and 78 KB list frames**.<br>• Each `open`…`close` segment serves one client connection; `rx` events are sent at their recorded `t`.<br>• A server-side `close` closes the socket with the recorded code.<br>• A `connect_failed` gap refuses connections for its duration (printer reboot).<br>• `tx`, `note`, and `error` events are skipped, and notes are echoed to the console.<br>Scripted faults (silence, close, a 128 KB frame, fragmented frames, blank fields, the 1.3.5.x placeholder dump with `connect:0`, `ok` frames, heartbeat on/off) | S |
+| 4.5 | `tools/fake_printer.py`: replays §4.2 capture files at 1–50× speed, including the checked-in 23–28.7 KB history/timelapse frames. The earlier 78 KB file-list frame is not in the fixtures; cover the same path with a scripted 78 KB or larger synthetic frame.<br>• Each `open`…`close` segment serves one client connection; `rx` events are sent at their recorded `t`.<br>• A server-side `close` closes the socket with the recorded code.<br>• A `connect_failed` gap refuses connections for its duration (printer reboot).<br>• `tx`, `note`, and `error` events are skipped, and notes are echoed to the console.<br>Scripted faults (silence, close, oversized frame, fragmented frames, blank fields, the 1.3.5.x placeholder dump with `connect:0`, `ok` frames, heartbeat on/off) | S |
 
 ### Phase 5: UI screens and state machine
 
@@ -626,14 +625,15 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 |---|---|---|
 | TFT_eSPI is not stable on Arduino core 3.x | Display broken | Phase 0.1 gate; fall back to LovyanGFX or to Arduino 2.0.17 (`espressif32@7.1.3`) |
 | Heap fragmentation from repeated GIF switching | GIF fails to load after hours | One GIF object; similar canvas sizes (35–88 KB); fallback icon; 24 h soak; downscale GIFs if needed. The idle rotation swaps `gif_creality` (88 KB) ↔ `gif_standby_green` (35 KB) every `page_secs`, so the soak test runs mostly idle. |
-| Printer firmware differences in state codes | Wrong screen | Rules verified on K1 Max captures + fixtures + debounce; unknown codes → PROCESSING if a file is set, else IDLE; log unknown codes. **K2 captures still needed.** |
-| Large unsolicited list frames (78 KB file list after every connect on 1.3.5.19, growing with the file count; 20–28.5 KB history/timelapse lists at job start/end) | Endless reconnects or heap exhaustion | Own streaming client skips frames > 4 KB without allocating (§9.2); fake printer replays the real large frames |
-| Placeholder dump on 1.3.5.x (`connect:0`, all values 0) | 0 °C shown, chamber hidden, or a false IDLE during a print | `NOT_READY` state until `connect:1`; capabilities re-evaluated on every merge; one `ReqPrinterPara` at `connect` 0 → 1; verify with a 1.3.5.x connect-during-print capture |
+| Printer firmware differences in state codes | Wrong screen | K1 Max fixtures verify `state:7` (stopping) and `state:9` (pre-job transient), in addition to the documented print states; unknown codes → PROCESSING if a file is set, else IDLE; log unknown codes. **K2 captures still needed.** |
+| Large unsolicited list frames (23.4–28.7 KB in checked-in 1.3.5.19 fixtures; earlier 78 KB file-list observation, not reproduced in fixtures) | Reconnect churn or heap exhaustion | Own streaming client skips frames > 4 KB without allocating (§9.2); fixture replay tests observed frames and a synthetic ≥78 KB frame |
+| Placeholder dump on 1.3.5.x (`connect:0`, all values 0) | 0 °C shown, chamber hidden, or a false IDLE during startup/print | `NOT_READY` state until `connect:1`; capabilities re-evaluated on every merge; one `ReqPrinterPara` at `connect` 0 → 1; validate with a capture made immediately after printer boot, since mid-print connects have not shown the placeholder |
 | Stale error or result after a reconnect | Misleading screen | Freshness rules (§5.5), error acknowledgement, error badge during active jobs |
 | Concurrent-client limit on the printer | KNOMI or Creality Print disconnected | Verify in Phase 0.4; only one socket from KNOMI; backoff |
 | Creality firmware update changes the protocol | Data missing | Tolerant parser (unknown/missing fields → `--`); fixtures make regressions visible |
 | No auth on the web page (owner decision) | Anyone on the LAN can change settings | LAN-only device, JSON-only POST, no secrets returned; can be added later |
 | Asset licensing: BTT KNOMI has no LICENSE; reference projects are (A)GPL; `gif_creality` shows the Creality logo (trademark) | Distribution issues | Personal/private use of the BTT GIFs and the logo animation; implement the protocol from facts, no copied code; Inter font is OFL (include the license) |
+| GPIO3 is both UART0 RX and the tested production display-reset pin | Serial logging can interfere with display reset or boot diagnostics can be misleading | Disable UART/bootloader logging in the production pin mode; use the alternate wiring for serial-debug builds; confirm repeated cold boots in HIL |
 | GPIO0 held at power-up | Boots into the ROM bootloader | Documented in the README |
 | Long browser capture lost or cut (tab closed, laptop sleeps, Wi-Fi drop) | Missing or incomplete fixture | The logger warns before the page closes with unsaved events, holds a screen wake lock, and auto-reconnects (gaps are recorded as `close`/`connect_failed`). Save intermediate copies during long prints. |
 
@@ -641,9 +641,9 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 
 | Document | Content | Phase |
 |---|---|---|
-| `docs/CREALITY_WS_PROTOCOL.md` | ✅ written and revised with the K1 Max captures (verified sequences, state 2 = completed, self-test steps, large-frame handling, rules validated by a prototype). Extend with the K2 findings. | 0.4 |
+| `docs/CREALITY_WS_PROTOCOL.md` | ✅ written and revised with legacy and checked-in K1 Max evidence (state 2 = completed; fixture-verified states 7/9; large-frame handling; fixture limitations). Extend with K2 findings and update as remaining captures resolve open points. | 0.4 |
 | `README.md` | Overview, photo, features, supported printers, hardware and wiring, build and flash (PlatformIO + ESP Web Flasher), first setup walkthrough, button actions, troubleshooting (Wi-Fi, printer unreachable, blank screen, colors inverted), licenses and credits | 8.1 |
-| `docs/HARDWARE.md` | Wiring table, schematic notes (GPIO5/GPIO0 strapping, 3.3 V supply, no backlight control), enclosure notes, SPI speed result | 0.1 / 8.1 |
+| `docs/HARDWARE.md` | Production and serial-debug pin tables, GPIO3 UART/reset note, GPIO5/GPIO0 strapping, 3.3 V signal/5 V power caveat, hard-wired backlight, GC9A01 SPI mode/CS/40 MHz settings, enclosure notes | 0.1 / 8.1 |
 | `docs/ARCHITECTURE.md` | Tasks and cores, data flow, snapshot and queue contracts, memory budget (Phase 0.3 numbers), Phase 0.1 platform decision, module responsibilities | 0.3 / 8.1 |
 | `docs/SCREENS.md` | Expanded §8: mockups (PNG from the LVGL simulator or photos) for each screen and page, state → screen table, button table | 5.3 |
 | `docs/TESTING.md` | Native tests, fake printer usage, capture walkthrough (`tools/WebSocketLogger.html`, scenarios, markers, naming; §4.2), HIL checklist (§13) | 4.5 / 7.4 |
@@ -675,8 +675,10 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 | H12 | Button: click / double / hold 5 s / hold 15 s | Info / next page / setup mode / factory reset |
 | H13 | Accented filename (e.g. `Fogaskerék_PLA.gcode`) | Rendered correctly and scrolling |
 | H14 | 24 h soak while idle + one long print | No reset; heap stable; GIFs always load |
-| H15 | Connect to a printer on FW 1.3.5.x (78 KB file list ×2), job start/end (`historyList` ×2), and opening the file list in Creality Print | **No WS reconnect** (the reconnect counter in `/api/status` is unchanged); the skipped-frame counter increases; "Printer starting…" → idle data within 2 s |
+| H15 | K1 Max 1.3.5.19 connect and job start/end (`historyList` / `elapseVideoList`); open the file list in Creality Print if it triggers a large push | No WS reconnect; skipped-frame counter increases for observed oversized frames. Do not require the 78 KB file-list push, which is not reproduced in the checked-in fixtures. |
 | H16 | Print with calibration vs without | Self-test screen shows steps 1–5 vs 1–4 with names |
+| H17 | Fake-printer sends a 78 KB or larger frame; if a live post-reboot placeholder (`connect:0`) is observed, connect during that startup window | Oversized frame is discarded without reconnect. For the placeholder, show NOT_READY with no stale/zero values until valid data (`connect:1`) arrives; record if the placeholder is not observed. |
+| H18 | Repeated cold boots using the production pin map with serial logging disabled | Display resets and firmware starts reliably; no firmware UART console is expected, though the ROM may emit its initial boot message |
 
 ### 13.3 Requirement → acceptance mapping
 

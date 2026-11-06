@@ -1,0 +1,37 @@
+{"type":"meta","format":"knomi-ws-capture","version":1,"tool":"tools/WebSocketLogger.html","started":"2026-10-15T15:44:20.531Z","saved":"2026-10-15T15:47:24.097Z","url":"ws://192.168.0.55:9999/","scenario":"printer-reboot","notes":"","printer":{"model":"K1 Max","hostname":"K1Max-BF1B","fw":"1.3.5.19","modelVersion":"printer hw ver:;printer sw ver:;DWIN hw ver:CR4CU220812S11;DWIN sw ver:1.3.5.19;"},"counts":{"connections":2,"rx":31,"rx_json":31,"rx_large":0,"rx_bytes":4617,"tx":0,"notes":1},"user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0"}
+{"t":0,"type":"open","url":"ws://192.168.0.55:9999/"}
+{"t":5,"type":"rx","len":1675,"data":"{ \"TotalLayer\": 0, \"accelToDecelLimits\": 20000, \"accelerationLimits\": 20000, \"aiDetection\": 0, \"aiFirstFloor\": 0, \"aiPausePrint\": 0, \"aiSw\": 0, \"autoLevelResult\": \"\", \"autohome\": \"X:0 Y:0 Z:0\", \"auxiliaryFanPct\": 0, \"bedTemp0\": \"23.090000\", \"bedTemp1\": \"0.000000\", \"bedTemp2\": \"0.000000\", \"bedTempAutoPid\": 0, \"boxTemp\": 23, \"caseFanPct\": 0, \"cfsConnect\": 0, \"connect\": 1, \"connectionCount\": 0, \"cornerVelocityLimits\": 5, \"curFeedratePct\": 100, \"curFlowratePct\": 100, \"curPosition\": \"X:0.00 Y:0.00 Z:0.00\", \"dProgress\": 0, \"deviceState\": 0, \"enableSelfTest\": 0, \"err\": { \"errcode\": 0, \"key\": 0, \"value\": \"\" }, \"fan\": 0, \"fanAuxiliary\": 0, \"fanCase\": 0, \"feedState\": 0, \"hostname\": \"K1Max-BF1B\", \"layer\": 0, \"lightSw\": 1, \"materialDetect\": 1, \"materialDetector1\": 1, \"materialStatus\": 0, \"maxBedTemp\": 100, \"maxBoxTemp\": 60, \"maxNozzleTemp\": 300, \"model\": \"K1 Max\", \"modelFanPct\": 0, \"modelVersion\": \"printer hw ver:;printer sw ver:;DWIN hw ver:CR4CU220812S11;DWIN sw ver:1.3.5.19;\", \"nozzleMoveSnapshot\": 0, \"nozzleTemp\": \"24.370000\", \"nozzleTempAutoPid\": 0, \"powerLoss\": 0, \"pressureAdvance\": \"0.040000\", \"printFileName\": \"\", \"printFileType\": 1, \"printId\": \"\", \"printJobTime\": 0, \"printLeftTime\": 0, \"printProgress\": 0, \"printStartTime\": 0, \"realTimeFlow\": \"0.000000\", \"realTimeSpeed\": \"0.000000\", \"repoPlrStatus\": 0, \"smoothTime\": \"0.040000\", \"state\": 0, \"targetBedTemp0\": 0, \"targetBedTemp1\": 0, \"targetBedTemp2\": 0, \"targetBoxTemp\": 0, \"targetNozzleTemp\": 0, \"tfCard\": 1, \"upgradeStatus\": 0, \"usedMaterialLength\": 0, \"velocityLimits\": 800, \"video\": 1, \"video1\": 0, \"videoElapse\": 0, \"videoElapseFrame\": 0, \"videoElapseInterval\": 0, \"webrtcSupport\": 0, \"withSelfTest\": 0 }"}
+{"t":5,"type":"rx","len":24,"data":"{ \"connectionCount\": 1 }"}
+{"t":801,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.060000\" }"}
+{"t":5936,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.380000\", \"bedTemp0\": \"23.050000\" }"}
+{"t":11056,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.360000\", \"bedTemp0\": \"23.070000\" }"}
+{"t":16205,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.370000\", \"bedTemp0\": \"23.060000\" }"}
+{"t":21321,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.070000\" }"}
+{"t":26443,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.090000\" }"}
+{"t":31564,"type":"rx","len":29,"data":"{ \"nozzleTemp\": \"24.410000\" }"}
+{"t":36718,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.380000\", \"bedTemp0\": \"23.170000\" }"}
+{"t":41837,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.370000\", \"bedTemp0\": \"23.200000\" }"}
+{"t":46970,"type":"rx","len":29,"data":"{ \"nozzleTemp\": \"24.400000\" }"}
+{"t":52084,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.410000\", \"bedTemp0\": \"23.220000\" }"}
+{"t":57214,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.400000\", \"bedTemp0\": \"23.140000\" }"}
+{"t":62329,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.390000\", \"bedTemp0\": \"23.060000\" }"}
+{"t":67475,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.420000\", \"bedTemp0\": \"23.130000\" }"}
+{"t":72594,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.230000\" }"}
+{"t":78267,"type":"note","text":"Printer rebooting"}
+{"t":117597,"type":"close","code":1006,"reason":"","clean":false}
+{"t":118744,"type":"open","url":"ws://192.168.0.55:9999/"}
+{"t":118749,"type":"rx","len":1675,"data":"{ \"TotalLayer\": 0, \"accelToDecelLimits\": 20000, \"accelerationLimits\": 20000, \"aiDetection\": 0, \"aiFirstFloor\": 0, \"aiPausePrint\": 0, \"aiSw\": 0, \"autoLevelResult\": \"\", \"autohome\": \"X:0 Y:0 Z:0\", \"auxiliaryFanPct\": 0, \"bedTemp0\": \"23.030000\", \"bedTemp1\": \"0.000000\", \"bedTemp2\": \"0.000000\", \"bedTempAutoPid\": 0, \"boxTemp\": 23, \"caseFanPct\": 0, \"cfsConnect\": 0, \"connect\": 1, \"connectionCount\": 0, \"cornerVelocityLimits\": 5, \"curFeedratePct\": 100, \"curFlowratePct\": 100, \"curPosition\": \"X:0.00 Y:0.00 Z:0.00\", \"dProgress\": 0, \"deviceState\": 0, \"enableSelfTest\": 0, \"err\": { \"errcode\": 0, \"key\": 0, \"value\": \"\" }, \"fan\": 0, \"fanAuxiliary\": 0, \"fanCase\": 0, \"feedState\": 0, \"hostname\": \"K1Max-BF1B\", \"layer\": 0, \"lightSw\": 1, \"materialDetect\": 1, \"materialDetector1\": 1, \"materialStatus\": 0, \"maxBedTemp\": 100, \"maxBoxTemp\": 60, \"maxNozzleTemp\": 300, \"model\": \"K1 Max\", \"modelFanPct\": 0, \"modelVersion\": \"printer hw ver:;printer sw ver:;DWIN hw ver:CR4CU220812S11;DWIN sw ver:1.3.5.19;\", \"nozzleMoveSnapshot\": 0, \"nozzleTemp\": \"24.440000\", \"nozzleTempAutoPid\": 0, \"powerLoss\": 0, \"pressureAdvance\": \"0.040000\", \"printFileName\": \"\", \"printFileType\": 1, \"printId\": \"\", \"printJobTime\": 0, \"printLeftTime\": 0, \"printProgress\": 0, \"printStartTime\": 0, \"realTimeFlow\": \"0.000000\", \"realTimeSpeed\": \"0.000000\", \"repoPlrStatus\": 0, \"smoothTime\": \"0.040000\", \"state\": 0, \"targetBedTemp0\": 0, \"targetBedTemp1\": 0, \"targetBedTemp2\": 0, \"targetBoxTemp\": 0, \"targetNozzleTemp\": 0, \"tfCard\": 1, \"upgradeStatus\": 0, \"usedMaterialLength\": 0, \"velocityLimits\": 800, \"video\": 1, \"video1\": 0, \"videoElapse\": 0, \"videoElapseFrame\": 0, \"videoElapseInterval\": 0, \"webrtcSupport\": 0, \"withSelfTest\": 0 }"}
+{"t":118749,"type":"rx","len":24,"data":"{ \"connectionCount\": 1 }"}
+{"t":122684,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.050000\" }"}
+{"t":127809,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.460000\", \"bedTemp0\": \"23.170000\" }"}
+{"t":132925,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.470000\", \"bedTemp0\": \"23.190000\" }"}
+{"t":138073,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.450000\", \"bedTemp0\": \"23.160000\" }"}
+{"t":143192,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.460000\", \"bedTemp0\": \"23.110000\" }"}
+{"t":148322,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.470000\", \"bedTemp0\": \"23.050000\" }"}
+{"t":153448,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.030000\" }"}
+{"t":158580,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.460000\", \"bedTemp0\": \"23.170000\" }"}
+{"t":163699,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.480000\", \"bedTemp0\": \"23.190000\" }"}
+{"t":168847,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.470000\", \"bedTemp0\": \"23.110000\" }"}
+{"t":173973,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"23.030000\" }"}
+{"t":179116,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"24.440000\", \"bedTemp0\": \"23.050000\" }"}
+{"t":180866,"type":"close","code":1000,"reason":"","clean":true,"by":"client"}

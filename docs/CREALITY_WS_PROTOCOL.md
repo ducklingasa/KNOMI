@@ -14,8 +14,7 @@ Implementation reference for the KNOMI Creality firmware. It covers only what a 
    | `Creality_WebSocket_in_print_example.txt` | 1.3.3.29 | Connect at 99 % → completed → idle |
    | `Creality_WebSocket_idle_example.txt` | **1.3.5.19** (latest installed; printer offers 1.3.5.22) | Connect while idle |
 
-   Plus owner notes in `Creality_WebSocket_API.txt`. Location: `C:\D_Drive\Linde\A5 - Private\Creality\`.
-   They will be converted into test fixtures (plan, Phase 0.4).
+   Plus owner notes in `Creality_WebSocket_API.txt`. These legacy captures are not checked in; separate, newer JSONL captures are in `test/fixtures` (see item 3).
    In this document, **VERIFIED (K1 Max)** means "seen in these captures"; **1.3.5.x** marks behaviour seen only on the latest firmware.
 2. **Live receive-only sessions on the same K1 Max, FW 1.3.5.19 (2026-10-20).** The client only listened and sent no application messages. The owner operated the printer from its own screen.
 
@@ -26,11 +25,12 @@ Implementation reference for the KNOMI Creality firmware. It covers only what a 
    | C | Idle, filament unload/load ×3 |
 
    Results from these sessions are marked **1.3.5.19 live**.
-3. **Static analysis of the offered OTA image** `CR4CU220812S11_ota_img_V1.3.5.22.img` (`ota_info`: `ota_version=1.3.5.22`).
+3. **Checked-in receive-only JSONL captures** in `test/fixtures` (11 K1 Max FW 1.3.5.19 files, captured 2026-10-15 through 2026-10-30). They cover idle/reconnect/reboot, print, connect during print, pause/resume, cancel/stop, and simulated recovery/runout scenarios. Every fixture has `tx:0`; none contains `connect:0`, `retGcodeFileInfo2`, or a nonzero `errcode`. Fixture-specific findings are called out below. These logs do not validate client requests or the earlier reported file-list push.
+4. **Static analysis of the offered OTA image** `CR4CU220812S11_ota_img_V1.3.5.22.img` (`ota_info`: `ota_version=1.3.5.22`).
    It covers the stock web UI source map (`/usr/share/frontend`), the startup scripts, and `/usr/bin/web-server`.
    The debug summary labels this image "V1.3.5.19", but its SHA-256 (`5765…7A42`) and `ota_info` identify 1.3.5.22.
    It shows what the **stock client** sends. It does not prove how the server handles requests.
-4. Open-source projects, October 2026:
+5. Open-source projects, October 2026:
 
    | Project | License | Notes |
    |---|---|---|
@@ -65,7 +65,7 @@ Items marked **UNVERIFIED** still need a capture, especially from the **K2 famil
      `"connect":0`, `"nozzleTemp":"0.000000"`, `"boxTemp":0`, `"maxNozzleTemp":0`, `"maxBoxTemp":0`, `"curFeedratePct":0`, `"tfCard":0`, `"velocityLimits":0`.
      The real values arrive as **deltas within the next ~10 frames**, ending with `{"connect":1}`.
      ➜ While `connect == 0`, **do not show or interpret the data** (logical state `NOT_READY`, §5.4).
-   - **FW 1.3.5.19, live sessions A–C: real dumps** (≈1 675 characters) with `connect:1`, real temperatures (≈21.8 °C), and `connectionCount:0`, followed by `{"connectionCount":1}`.
+   - **FW 1.3.5.19, live sessions A–C: real dumps** (≈1 675 characters) with `connect:1`, real temperatures (≈21.8 °C), and `connectionCount:0`, followed by `{"connectionCount":1}`. The checked-in fixtures also have real dumps (`connect:1`), 1 675–1 786 bytes; none records the placeholder dump.
      Session B connected during print setup, and its dump already contained the job (`state:1`, `deviceState:1`, `printProgress:0`).
      ➜ The placeholder dump is **not sent on every connect**. It probably only appears shortly after the printer boots (UNVERIFIED).
 2. **Then unsolicited delta frames** with only the changed keys (VERIFIED). Rates seen on the K1 Max:
@@ -79,14 +79,14 @@ Items marked **UNVERIFIED** still need a capture, especially from the **K2 famil
 
    | First key | Size seen | When |
    |---|---|---|
-   | `retGcodeFileInfo2` (full file list with metadata, ≈ 740 B per file) | **≈ 78 KB for 105 files, sent twice** | **1.3.5.19: right after every connect, unrequested** (no other client connected; `connectionCount` 0 → 1) |
-   | `totalJob` + `historyList` (50 entries) | **≈ 20 KB**, sent **twice** in a row | At every job start and job end |
-   | `elapseVideoList` (50 entries) | **≈ 28.5 KB**, up to 4× in a row | After a job (timelapse list) |
+   | `retGcodeFileInfo2` (full file list with metadata, ≈ 740 B per file) | **≈ 78 KB for 105 files, sent twice** | Seen unrequested just after connect in an earlier capture; **absent from all checked-in fixtures**, including reconnects |
+   | `totalJob` + `historyList` (50 entries) | **≈ 23.4 KB in checked-in fixtures**, sent twice in a row | At job start and job end |
+   | `elapseVideoList` (50 entries) | **≈ 28.7 KB in checked-in fixtures**, sent twice in a row | After a job (timelapse list) |
    | `retGcodeFileInfo` | 6.7 KB for 33 files; grows with the file count | When another client (Creality Print) asks for the file list |
    | `linuxOtaInfo` | 233 B | 1.3.5.19, after connect (offered printer firmware: version and URL) |
 
    ➜ The client **must skip frames larger than its buffer without dropping the connection** (§4).
-   On 1.3.5.x, a client that closes on oversized frames would **reconnect forever**, because the 78 KB list follows every connect.
+   The earlier 78 KB observation was not reproduced in the checked-in fixtures, so do not assume it follows every connect. Still handle oversized frames: that earlier capture demonstrates that file-list pushes can exceed the buffer.
 4. **Heartbeat:** sources describe `{"ModeCode":"heart_beat"}` from the printer, answered with the bare text `ok`.
    **No heartbeat appeared in the K1 Max captures** (several minutes each, no reply sent). Keep the handler for other firmware.
    - The **stock web UI** (1.3.5.22 image) sends its own heartbeat *to* the printer: `{"ModeCode":"heart_beat","msg":"<ISO-8601 date>"}`.
@@ -165,14 +165,14 @@ The filter must use `linuxOtaInfo: {version: true}` only, never the whole object
 
 | Rule | Value |
 |---|---|
-| Receive buffer | **4 KB, static.** The largest status frame seen is ≈ 1.68 KB (1.3.5.19 dump with real values, ≈ 1 675 characters); the K2 dump is ≈ 1.8 KB plus possible CFS keys. |
-| Larger frames | **Stream-discard** the payload without allocating, and keep the connection. Record the first ≈ 32 bytes (e.g. `{"totalJob":`, `{"retGcodeFileInfo2":`) for diagnostics. The largest frame seen is **78 KB**; the size grows with the number of files on the printer, so there is no upper bound. |
+| Receive buffer | **4 KB, static.** The largest status frame seen is ≈ 1.79 KB (1 786 bytes in the checked-in fixtures; the live-session dump was ≈ 1 675 characters); the K2 dump is ≈ 1.8 KB plus possible CFS keys. |
+| Larger frames | **Stream-discard** the payload without allocating, and keep the connection. Record the first ≈ 32 bytes (e.g. `{"totalJob":`, `{"retGcodeFileInfo2":`) for diagnostics. An earlier capture's largest frame was **78 KB**; the checked-in fixtures reach 28.7 KB. The file-list size grows with the number of files, so there is no upper bound. |
 | Fragmented frames | Assemble continuation frames while the total is ≤ buffer; otherwise discard the whole message |
 | Control frames | `ping` → `pong`; `close` → close and reconnect |
 
 > The `links2004/WebSockets` library closes the connection (code 1009) on any frame above `WEBSOCKETS_MAX_DATA_SIZE` (15 KB default) and `malloc`s whole frames otherwise.
 > On 1.3.3.x it would disconnect at **every job start and end** (20 KB `historyList`).
-> On 1.3.5.x it would **never stay connected** (78 KB file list after every connect), and heap churn would compete with the GIF canvas.
+> On 1.3.5.19 the checked-in fixtures show oversized `historyList` and `elapseVideoList` frames around job events; an earlier capture also shows a 78 KB file list after connect. The file-list push was not reproduced in the fixtures, so do not assume every connection triggers it. Heap churn would also compete with the GIF canvas.
 > Hence the plan uses a small **custom streaming client** (plan §9.2).
 
 ## 5. State model
@@ -188,9 +188,9 @@ The filter must use `linuxOtaInfo: {version: true}` only, never the whole object
 | 4 | Stopped/cancelled (stop from the printer screen or the slicer). `deviceState`, `layer`, and `TotalLayer` become 0 in the same frame. | VERIFIED K1 Max |
 | 5 | Paused | VERIFIED K1 Max (1.3.3.x and 1.3.5.19 live) |
 | 6 | Pausing (between running and paused) | **VERIFIED K1 Max 1.3.5.19 live** (`1 → 6 → 5`) → PAUSED "Pausing…" |
-| 7 | Busy while a cancel finishes its move | K1C (sources) → PROCESSING "Stopping…" |
+| 7 | Busy while a cancel finishes its move | **VERIFIED K1 Max 1.3.5.19 fixtures**: appears before `state:4` on stop/cancel → PROCESSING "Stopping…" |
 | 8 | Resuming from pause (between paused and running; the nozzle reheats). Sources also report it while restoring after power loss. | **VERIFIED K1 Max 1.3.5.19 live** (`5 → 8 → 1`) → PROCESSING "Resuming…" |
-| 9 | ~0.5 s transient before a job starts | K1C (sources); not seen on the K1 Max → IDLE |
+| 9 | ~0.5 s transient before a job starts | **VERIFIED K1 Max 1.3.5.19 fixtures**: repeatedly appears about 0.4–0.6 s before `state:1` → IDLE |
 
 ### 5.2 Verified sequences (K1 Max FW 1.3.3.x)
 
@@ -250,7 +250,7 @@ The `withSelfTest` values were not recorded.
 `printProgress` and `printJobTime` stay frozen (47 %, 63 s) from 6 to 8. Unlike 1.3.3.x, **no `state:0` appears** in this sequence.
 
 **Completion:** `printProgress:100`, `printLeftTime:0`, `printJobTime:139`, `state:2`, `deviceState:0`, `layer:0`, `TotalLayer:0`, both targets 0, and `printFileName` kept.
-This matches 1.3.3.x. The delay until `state:0` was not recorded.
+This matches 1.3.3.x. The live-session summary did not record the delay until `state:0`; a checked-in fixture records `state:0` about 63 s after `state:2` (§5.2b).
 
 **Idle manual homing** (session A): `deviceState` 7 → 0, and `state` stays 0.
 `autohome` goes `"X:0 Y:0 Z:0"` → `"X:1 Y:0 Z:0"` → `"X:1 Y:1 Z:0"` → `"X:1 Y:1 Z:1"`, with frequent `curPosition` deltas.
@@ -263,6 +263,18 @@ This matches 1.3.3.x. The delay until `state:0` was not recorded.
 4. At the end, `deviceState:0` and both targets return to 0.
 
 **Idle heating from the screen** (session A): only `targetNozzleTemp`/`targetBedTemp0` change. `state` and `deviceState` stay 0 → IDLE with "Heating".
+
+### 5.2b Checked-in fixtures (K1 Max FW 1.3.5.19)
+
+The 11 receive-only JSONL captures in `test/fixtures` verify these additional details:
+
+- `state:9` precedes `state:1` by about 0.4–0.6 s at job start. `state:7` appears during stop/cancel, followed by `state:4`.
+- Print captures show `withSelfTest` steps 1–5 then 100 when step 5 is part of the run. Pause/resume includes `1 → 6 → 5 → 8 → 1`; stop/cancel includes `1 → 7 → 4`.
+- A connect-during-print capture begins at layer 13 (`state:1`) and reaches `state:2`; `state:0` follows about 63 s later.
+- Large captured frames include `totalJob`/`historyList` at 23.4 KB and `elapseVideoList` up to 28.7 KB. No fixture contains `retGcodeFileInfo2` or the `connect:0` placeholder dump.
+- The `error` fixture includes simulated power-loss and filament-runout flows, but `errcode` stays 0. It is not evidence of a nonzero `err` payload.
+
+Replay command: `python -c "import glob; from tools.derive_prototype import main; main(sorted(glob.glob('test/fixtures/*.jsonl')))"`. The prototype emits `OFFLINE` at recorded close/reconnect boundaries; there are no checked-in `.expected.txt` files yet.
 
 ### 5.3 Self-test steps (`withSelfTest`)
 
@@ -322,7 +334,7 @@ Additional rules:
 
 ### 5.5 Prototype validation
 
-A Python prototype of these rules ([tools/derive_prototype.py](../tools/derive_prototype.py); to be ported to `lib/creality_model` with unit tests) produces these sequences from the owner captures. They are the **expected outputs** for the fixtures:
+A Python prototype of these rules ([tools/derive_prototype.py](../tools/derive_prototype.py); to be ported to `lib/creality_model` with unit tests) produces these sequences from the legacy owner captures listed in §1. They are **not** the replay outputs for the checked-in fixtures, which are all FW 1.3.5.19; see §5.2b for their distinguishing observations.
 
 ```
 full_print:  IDLE → PROCESSING(Preparing) → SELF_TESTING(1→2→3→4→5) → PROCESSING(Preparing→Heating→Preparing) → PRINTING → COMPLETED
@@ -334,7 +346,7 @@ in_print:    PRINTING → COMPLETED (latched through state 0 and the later idle 
 idle (1.3.5.19): NOT_READY → IDLE (at the {"connect":1} delta; the two 78 KB file-list frames are skipped)
 ```
 
-For the 1.3.5.19 live sessions (§5.2a), only a written summary exists, so these are **expected** outputs. Confirm them once raw logs are captured:
+For the 2026-10-20 1.3.5.19 live sessions (§5.2a), only a written summary exists, so these are **expected** outputs. The later checked-in fixtures provide separate raw traces:
 
 ```
 live A (1.3.5.19): IDLE (incl. idle heating) → PROCESSING(Homing) → IDLE → PROCESSING(Bed leveling) → IDLE
@@ -360,7 +372,7 @@ Completion and stop frames (K1 Max):
 {"state":4,"deviceState":0,"layer":0,"TotalLayer":0, "…":"…"}
 ```
 
-Connect sequence on K1 Max FW 1.3.5.19 (idle). Large frames are shortened.
+Connect sequence on K1 Max FW 1.3.5.19 (idle), from an earlier capture and **not reproduced in the checked-in fixtures**. Large frames are shortened.
 
 ```json
 {"connect":0,"nozzleTemp":"0.000000","bedTemp0":"0.000000","boxTemp":0,"maxBoxTemp":0,"targetBoxTemp":0,"maxNozzleTemp":0,
@@ -415,19 +427,18 @@ Heartbeat sent **by the stock web UI** to the printer (1.3.5.22 source map; KNOM
 
 ## 7. Open points (Phase 0.4)
 
-- [ ] **Raw logs of the 1.3.5.19 live sessions** (JSONL, with timestamps) so they can become fixtures. At the moment only the written summary exists.
 - [ ] **Remaining print scenarios on FW 1.3.5.19:**
-  - Done (live): pause/resume, completion, and connect during print setup.
-  - Still open: **stop**, **connect mid-print** (`layer > 0`), and the `withSelfTest` steps.
+   - Checked-in fixtures now cover pause/resume, completion, stop/cancel, connect mid-print (`layer:13`), and `withSelfTest` steps 1–5.
+   - Still open: stop behavior in more scenarios and on other firmware/models; confirm the full state/field sequences and phase timing.
   - Are the job fields re-sent after a placeholder dump?
   - How long after completion does `state` change from 2 to 0?
-- [ ] Placeholder dump (`connect:0`): the live sessions show that it is **not** sent on every connect. Confirm that it appears only shortly after boot (connect within the first minute after power-on).
-- [ ] Does the 78 KB `retGcodeFileInfo2` push happen on every connect? The live summary does not record it.
+- [ ] Placeholder dump (`connect:0`): the live sessions show that it is **not** sent on every connect, and none of the checked-in fixtures contain it. Confirm whether it appears only shortly after boot (connect within the first minute after power-on).
+- [ ] The earlier 78 KB `retGcodeFileInfo2` push is absent from all checked-in fixtures, including reconnects. Determine when it is sent and whether the push is conditional.
 - [ ] State `8`: on 1.3.5.19 it appeared while resuming from pause, before the owner confirmed the resume. Is it also used after power loss, as sources report?
 - [ ] Other `deviceState` values (only 0, 1, 3, and 7 are seen). Check printhead cleaning, if the printer has it, and filament retract/load.
 - [ ] **K2 family captures:** idle dump, print with self-test, pause/resume, stop, completion. Confirm `state:2`, the `withSelfTest` steps, and the chamber fields.
-- [ ] K1 / K1C captures, if available (sources show `state:7`/`9`, which the K1 Max does not).
-- [ ] An error capture from a natural error (e.g. filament runout): does `err` clear by itself? `err` stayed 0 in all live sessions. Do not force a fault only to test this.
+- [ ] K1 / K1C captures, if available, to check whether their other state codes and transitions match the K1 Max. K1 Max 1.3.5.19 fixtures now verify `state:7` and `state:9`.
+- [ ] A capture with nonzero `err` from a natural error (e.g. filament runout): does `err` clear by itself? The checked-in `error` fixture includes simulated power-loss and filament-runout flows, but `err` stayed 0. Do not force a fault only to test this.
 - [ ] Confirm the self-test step names (§5.3) on the printer screen.
-- [ ] Captures with timestamps, to measure real time spent per phase and the delay of `state 2 → 0` and of the `printJobTime` reset.
+- [ ] More timestamped captures to measure phase timing, the variability of `state 2 → 0`, and the `printJobTime` reset.
 - [x] ~~Heartbeat required?~~ No. A 1.3.5.19 client that sent nothing stayed connected for 20 min. Whether the printer itself sends a heartbeat to third-party clients is still unknown for other firmware.

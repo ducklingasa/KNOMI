@@ -1,0 +1,1113 @@
+{"type":"meta","format":"knomi-ws-capture","version":1,"tool":"tools/WebSocketLogger.html","started":"2026-10-30T13:14:40.024Z","saved":"2026-10-30T13:22:10.974Z","url":"ws://192.168.0.55:9999/","scenario":"pause-resume-stop","notes":"","printer":{"model":"K1 Max","hostname":"K1Max-BF1B","fw":"1.3.5.19","modelVersion":"printer hw ver:;printer sw ver:;DWIN hw ver:CR4CU220812S11;DWIN sw ver:1.3.5.19;"},"counts":{"connections":1,"rx":1107,"rx_json":1107,"rx_large":2,"rx_bytes":132712,"tx":0,"notes":3},"user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0"}
+{"t":0,"type":"open","url":"ws://192.168.0.55:9999/"}
+{"t":4,"type":"rx","len":1778,"data":"{ \"TotalLayer\": 0, \"accelToDecelLimits\": 2500, \"accelerationLimits\": 5000, \"aiDetection\": 0, \"aiFirstFloor\": 0, \"aiPausePrint\": 0, \"aiSw\": 0, \"autoLevelResult\": \"\", \"autohome\": \"X:0 Y:0 Z:0\", \"auxiliaryFanPct\": 0, \"bedTemp0\": \"46.790000\", \"bedTemp1\": \"0.000000\", \"bedTemp2\": \"0.000000\", \"bedTempAutoPid\": 0, \"boxTemp\": 31, \"caseFanPct\": 0, \"cfsConnect\": 0, \"connect\": 1, \"connectionCount\": 0, \"cornerVelocityLimits\": 5, \"curFeedratePct\": 100, \"curFlowratePct\": 100, \"curPosition\": \"X:296.50 Y:153.00 Z:149.99\", \"dProgress\": 0, \"deviceState\": 0, \"enableSelfTest\": 0, \"err\": { \"errcode\": 0, \"key\": 0, \"value\": \"\" }, \"fan\": 1, \"fanAuxiliary\": 0, \"fanCase\": 0, \"feedState\": 0, \"hostname\": \"K1Max-BF1B\", \"layer\": 0, \"lightSw\": 1, \"materialDetect\": 1, \"materialDetector1\": 0, \"materialStatus\": 0, \"maxBedTemp\": 100, \"maxBoxTemp\": 60, \"maxNozzleTemp\": 300, \"model\": \"K1 Max\", \"modelFanPct\": 100, \"modelVersion\": \"printer hw ver:;printer sw ver:;DWIN hw ver:CR4CU220812S11;DWIN sw ver:1.3.5.19;\", \"nozzleMoveSnapshot\": 0, \"nozzleTemp\": \"102.660000\", \"nozzleTempAutoPid\": 0, \"powerLoss\": 0, \"pressureAdvance\": \"0.044000\", \"printFileName\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"printFileType\": 1, \"printId\": \"6ae496cd3e9e0c252803da39\", \"printJobTime\": 0, \"printLeftTime\": 0, \"printProgress\": 0, \"printStartTime\": 1793365709, \"realTimeFlow\": \"0.280000\", \"realTimeSpeed\": \"10.000000\", \"repoPlrStatus\": 0, \"smoothTime\": \"0.040000\", \"state\": 4, \"targetBedTemp0\": 0, \"targetBedTemp1\": 0, \"targetBedTemp2\": 0, \"targetBoxTemp\": 0, \"targetNozzleTemp\": 0, \"tfCard\": 1, \"upgradeStatus\": 0, \"usedMaterialLength\": 0, \"velocityLimits\": 800, \"video\": 1, \"video1\": 0, \"videoElapse\": 1, \"videoElapseFrame\": 15, \"videoElapseInterval\": 1, \"webrtcSupport\": 0, \"withSelfTest\": 100 }"}
+{"t":4,"type":"rx","len":24,"data":"{ \"connectionCount\": 1 }"}
+{"t":487,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"101.870000\", \"bedTemp0\": \"46.730000\" }"}
+{"t":986,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"101.700000\", \"bedTemp0\": \"46.700000\" }"}
+{"t":2493,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"100.920000\", \"bedTemp0\": \"46.640000\" }"}
+{"t":2995,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"100.630000\" }"}
+{"t":4498,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"99.880000\", \"bedTemp0\": \"46.580000\" }"}
+{"t":5000,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"99.580000\", \"bedTemp0\": \"46.560000\" }"}
+{"t":6019,"type":"rx","len":66,"data":"{ \"nozzleTemp\": \"99.150000\", \"bedTemp0\": \"46.510000\", \"state\": 9 }"}
+{"t":6145,"type":"rx","len":63,"data":"{ \"current_object\": \"\", \"excluded_objects\": \"\", \"objects\": \"\" }"}
+{"t":6267,"type":"rx","len":32,"data":"{ \"printStartTime\": 1793366086 }"}
+{"t":6343,"type":"rx","len":23410,"data":"{ \"totalJob\": 50, \"totalUsageTime\": 135605, \"totalUsageMaterial\": 349882, \"historyList\": [ { \"dateTime\": \"2026-10-30 14:14:46\", \"id\": 1793366086, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793366086, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793366086.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 14:08:29\", \"id\": 1793365709, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793365709, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793365709.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 14:01:46\", \"id\": 1793365306, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793365306, \"startway\": 1, \"usagetime\": 22, \"usagematerial\": 19.5, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793365306.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 13:47:04\", \"id\": 1793364424, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793364424, \"startway\": 1, \"usagetime\": 202, \"usagematerial\": 83.343422857155275, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793364424.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 12:03:24\", \"id\": 1793358204, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Slicer Key_PLA_44m.gcode\", \"size\": 1333124, \"ctime\": 1793358094, \"starttime\": 1793358204, \"startway\": 1, \"usagetime\": 2629, \"usagematerial\": 2551.711249999762, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793358204.png\", \"filemd5\": \"12b2b8afbf1357fa7cf66c158fc3b6dc\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 12:01:43\", \"id\": 1793358103, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Slicer Key_PLA_44m.gcode\", \"size\": 1333124, \"ctime\": 1793358094, \"starttime\": 1793358103, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793358103.png\", \"filemd5\": \"12b2b8afbf1357fa7cf66c158fc3b6dc\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 10:26:35\", \"id\": 1793352395, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Haj Tom Barber 2_PLA_1h9m.gcode\", \"size\": 3941932, \"ctime\": 1790857897, \"starttime\": 1793352395, \"startway\": 1, \"usagetime\": 4157, \"usagematerial\": 11551.936529999512, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793352395.png\", \"filemd5\": \"6e1b2ca03d7631dd422a33ce783c4bd8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-22 15:38:25\", \"id\": 1792676305, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Luckfox Pico Mini_PETG_32m.gcode\", \"size\": 1796664, \"ctime\": 1792676029, \"starttime\": 1792676305, \"startway\": 1, \"usagetime\": 1939, \"usagematerial\": 4132.6046700001589, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792676305.png\", \"filemd5\": \"e16fd2ea294b0199d63a69fda5c7aa24\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-20 10:22:44\", \"id\": 1792484564, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1792484564, \"startway\": 1, \"usagetime\": 139, \"usagematerial\": 87.658699999999897, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792484564.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-16 09:27:57\", \"id\": 1792135677, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/ProGlide Case In_PLA_2h58m.gcode\", \"size\": 9843701, \"ctime\": 1791988449, \"starttime\": 1792135677, \"startway\": 1, \"usagetime\": 10973, \"usagematerial\": 23756.450819989699, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792135677.png\", \"filemd5\": \"43abb7c011ccff05ce862ca4df522edf\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-01 14:43:21\", \"id\": 1790858601, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Haj Tom Barber 2_PLA_1h9m.gcode\", \"size\": 3941932, \"ctime\": 1790857897, \"starttime\": 1790858601, \"startway\": 1, \"usagetime\": 4159, \"usagematerial\": 11551.936529999517, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790858601.png\", \"filemd5\": \"6e1b2ca03d7631dd422a33ce783c4bd8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-28 16:53:33\", \"id\": 1790607213, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790607213, \"startway\": 1, \"usagetime\": 4226, \"usagematerial\": 4915.2300800004568, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790607213.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 17:02:09\", \"id\": 1790262129, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790262129, \"startway\": 1, \"usagetime\": 4227, \"usagematerial\": 4915.2300799935365, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790262129.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 16:36:03\", \"id\": 1790260563, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790260563, \"startway\": 1, \"usagetime\": 334, \"usagematerial\": 298.98732999977437, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790260563.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 13:35:08\", \"id\": 1790249708, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1790249708, \"startway\": 1, \"usagetime\": 4860, \"usagematerial\": 15103.490189992021, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790249708.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 12:35:25\", \"id\": 1790246125, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/BikeLampHolder_PETG_22m.gcode\", \"size\": 2033230, \"ctime\": 1790238437, \"starttime\": 1790246125, \"startway\": 1, \"usagetime\": 1391, \"usagematerial\": 3279.4804200000158, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790246125.png\", \"filemd5\": \"2dcc692ae7ddf8bd843819b03717c38c\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-14 12:07:14\", \"id\": 1789380434, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Garden Lamp Pile_PETG_25m.gcode\", \"size\": 1478150, \"ctime\": 1789377234, \"starttime\": 1789380434, \"startway\": 1, \"usagetime\": 1513, \"usagematerial\": 3570.3080600000735, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1789380434.png\", \"filemd5\": \"053fd91f53a78eb3fb0b048d6b6be7f4\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-10 12:42:46\", \"id\": 1789036966, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Saw Handle_PETG_52m.gcode\", \"size\": 5011155, \"ctime\": 1789034338, \"starttime\": 1789036966, \"startway\": 1, \"usagetime\": 3261, \"usagematerial\": 11148.347340000484, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1789036966.png\", \"filemd5\": \"d905fc2409f321daa497d94ee9445d7a\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 21:33:40\", \"id\": 1788464020, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Sektion Endcap_PETG_18m.gcode\", \"size\": 875981, \"ctime\": 1788464016, \"starttime\": 1788464020, \"startway\": 11, \"usagetime\": 1132, \"usagematerial\": 2691.4896000002609, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788464020.png\", \"filemd5\": \"cfee419babcc6b45227f0edb3f196bfb\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 17:21:07\", \"id\": 1788448867, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Paddle Board Gasket_TPU_3m.gcode\", \"size\": 150609, \"ctime\": 1788446641, \"starttime\": 1788448867, \"startway\": 1, \"usagetime\": 195, \"usagematerial\": 155.83467000000383, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788448867.png\", \"filemd5\": \"38753661308cb47fa6f20f0ed0ed139d\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 16:52:41\", \"id\": 1788447161, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shelf Pins_PETG_8m.gcode\", \"size\": 700461, \"ctime\": 1788446196, \"starttime\": 1788447161, \"startway\": 1, \"usagetime\": 542, \"usagematerial\": 1146.8346699999929, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788447161.png\", \"filemd5\": \"5751d92651c89f9786afd7c3e194c6f4\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-02 21:03:01\", \"id\": 1788375781, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Paddle Board Pump_PETG_39m.gcode\", \"size\": 4001110, \"ctime\": 1788375390, \"starttime\": 1788375781, \"startway\": 1, \"usagetime\": 2350, \"usagematerial\": 4000.2527499995531, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788375781.png\", \"filemd5\": \"ef30cad59938ecce584556d99adbff17\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-26 14:28:38\", \"id\": 1787747318, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Woopie Pedal_PETG_1h30m.gcode\", \"size\": 7165137, \"ctime\": 1785758189, \"starttime\": 1787747318, \"startway\": 1, \"usagetime\": 5387, \"usagematerial\": 11721.401517500828, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787747318.png\", \"filemd5\": \"bf992c5df851f73134f0e1a44c6145cf\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-26 12:43:39\", \"id\": 1787741019, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Woopie Pedal_PETG_1h30m.gcode\", \"size\": 7165137, \"ctime\": 1785758189, \"starttime\": 1787741019, \"startway\": 1, \"usagetime\": 5387, \"usagematerial\": 11721.401517500672, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787741019.png\", \"filemd5\": \"bf992c5df851f73134f0e1a44c6145cf\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-25 15:20:53\", \"id\": 1787664053, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Garden Lamp Dome_PETG_1h5m.gcode\", \"size\": 5718948, \"ctime\": 1753881627, \"starttime\": 1787664053, \"startway\": 1, \"usagetime\": 4529, \"usagematerial\": 6478.7529474990406, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787664053.png\", \"filemd5\": \"b9015035ac6839e69ba4770af33e9374\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 17:47:11\", \"id\": 1786117631, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h25m.gcode\", \"size\": 4900093, \"ctime\": 1786117617, \"starttime\": 1786117631, \"startway\": 1, \"usagetime\": 5161, \"usagematerial\": 8536.0751899945135, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786117631.png\", \"filemd5\": \"4a9310ca1ca4933fb15028d5372b420c\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 14:47:06\", \"id\": 1786106826, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h25m.gcode\", \"size\": 4717637, \"ctime\": 1786106812, \"starttime\": 1786106826, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786106826.png\", \"filemd5\": \"fc32c2e6041f06198609ce63217bb8c8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 14:12:52\", \"id\": 1786104772, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h21m.gcode\", \"size\": 3418870, \"ctime\": 1786103431, \"starttime\": 1786104772, \"startway\": 1, \"usagetime\": 1261, \"usagematerial\": 3499.6285599999701, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786104772.png\", \"filemd5\": \"8790c0eacda10749bf8234a6587ddb69\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-04 09:27:12\", \"id\": 1785828432, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Viktor_PETG_4h10m.gcode\", \"size\": 40596384, \"ctime\": 1771141636, \"starttime\": 1785828432, \"startway\": 1, \"usagetime\": 16016, \"usagematerial\": 64273.880110010075, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785828432.png\", \"filemd5\": \"9f2327614dbeaddd569244cb5da0e913\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 17:01:57\", \"id\": 1785769317, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Viktor_PETG_4h10m.gcode\", \"size\": 40596384, \"ctime\": 1771141636, \"starttime\": 1785769317, \"startway\": 1, \"usagetime\": 16016, \"usagematerial\": 64273.880110007165, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785769317.png\", \"filemd5\": \"9f2327614dbeaddd569244cb5da0e913\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 15:23:22\", \"id\": 1785763402, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Panni_PLA_55m.gcode\", \"size\": 952183, \"ctime\": 1785763335, \"starttime\": 1785763402, \"startway\": 1, \"usagetime\": 3338, \"usagematerial\": 3655.7172300004786, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785763402.png\", \"filemd5\": \"00b71faf658c00363ac99d97fb95ef73\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 13:52:39\", \"id\": 1785757959, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Panni_PLA_23m.gcode\", \"size\": 835755, \"ctime\": 1785754996, \"starttime\": 1785757959, \"startway\": 1, \"usagetime\": 1404, \"usagematerial\": 3587.1780800000738, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785757959.png\", \"filemd5\": \"8fabf729ad2f7fb01d72c8ad284b541a\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 16:25:46\", \"id\": 1784643946, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shower Drain Hair Net_PETG_22m.gcode\", \"size\": 2124242, \"ctime\": 1784618478, \"starttime\": 1784643946, \"startway\": 1, \"usagetime\": 1402, \"usagematerial\": 1736.1855599985502, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784643946.png\", \"filemd5\": \"7ca2f924148fae76591a12b395c57b12\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 16:06:27\", \"id\": 1784642787, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1784642787, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784642787.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 14:31:41\", \"id\": 1784637101, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1784637101, \"startway\": 1, \"usagetime\": 4853, \"usagematerial\": 15103.441339997958, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784637101.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 12:26:48\", \"id\": 1784629608, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Toothpick Dispenser_PLA_1h11m.gcode\", \"size\": 8209339, \"ctime\": 1784628401, \"starttime\": 1784629608, \"startway\": 1, \"usagetime\": 4353, \"usagematerial\": 12252.7843399992, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784629608.png\", \"filemd5\": \"1d729a7af67f09060a0b039906032fd2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-16 17:46:58\", \"id\": 1784216818, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Dimmer Switch Knob_PLA_14m.gcode\", \"size\": 1876097, \"ctime\": 1784216814, \"starttime\": 1784216818, \"startway\": 11, \"usagetime\": 886, \"usagematerial\": 1806.9506399999552, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784216818.png\", \"filemd5\": \"a4b1d7ad1c503a6870b94e0d7838033e\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-16 15:57:47\", \"id\": 1784210267, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Dimmer Switch Knob_PLA_14m.gcode\", \"size\": 1909008, \"ctime\": 1784210253, \"starttime\": 1784210267, \"startway\": 1, \"usagetime\": 878, \"usagematerial\": 1761.8193999999926, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784210267.png\", \"filemd5\": \"0782a414bd0c6246bf2c95c059dabe75\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-13 15:42:05\", \"id\": 1783950125, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 25thick_PETG_1h18m.gcode\", \"size\": 6885232, \"ctime\": 1783935297, \"starttime\": 1783950125, \"startway\": 1, \"usagetime\": 4691, \"usagematerial\": 15385.733579992111, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1783950125.png\", \"filemd5\": \"8f7d878a1f3ca3bc9c5dce6d0e45f524\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-13 14:30:32\", \"id\": 1783945832, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Drain Yub Hair Trap_PETG_45m.gcode\", \"size\": 4084992, \"ctime\": 1783930395, \"starttime\": 1783945832, \"startway\": 1, \"usagetime\": 2690, \"usagematerial\": 3111.4259600002983, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1783945832.png\", \"filemd5\": \"87c91b810cc9aa0ae062300086599cb3\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-02 14:46:15\", \"id\": 1782996375, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Attic Door Hook_ABS_38m.gcode\", \"size\": 2281727, \"ctime\": 1761559746, \"starttime\": 1782996375, \"startway\": 1, \"usagetime\": 1568, \"usagematerial\": 4902.7161900003039, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782996375.png\", \"filemd5\": \"0b7138c86da740c9e4f946b9b4972afb\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-02 12:12:36\", \"id\": 1782987156, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shower Rod Extension_ABS_35m.gcode\", \"size\": 2574048, \"ctime\": 1782942255, \"starttime\": 1782987156, \"startway\": 1, \"usagetime\": 2165, \"usagematerial\": 4742.2973300001941, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782987156.png\", \"filemd5\": \"5b4d98b1b3d28dd0f07da33466322774\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 23:17:19\", \"id\": 1782854239, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 6x35_PETG_18m.gcode\", \"size\": 1757636, \"ctime\": 1782847744, \"starttime\": 1782854239, \"startway\": 1, \"usagetime\": 1113, \"usagematerial\": 1364.3979100001511, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782854239.png\", \"filemd5\": \"ea87fb02ded1203b5e5f7e6b246a2878\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 21:29:21\", \"id\": 1782847761, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 6x35_PETG_18m.gcode\", \"size\": 1757636, \"ctime\": 1782847744, \"starttime\": 1782847761, \"startway\": 1, \"usagetime\": 1113, \"usagematerial\": 1364.3979099998858, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782847761.png\", \"filemd5\": \"ea87fb02ded1203b5e5f7e6b246a2878\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 19:05:44\", \"id\": 1782839144, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 4x35_PETG_18m.gcode\", \"size\": 1874618, \"ctime\": 1782838645, \"starttime\": 1782839144, \"startway\": 1, \"usagetime\": 1120, \"usagematerial\": 1436.3081099998797, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782839144.png\", \"filemd5\": \"173db5323fbac23992ff6224fbf46161\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:32:42\", \"id\": 1782037962, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Clip_PETG_4m.gcode\", \"size\": 174523, \"ctime\": 1752842125, \"starttime\": 1782037962, \"startway\": 1, \"usagetime\": 279, \"usagematerial\": 263.11337999998091, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782037962.png\", \"filemd5\": \"93060a91113b14412869db3e3c843dab\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:16:55\", \"id\": 1782037015, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_8m.gcode\", \"size\": 843609, \"ctime\": 1782037010, \"starttime\": 1782037015, \"startway\": 11, \"usagetime\": 509, \"usagematerial\": 705.6494999999486, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782037015.png\", \"filemd5\": \"a2cd07ad75dbc1453e8acd728fe96213\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:14:09\", \"id\": 1782036849, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_8m.gcode\", \"size\": 875020, \"ctime\": 1782036827, \"starttime\": 1782036849, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782036849.png\", \"filemd5\": \"1d13440296c73d86772efca472103fb6\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 11:55:36\", \"id\": 1782035736, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_14m.gcode\", \"size\": 1671602, \"ctime\": 1782035711, \"starttime\": 1782035736, \"startway\": 1, \"usagetime\": 460, \"usagematerial\": 630.10799000000668, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782035736.png\", \"filemd5\": \"e2113ad169c2fcd11a05fb360b7bd1cd\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-18 18:47:55\", \"id\": 1781801275, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Led Strip Holder_PETG_12m.gcode\", \"size\": 632986, \"ctime\": 1781796302, \"starttime\": 1781801275, \"startway\": 1, \"usagetime\": 775, \"usagematerial\": 629.70671000001857, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1781801275.png\", \"filemd5\": \"517cbb533197cfca2a5448759e463521\", \"ismulticolor\": false, \"iswaitbedsteady\": false } ] }"}
+{"t":6392,"type":"rx","len":66,"data":"{ \"nozzleTemp\": \"99.010000\", \"deviceState\": 1, \"withSelfTest\": 0 }"}
+{"t":6439,"type":"rx","len":14,"data":"{ \"state\": 1 }"}
+{"t":6506,"type":"rx","len":82,"data":"{ \"nozzleTemp\": \"98.870000\", \"bedTemp0\": \"46.500000\", \"fan\": 0, \"modelFanPct\": 0 }"}
+{"t":6610,"type":"rx","len":41,"data":"{ \"printId\": \"6ae498463cdf0518b6f9ab86\" }"}
+{"t":7006,"type":"rx","len":76,"data":"{ \"nozzleTemp\": \"98.720000\", \"bedTemp0\": \"46.480000\", \"targetBedTemp0\": 50 }"}
+{"t":7055,"type":"rx","len":21,"data":"{ \"withSelfTest\": 1 }"}
+{"t":7259,"type":"rx","len":79,"data":"{ \"nozzleTemp\": \"98.580000\", \"bedTemp0\": \"46.460000\", \"targetNozzleTemp\": 150 }"}
+{"t":8763,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"97.900000\", \"bedTemp0\": \"46.470000\" }"}
+{"t":9020,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"97.830000\", \"bedTemp0\": \"46.520000\" }"}
+{"t":10014,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"98.050000\", \"bedTemp0\": \"46.840000\" }"}
+{"t":10523,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"98.670000\", \"bedTemp0\": \"47.150000\" }"}
+{"t":10775,"type":"rx","len":29,"data":"{ \"nozzleTemp\": \"99.140000\" }"}
+{"t":11026,"type":"rx","len":54,"data":"{ \"nozzleTemp\": \"99.720000\", \"bedTemp0\": \"47.300000\" }"}
+{"t":11521,"type":"rx","len":82,"data":"{ \"nozzleTemp\": \"100.410000\", \"bedTemp0\": \"47.610000\", \"autohome\": \"X:1 Y:0 Z:0\" }"}
+{"t":11780,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"101.180000\", \"bedTemp0\": \"47.740000\" }"}
+{"t":12028,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"102.030000\", \"bedTemp0\": \"47.860000\" }"}
+{"t":12524,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"103.930000\", \"bedTemp0\": \"47.950000\" }"}
+{"t":12778,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"104.960000\", \"bedTemp0\": \"48.030000\" }"}
+{"t":13027,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"48.090000\" }"}
+{"t":13279,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"106.040000\", \"bedTemp0\": \"48.140000\" }"}
+{"t":13527,"type":"rx","len":101,"data":"{ \"nozzleTemp\": \"107.170000\", \"bedTemp0\": \"48.180000\", \"curPosition\": \"X:-156.12 Y:153.00 Z:149.99\" }"}
+{"t":13789,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"108.330000\" }"}
+{"t":14032,"type":"rx","len":101,"data":"{ \"nozzleTemp\": \"109.530000\", \"bedTemp0\": \"48.200000\", \"curPosition\": \"X:-133.85 Y:153.00 Z:149.99\" }"}
+{"t":14282,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"110.740000\", \"bedTemp0\": \"48.220000\", \"curPosition\": \"X:297.81 Y:153.00 Z:149.99\" }"}
+{"t":14530,"type":"rx","len":99,"data":"{ \"bedTemp0\": \"48.230000\", \"curPosition\": \"X:296.50 Y:153.00 Z:149.99\", \"autohome\": \"X:1 Y:1 Z:0\" }"}
+{"t":14789,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"111.980000\", \"bedTemp0\": \"48.250000\" }"}
+{"t":15065,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"113.230000\", \"bedTemp0\": \"48.270000\" }"}
+{"t":15286,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"114.500000\" }"}
+{"t":15534,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"115.780000\", \"bedTemp0\": \"48.290000\" }"}
+{"t":15792,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"117.080000\", \"bedTemp0\": \"48.320000\" }"}
+{"t":16288,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"118.380000\", \"bedTemp0\": \"48.390000\" }"}
+{"t":16537,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"119.690000\", \"bedTemp0\": \"48.450000\", \"curPosition\": \"X:296.50 Y:459.87 Z:149.99\" }"}
+{"t":16794,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"121.000000\" }"}
+{"t":17044,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"122.300000\", \"bedTemp0\": \"48.500000\" }"}
+{"t":17290,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"123.600000\", \"bedTemp0\": \"48.560000\" }"}
+{"t":17798,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"124.910000\", \"bedTemp0\": \"48.670000\" }"}
+{"t":18053,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"126.200000\", \"bedTemp0\": \"48.730000\" }"}
+{"t":18295,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"127.490000\" }"}
+{"t":18544,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"128.780000\", \"bedTemp0\": \"48.790000\" }"}
+{"t":18795,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.070000\", \"bedTemp0\": \"48.840000\" }"}
+{"t":19056,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"48.890000\" }"}
+{"t":19298,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"131.350000\", \"bedTemp0\": \"48.920000\" }"}
+{"t":19548,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"132.630000\", \"bedTemp0\": \"48.960000\" }"}
+{"t":19798,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"133.910000\", \"bedTemp0\": \"48.990000\" }"}
+{"t":20058,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"135.180000\" }"}
+{"t":20308,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"136.460000\", \"bedTemp0\": \"49.000000\" }"}
+{"t":20803,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"137.730000\", \"bedTemp0\": \"49.020000\", \"curPosition\": \"X:296.50 Y:300.62 Z:149.99\" }"}
+{"t":21051,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"138.970000\", \"bedTemp0\": \"49.030000\", \"curPosition\": \"X:296.50 Y:-2.00 Z:149.99\" }"}
+{"t":21303,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"140.190000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":21553,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"141.360000\" }"}
+{"t":21809,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"142.500000\", \"bedTemp0\": \"49.040000\" }"}
+{"t":22309,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"143.590000\", \"bedTemp0\": \"49.080000\" }"}
+{"t":22556,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"144.620000\", \"bedTemp0\": \"49.090000\" }"}
+{"t":22805,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"145.580000\", \"bedTemp0\": \"49.100000\" }"}
+{"t":23057,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"146.480000\" }"}
+{"t":23315,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"147.300000\", \"bedTemp0\": \"49.120000\" }"}
+{"t":23563,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.140000\", \"curPosition\": \"X:-156.12 Y:8.00 Z:149.99\" }"}
+{"t":23807,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"148.050000\", \"bedTemp0\": \"49.160000\", \"curPosition\": \"X:-140.26 Y:8.00 Z:149.99\" }"}
+{"t":24059,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"148.710000\", \"bedTemp0\": \"49.180000\", \"curPosition\": \"X:302.04 Y:8.00 Z:149.99\" }"}
+{"t":24317,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"149.300000\", \"bedTemp0\": \"49.200000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":24817,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.250000\", \"bedTemp0\": \"49.220000\" }"}
+{"t":25813,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.140000\", \"bedTemp0\": \"49.320000\" }"}
+{"t":26323,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"151.430000\", \"bedTemp0\": \"49.340000\", \"curPosition\": \"X:296.50 Y:459.87 Z:149.99\" }"}
+{"t":26576,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"49.350000\", \"curPosition\": \"X:296.50 Y:447.59 Z:149.99\" }"}
+{"t":26826,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"151.510000\", \"bedTemp0\": \"49.370000\", \"curPosition\": \"X:296.50 Y:-2.00 Z:149.99\" }"}
+{"t":27118,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"151.550000\", \"bedTemp0\": \"49.390000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":27865,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.510000\", \"bedTemp0\": \"49.420000\" }"}
+{"t":28866,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.370000\", \"bedTemp0\": \"49.470000\" }"}
+{"t":29617,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"151.300000\", \"bedTemp0\": \"49.500000\", \"curPosition\": \"X:291.01 Y:13.55 Z:149.99\" }"}
+{"t":29874,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.520000\", \"curPosition\": \"X:255.63 Y:49.30 Z:149.99\" }"}
+{"t":30125,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.530000\", \"curPosition\": \"X:220.41 Y:84.89 Z:149.99\" }"}
+{"t":30376,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"151.330000\", \"bedTemp0\": \"49.550000\", \"curPosition\": \"X:185.08 Y:120.58 Z:149.99\" }"}
+{"t":30619,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"151.380000\", \"bedTemp0\": \"49.570000\", \"curPosition\": \"X:153.00 Y:153.00 Z:149.99\" }"}
+{"t":30880,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"151.440000\" }"}
+{"t":32376,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.070000\", \"bedTemp0\": \"49.660000\" }"}
+{"t":32885,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.390000\", \"bedTemp0\": \"49.700000\" }"}
+{"t":34387,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"153.030000\", \"bedTemp0\": \"49.810000\" }"}
+{"t":36905,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"153.100000\", \"bedTemp0\": \"49.840000\" }"}
+{"t":37394,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.950000\", \"bedTemp0\": \"49.830000\" }"}
+{"t":38147,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"152.780000\", \"bedTemp0\": \"49.840000\", \"boxTemp\": 30 }"}
+{"t":38406,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"152.680000\", \"bedTemp0\": \"49.850000\", \"boxTemp\": 31 }"}
+{"t":38909,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.460000\", \"bedTemp0\": \"49.860000\" }"}
+{"t":40159,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.980000\", \"bedTemp0\": \"49.910000\" }"}
+{"t":42658,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.290000\", \"bedTemp0\": \"49.970000\", \"boxTemp\": 30 }"}
+{"t":42921,"type":"rx","len":45,"data":"{ \"nozzleTemp\": \"151.250000\", \"boxTemp\": 31 }"}
+{"t":43411,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.190000\", \"bedTemp0\": \"49.960000\", \"boxTemp\": 30 }"}
+{"t":43661,"type":"rx","len":42,"data":"{ \"bedTemp0\": \"49.950000\", \"boxTemp\": 31 }"}
+{"t":44163,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.180000\", \"bedTemp0\": \"49.920000\", \"boxTemp\": 30 }"}
+{"t":44674,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.190000\", \"bedTemp0\": \"49.900000\", \"boxTemp\": 31 }"}
+{"t":45921,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.270000\", \"bedTemp0\": \"49.870000\", \"boxTemp\": 30 }"}
+{"t":46179,"type":"rx","len":45,"data":"{ \"nozzleTemp\": \"151.280000\", \"boxTemp\": 31 }"}
+{"t":46671,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.310000\", \"bedTemp0\": \"49.880000\", \"boxTemp\": 30 }"}
+{"t":47425,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.320000\", \"bedTemp0\": \"49.890000\", \"boxTemp\": 31 }"}
+{"t":48439,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"151.260000\", \"bedTemp0\": \"49.910000\", \"boxTemp\": 30 }"}
+{"t":48938,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"151.180000\" }"}
+{"t":50182,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.950000\", \"bedTemp0\": \"49.880000\" }"}
+{"t":50942,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"150.730000\" }"}
+{"t":52690,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.250000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":52959,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"50.050000\" }"}
+{"t":53946,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.980000\", \"bedTemp0\": \"50.150000\" }"}
+{"t":54960,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.830000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":56964,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.820000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":58466,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.030000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":58977,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"150.080000\" }"}
+{"t":60984,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.370000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":62995,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.330000\", \"bedTemp0\": \"50.340000\" }"}
+{"t":65054,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.010000\", \"bedTemp0\": \"50.460000\" }"}
+{"t":65495,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"149.960000\" }"}
+{"t":67006,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.720000\", \"bedTemp0\": \"50.390000\" }"}
+{"t":69007,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.620000\", \"bedTemp0\": \"50.340000\" }"}
+{"t":71025,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.780000\", \"bedTemp0\": \"50.390000\" }"}
+{"t":73015,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"150.010000\" }"}
+{"t":75043,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.260000\", \"bedTemp0\": \"50.310000\" }"}
+{"t":79043,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.200000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":80786,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.950000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":80842,"type":"rx","len":21,"data":"{ \"withSelfTest\": 2 }"}
+{"t":81053,"type":"rx","len":29,"data":"{ \"accelerationLimits\": 500 }"}
+{"t":81108,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"149.900000\", \"curPosition\": \"X:0.00 Y:0.00 Z:0.00\", \"targetNozzleTemp\": 130 }"}
+{"t":81293,"type":"rx","len":76,"data":"{ \"nozzleTemp\": \"149.850000\", \"curPosition\": \"X:-156.16 Y:153.00 Z:149.99\" }"}
+{"t":81542,"type":"rx","len":76,"data":"{ \"nozzleTemp\": \"149.810000\", \"curPosition\": \"X:-154.95 Y:153.00 Z:149.99\" }"}
+{"t":83058,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.610000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":85054,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.210000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":85806,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"148.890000\", \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:5.59 Y:153.00 Z:149.99\" }"}
+{"t":86053,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"148.770000\", \"curPosition\": \"X:300.92 Y:153.00 Z:149.99\" }"}
+{"t":86315,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"148.640000\", \"curPosition\": \"X:296.50 Y:153.00 Z:149.99\" }"}
+{"t":87062,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"148.370000\", \"bedTemp0\": \"50.130000\" }"}
+{"t":87809,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"147.930000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":88317,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"147.780000\", \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:296.50 Y:459.01 Z:149.99\" }"}
+{"t":88565,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"147.630000\", \"curPosition\": \"X:296.50 Y:458.70 Z:149.99\" }"}
+{"t":89069,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"147.320000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":90064,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"146.850000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":91075,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"146.190000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":91829,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"145.860000\", \"bedTemp0\": \"50.070000\" }"}
+{"t":92823,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"145.360000\", \"bedTemp0\": \"50.080000\", \"curPosition\": \"X:296.50 Y:296.61 Z:149.99\" }"}
+{"t":93071,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"145.200000\", \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:296.50 Y:3.56 Z:149.99\" }"}
+{"t":93332,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"145.040000\", \"bedTemp0\": \"50.100000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":93581,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"144.880000\" }"}
+{"t":95086,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"144.060000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":95331,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"143.900000\", \"bedTemp0\": \"50.180000\", \"curPosition\": \"X:-155.31 Y:8.00 Z:149.99\" }"}
+{"t":95584,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"143.740000\", \"curPosition\": \"X:-154.95 Y:8.00 Z:149.99\" }"}
+{"t":95833,"type":"rx","len":46,"data":"{ \"curPosition\": \"X:-137.29 Y:8.00 Z:149.99\" }"}
+{"t":96082,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"143.580000\", \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:300.83 Y:8.00 Z:149.99\" }"}
+{"t":96335,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"143.420000\", \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":96842,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"143.100000\", \"bedTemp0\": \"50.150000\" }"}
+{"t":97088,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"142.950000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":98346,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"142.330000\", \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:296.50 Y:458.96 Z:149.99\" }"}
+{"t":98594,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"142.180000\", \"curPosition\": \"X:296.50 Y:458.70 Z:149.99\" }"}
+{"t":98846,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:296.50 Y:440.95 Z:149.99\" }"}
+{"t":99094,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"142.030000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:296.50 Y:3.54 Z:149.99\" }"}
+{"t":99368,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"141.880000\", \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:296.50 Y:8.00 Z:149.99\" }"}
+{"t":100866,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"141.130000\", \"bedTemp0\": \"50.230000\" }"}
+{"t":101114,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"140.980000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":101365,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"140.840000\", \"curPosition\": \"X:294.86 Y:9.66 Z:149.99\" }"}
+{"t":101616,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"140.690000\", \"curPosition\": \"X:284.42 Y:20.27 Z:149.99\" }"}
+{"t":101866,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.250000\", \"curPosition\": \"X:273.89 Y:30.97 Z:149.99\" }"}
+{"t":102114,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"140.540000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:263.34 Y:41.68 Z:149.99\" }"}
+{"t":102375,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"140.390000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:252.81 Y:52.38 Z:149.99\" }"}
+{"t":102621,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"140.250000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:242.25 Y:63.10 Z:149.99\" }"}
+{"t":102867,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"140.100000\", \"curPosition\": \"X:231.69 Y:73.83 Z:149.99\" }"}
+{"t":103115,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"139.950000\", \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:221.12 Y:84.57 Z:149.99\" }"}
+{"t":103375,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"139.800000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:210.58 Y:95.27 Z:149.99\" }"}
+{"t":103615,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:200.04 Y:105.98 Z:149.99\" }"}
+{"t":103876,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"139.630000\", \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:189.50 Y:116.69 Z:149.99\" }"}
+{"t":104174,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"139.470000\", \"curPosition\": \"X:178.95 Y:127.40 Z:149.99\" }"}
+{"t":104383,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"139.310000\", \"curPosition\": \"X:168.37 Y:138.15 Z:149.99\" }"}
+{"t":104623,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"139.160000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:157.84 Y:148.85 Z:149.99\" }"}
+{"t":104871,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"139.000000\", \"curPosition\": \"X:153.75 Y:153.00 Z:149.99\" }"}
+{"t":105123,"type":"rx","len":170,"data":"{ \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:153.75 Y:153.00 Z:0.00\", \"autohome\": \"X:1 Y:1 Z:1\", \"fan\": 1, \"fanAuxiliary\": 1, \"modelFanPct\": 100, \"auxiliaryFanPct\": 100 }"}
+{"t":105381,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"138.850000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":106882,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"138.130000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":107131,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"137.990000\", \"bedTemp0\": \"50.230000\" }"}
+{"t":108889,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"137.030000\" }"}
+{"t":109130,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"136.850000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":110640,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"135.830000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":110893,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"135.600000\" }"}
+{"t":111897,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"134.910000\", \"bedTemp0\": \"50.210000\", \"fan\": 0, \"fanAuxiliary\": 0, \"modelFanPct\": 0, \"auxiliaryFanPct\": 0 }"}
+{"t":112137,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"134.670000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:152.52 Y:153.16 Z:0.00\" }"}
+{"t":112390,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"134.430000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:143.34 Y:154.40 Z:0.00\" }"}
+{"t":112650,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.00\" }"}
+{"t":112898,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"134.180000\", \"bedTemp0\": \"50.280000\" }"}
+{"t":113147,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"133.940000\", \"bedTemp0\": \"50.300000\" }"}
+{"t":114157,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"133.180000\", \"bedTemp0\": \"50.360000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.46\" }"}
+{"t":114402,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"132.930000\", \"bedTemp0\": \"50.390000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.44\" }"}
+{"t":114648,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"132.680000\", \"bedTemp0\": \"50.410000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.42\" }"}
+{"t":114898,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"132.440000\", \"bedTemp0\": \"50.430000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.41\" }"}
+{"t":115149,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"132.190000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.38\" }"}
+{"t":115399,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"131.950000\", \"bedTemp0\": \"50.460000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.05\" }"}
+{"t":115657,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.480000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.00\" }"}
+{"t":116911,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.840000\", \"bedTemp0\": \"50.550000\" }"}
+{"t":118910,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.930000\", \"bedTemp0\": \"50.500000\" }"}
+{"t":119672,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.710000\", \"bedTemp0\": \"50.470000\" }"}
+{"t":119913,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.670000\", \"bedTemp0\": \"50.460000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.02\" }"}
+{"t":120165,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.470000\", \"curPosition\": \"X:143.18 Y:154.42 Z:2.39\" }"}
+{"t":120417,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.650000\", \"bedTemp0\": \"50.460000\", \"curPosition\": \"X:143.18 Y:154.42 Z:4.90\" }"}
+{"t":120671,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.470000\", \"curPosition\": \"X:143.18 Y:154.42 Z:6.00\" }"}
+{"t":120928,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"129.660000\" }"}
+{"t":122958,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.030000\", \"bedTemp0\": \"50.480000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.00\" }"}
+{"t":123198,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.100000\", \"bedTemp0\": \"50.470000\", \"curPosition\": \"X:143.18 Y:154.42 Z:2.32\" }"}
+{"t":123457,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.460000\", \"curPosition\": \"X:143.18 Y:154.42 Z:4.83\" }"}
+{"t":123706,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.150000\", \"bedTemp0\": \"50.440000\", \"curPosition\": \"X:143.18 Y:154.42 Z:6.00\" }"}
+{"t":124959,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.290000\", \"bedTemp0\": \"50.360000\" }"}
+{"t":125710,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.270000\", \"bedTemp0\": \"50.280000\", \"curPosition\": \"X:143.18 Y:154.42 Z:0.82\" }"}
+{"t":125960,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.240000\", \"curPosition\": \"X:143.18 Y:154.42 Z:3.33\" }"}
+{"t":126210,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.190000\", \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:143.18 Y:154.42 Z:5.83\" }"}
+{"t":126444,"type":"rx","len":21,"data":"{ \"withSelfTest\": 3 }"}
+{"t":126495,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:143.18 Y:154.42 Z:6.00\" }"}
+{"t":126964,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.070000\", \"bedTemp0\": \"50.230000\" }"}
+{"t":127482,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"129.920000\" }"}
+{"t":127980,"type":"rx","len":80,"data":"{ \"nozzleTemp\": \"129.760000\", \"bedTemp0\": \"50.240000\", \"targetNozzleTemp\": 170 }"}
+{"t":128971,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.520000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":129998,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.410000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:142.73 Y:161.91 Z:5.95\" }"}
+{"t":130221,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.470000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:140.49 Y:199.17 Z:5.70\" }"}
+{"t":130474,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.600000\", \"curPosition\": \"X:137.48 Y:249.23 Z:5.37\" }"}
+{"t":130726,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.810000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:134.93 Y:291.71 Z:5.08\" }"}
+{"t":130975,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.110000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:134.17 Y:304.41 Z:5.00\" }"}
+{"t":131978,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"131.570000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":132227,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"132.230000\", \"bedTemp0\": \"50.130000\" }"}
+{"t":132982,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"133.780000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":133227,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"134.650000\" }"}
+{"t":133478,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"135.580000\" }"}
+{"t":133731,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"136.560000\" }"}
+{"t":133981,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"137.610000\", \"bedTemp0\": \"50.100000\" }"}
+{"t":134488,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"138.690000\", \"bedTemp0\": \"50.130000\" }"}
+{"t":134733,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"139.800000\" }"}
+{"t":134984,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"140.930000\" }"}
+{"t":135240,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"142.090000\", \"bedTemp0\": \"50.150000\" }"}
+{"t":135493,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"143.260000\" }"}
+{"t":135988,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"144.450000\" }"}
+{"t":136241,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"145.640000\" }"}
+{"t":136494,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"146.850000\" }"}
+{"t":136741,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"148.060000\" }"}
+{"t":136993,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"149.290000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:136.24 Y:304.41 Z:5.00\" }"}
+{"t":137247,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:158.69 Y:304.41 Z:5.00\" }"}
+{"t":137496,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"150.530000\", \"curPosition\": \"X:164.17 Y:304.41 Z:5.00\" }"}
+{"t":137744,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"151.760000\" }"}
+{"t":137995,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.990000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":138253,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"154.230000\" }"}
+{"t":138506,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"155.450000\" }"}
+{"t":139002,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"156.670000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":139252,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"157.880000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":139511,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"159.070000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":139761,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"160.240000\" }"}
+{"t":140006,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"161.380000\", \"bedTemp0\": \"50.190000\" }"}
+{"t":140511,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"162.480000\", \"bedTemp0\": \"50.230000\" }"}
+{"t":140760,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"163.530000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":141008,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"164.530000\", \"bedTemp0\": \"50.270000\" }"}
+{"t":141262,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"165.470000\" }"}
+{"t":141511,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"166.390000\", \"bedTemp0\": \"50.290000\" }"}
+{"t":142019,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"167.230000\", \"bedTemp0\": \"50.330000\" }"}
+{"t":142514,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"168.650000\", \"bedTemp0\": \"50.370000\" }"}
+{"t":142777,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"169.240000\" }"}
+{"t":143011,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"169.740000\", \"bedTemp0\": \"50.400000\" }"}
+{"t":143266,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"50.420000\" }"}
+{"t":143535,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"170.160000\", \"bedTemp0\": \"50.450000\", \"curPosition\": \"X:162.67 Y:304.41 Z:5.00\" }"}
+{"t":143765,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"170.520000\", \"bedTemp0\": \"50.470000\", \"curPosition\": \"X:140.69 Y:304.41 Z:5.00\" }"}
+{"t":144015,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"170.800000\", \"bedTemp0\": \"50.500000\", \"curPosition\": \"X:134.17 Y:304.41 Z:5.00\" }"}
+{"t":144263,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"171.020000\" }"}
+{"t":144520,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"171.190000\", \"bedTemp0\": \"50.510000\", \"curPosition\": \"X:134.17 Y:304.41 Z:3.79\" }"}
+{"t":144776,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"171.300000\", \"bedTemp0\": \"50.530000\", \"curPosition\": \"X:134.17 Y:304.41 Z:2.53\" }"}
+{"t":145027,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.540000\", \"curPosition\": \"X:134.17 Y:304.41 Z:1.27\" }"}
+{"t":145274,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"171.370000\", \"bedTemp0\": \"50.550000\", \"curPosition\": \"X:134.17 Y:304.41 Z:0.33\" }"}
+{"t":145522,"type":"rx","len":80,"data":"{ \"nozzleTemp\": \"171.390000\", \"bedTemp0\": \"50.540000\", \"targetNozzleTemp\": 200 }"}
+{"t":147027,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"171.180000\", \"bedTemp0\": \"50.470000\" }"}
+{"t":149034,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"172.300000\", \"bedTemp0\": \"50.400000\" }"}
+{"t":149782,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"173.310000\", \"bedTemp0\": \"50.410000\" }"}
+{"t":150289,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"174.610000\" }"}
+{"t":150538,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"175.360000\", \"bedTemp0\": \"50.420000\" }"}
+{"t":150785,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"176.150000\" }"}
+{"t":151046,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"50.430000\" }"}
+{"t":151545,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"177.880000\" }"}
+{"t":151797,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"178.800000\" }"}
+{"t":152040,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"179.750000\" }"}
+{"t":152287,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"180.740000\", \"bedTemp0\": \"50.420000\" }"}
+{"t":152791,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"181.740000\", \"bedTemp0\": \"50.390000\" }"}
+{"t":153049,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"182.760000\", \"bedTemp0\": \"50.370000\" }"}
+{"t":153296,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"183.780000\" }"}
+{"t":153543,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"184.830000\", \"bedTemp0\": \"50.360000\" }"}
+{"t":153791,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"185.890000\", \"bedTemp0\": \"50.330000\" }"}
+{"t":154295,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"186.950000\", \"bedTemp0\": \"50.280000\" }"}
+{"t":154543,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"188.030000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":154803,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"189.100000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":155066,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"190.170000\" }"}
+{"t":155304,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"191.260000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":155550,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:134.64 Y:304.41 Z:0.32\" }"}
+{"t":155799,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"192.320000\", \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:135.14 Y:304.41 Z:0.32\" }"}
+{"t":156057,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"193.370000\", \"curPosition\": \"X:135.65 Y:304.41 Z:0.31\" }"}
+{"t":156300,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"194.410000\", \"curPosition\": \"X:136.15 Y:304.41 Z:0.30\" }"}
+{"t":156558,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"195.430000\", \"curPosition\": \"X:136.65 Y:304.41 Z:0.30\" }"}
+{"t":156804,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"196.400000\", \"curPosition\": \"X:137.15 Y:304.41 Z:0.29\" }"}
+{"t":157053,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:137.65 Y:304.41 Z:0.29\" }"}
+{"t":157305,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"197.340000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:138.15 Y:304.41 Z:0.28\" }"}
+{"t":157556,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"198.220000\", \"curPosition\": \"X:138.65 Y:304.41 Z:0.28\" }"}
+{"t":157805,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"199.040000\", \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:139.15 Y:304.41 Z:0.27\" }"}
+{"t":158053,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"199.810000\", \"curPosition\": \"X:139.65 Y:304.41 Z:0.27\" }"}
+{"t":158310,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"200.480000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:140.16 Y:304.41 Z:0.26\" }"}
+{"t":158556,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.180000\", \"curPosition\": \"X:140.66 Y:304.41 Z:0.26\" }"}
+{"t":158807,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"201.100000\", \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:141.16 Y:304.41 Z:0.25\" }"}
+{"t":159058,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"201.640000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:141.66 Y:304.41 Z:0.24\" }"}
+{"t":159308,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.090000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:142.16 Y:304.41 Z:0.24\" }"}
+{"t":159561,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.490000\", \"curPosition\": \"X:142.66 Y:304.41 Z:0.23\" }"}
+{"t":159823,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.810000\", \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:143.17 Y:304.41 Z:0.23\" }"}
+{"t":160068,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:143.67 Y:304.41 Z:0.22\" }"}
+{"t":160318,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.050000\", \"curPosition\": \"X:144.17 Y:304.41 Z:0.22\" }"}
+{"t":160567,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.250000\", \"curPosition\": \"X:144.67 Y:304.41 Z:0.21\" }"}
+{"t":160815,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.380000\", \"curPosition\": \"X:145.17 Y:304.41 Z:0.20\" }"}
+{"t":161062,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.470000\", \"curPosition\": \"X:145.68 Y:304.41 Z:0.20\" }"}
+{"t":161314,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.510000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:146.18 Y:304.41 Z:0.19\" }"}
+{"t":161588,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.520000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:146.68 Y:304.41 Z:0.19\" }"}
+{"t":161816,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:147.18 Y:304.41 Z:0.18\" }"}
+{"t":162072,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.490000\", \"bedTemp0\": \"50.180000\", \"curPosition\": \"X:147.68 Y:304.41 Z:0.18\" }"}
+{"t":162324,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.430000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:148.18 Y:304.41 Z:0.17\" }"}
+{"t":162579,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.370000\", \"curPosition\": \"X:148.68 Y:304.41 Z:0.17\" }"}
+{"t":162828,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.280000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:149.18 Y:304.41 Z:0.16\" }"}
+{"t":163076,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.170000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:149.69 Y:304.41 Z:0.16\" }"}
+{"t":163324,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:150.19 Y:304.41 Z:0.15\" }"}
+{"t":163576,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.070000\", \"curPosition\": \"X:150.69 Y:304.41 Z:0.14\" }"}
+{"t":163824,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.970000\", \"curPosition\": \"X:151.19 Y:304.41 Z:0.14\" }"}
+{"t":164074,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.880000\", \"curPosition\": \"X:151.69 Y:304.41 Z:0.13\" }"}
+{"t":164323,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.790000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:152.19 Y:304.41 Z:0.13\" }"}
+{"t":164582,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.710000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:152.70 Y:304.41 Z:0.12\" }"}
+{"t":164830,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:153.20 Y:304.41 Z:0.12\" }"}
+{"t":165081,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.660000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:153.70 Y:304.41 Z:0.11\" }"}
+{"t":165334,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.610000\", \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:154.20 Y:304.41 Z:0.11\" }"}
+{"t":165584,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.590000\", \"curPosition\": \"X:154.70 Y:304.41 Z:0.10\" }"}
+{"t":165835,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:155.20 Y:304.41 Z:0.10\" }"}
+{"t":166086,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.610000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:155.71 Y:304.41 Z:0.09\" }"}
+{"t":166329,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:156.21 Y:304.41 Z:0.08\" }"}
+{"t":166600,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.640000\", \"curPosition\": \"X:156.71 Y:304.41 Z:0.08\" }"}
+{"t":166840,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.690000\", \"curPosition\": \"X:157.21 Y:304.41 Z:0.07\" }"}
+{"t":167087,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.730000\", \"curPosition\": \"X:157.71 Y:304.41 Z:0.07\" }"}
+{"t":167338,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"202.810000\", \"curPosition\": \"X:158.21 Y:304.41 Z:0.06\" }"}
+{"t":167590,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.880000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:158.71 Y:304.41 Z:0.06\" }"}
+{"t":167841,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:159.22 Y:304.41 Z:0.05\" }"}
+{"t":168091,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"202.960000\", \"bedTemp0\": \"50.160000\", \"curPosition\": \"X:159.72 Y:304.41 Z:0.05\" }"}
+{"t":168340,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.030000\", \"bedTemp0\": \"50.180000\", \"curPosition\": \"X:160.22 Y:304.41 Z:0.04\" }"}
+{"t":168589,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.110000\", \"curPosition\": \"X:160.72 Y:304.41 Z:0.04\" }"}
+{"t":168850,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.160000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:161.22 Y:304.41 Z:0.03\" }"}
+{"t":169095,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.210000\", \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:161.72 Y:304.41 Z:0.02\" }"}
+{"t":169345,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:162.22 Y:304.41 Z:0.02\" }"}
+{"t":169593,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.240000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:162.72 Y:304.41 Z:0.01\" }"}
+{"t":169844,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"203.260000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:163.22 Y:304.41 Z:0.01\" }"}
+{"t":170090,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"203.270000\", \"curPosition\": \"X:163.72 Y:304.41 Z:0.00\" }"}
+{"t":170339,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:164.17 Y:304.41 Z:-0.00\" }"}
+{"t":170606,"type":"rx","len":128,"data":"{ \"nozzleTemp\": \"203.230000\", \"fan\": 1, \"fanAuxiliary\": 1, \"targetNozzleTemp\": 130, \"modelFanPct\": 100, \"auxiliaryFanPct\": 100 }"}
+{"t":171105,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"203.160000\", \"bedTemp0\": \"50.210000\" }"}
+{"t":171598,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"202.960000\", \"bedTemp0\": \"50.180000\" }"}
+{"t":173106,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"202.200000\" }"}
+{"t":173354,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"201.980000\" }"}
+{"t":174109,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"201.510000\", \"bedTemp0\": \"50.220000\", \"boxTemp\": 31 }"}
+{"t":174605,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"200.970000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":175112,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"200.370000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":175901,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"199.690000\" }"}
+{"t":176359,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"198.980000\" }"}
+{"t":176859,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"198.580000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":177368,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"197.810000\", \"bedTemp0\": \"50.210000\" }"}
+{"t":177859,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"196.990000\", \"bedTemp0\": \"50.200000\" }"}
+{"t":178868,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"195.740000\" }"}
+{"t":179375,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"194.890000\" }"}
+{"t":180376,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"193.590000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":180872,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"192.720000\", \"bedTemp0\": \"50.280000\" }"}
+{"t":181378,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"191.850000\", \"bedTemp0\": \"50.320000\" }"}
+{"t":182388,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"190.570000\", \"bedTemp0\": \"50.390000\" }"}
+{"t":182872,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"189.700000\", \"bedTemp0\": \"50.440000\" }"}
+{"t":183637,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"188.840000\", \"bedTemp0\": \"50.510000\" }"}
+{"t":184131,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"187.980000\", \"bedTemp0\": \"50.540000\" }"}
+{"t":184888,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"187.120000\", \"bedTemp0\": \"50.580000\" }"}
+{"t":185135,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"186.690000\" }"}
+{"t":185641,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"185.840000\", \"bedTemp0\": \"50.570000\" }"}
+{"t":186389,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"184.990000\", \"bedTemp0\": \"50.540000\" }"}
+{"t":186886,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"184.150000\", \"bedTemp0\": \"50.530000\" }"}
+{"t":187136,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"183.730000\", \"bedTemp0\": \"50.510000\" }"}
+{"t":187897,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"182.900000\", \"bedTemp0\": \"50.440000\" }"}
+{"t":188645,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"181.670000\", \"bedTemp0\": \"50.390000\" }"}
+{"t":188903,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"181.250000\", \"bedTemp0\": \"50.360000\" }"}
+{"t":189399,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"180.850000\", \"bedTemp0\": \"50.300000\" }"}
+{"t":190151,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"179.620000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":190907,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"178.820000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":191657,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"177.620000\" }"}
+{"t":192409,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"176.820000\", \"bedTemp0\": \"50.230000\" }"}
+{"t":192937,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"176.040000\", \"bedTemp0\": \"50.210000\" }"}
+{"t":193172,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"175.640000\" }"}
+{"t":193913,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"174.860000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":194679,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"173.700000\", \"bedTemp0\": \"50.110000\" }"}
+{"t":194922,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"173.320000\", \"bedTemp0\": \"50.100000\" }"}
+{"t":195415,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"172.940000\", \"bedTemp0\": \"50.080000\" }"}
+{"t":196172,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"171.800000\" }"}
+{"t":196928,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"171.050000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":197174,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"170.670000\", \"bedTemp0\": \"50.110000\" }"}
+{"t":197667,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"169.920000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":198680,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"168.760000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":198925,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"168.350000\" }"}
+{"t":199174,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"167.950000\" }"}
+{"t":200181,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"166.830000\", \"bedTemp0\": \"50.150000\" }"}
+{"t":200934,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"165.740000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":201932,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"164.660000\", \"bedTemp0\": \"50.070000\" }"}
+{"t":202440,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"163.950000\" }"}
+{"t":202942,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"163.590000\", \"bedTemp0\": \"50.080000\" }"}
+{"t":203444,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"162.880000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":204185,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"161.840000\", \"bedTemp0\": \"50.100000\" }"}
+{"t":204948,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"161.140000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":205196,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"160.790000\" }"}
+{"t":206222,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"159.750000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":206947,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"158.730000\", \"bedTemp0\": \"50.060000\" }"}
+{"t":207945,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"157.710000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":208197,"type":"rx","len":45,"data":"{ \"nozzleTemp\": \"157.370000\", \"boxTemp\": 32 }"}
+{"t":208703,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"156.700000\", \"bedTemp0\": \"50.020000\", \"boxTemp\": 31 }"}
+{"t":208951,"type":"rx","len":42,"data":"{ \"bedTemp0\": \"50.040000\", \"boxTemp\": 32 }"}
+{"t":209200,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"156.370000\", \"bedTemp0\": \"50.060000\", \"boxTemp\": 31 }"}
+{"t":209707,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"155.700000\", \"bedTemp0\": \"50.120000\", \"boxTemp\": 32 }"}
+{"t":210712,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"154.710000\", \"bedTemp0\": \"50.190000\" }"}
+{"t":210964,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"154.390000\" }"}
+{"t":211459,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"153.740000\", \"bedTemp0\": \"50.200000\" }"}
+{"t":212463,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.740000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":212970,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"152.080000\", \"bedTemp0\": \"50.130000\" }"}
+{"t":213238,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.760000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":214220,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.800000\", \"bedTemp0\": \"50.070000\" }"}
+{"t":214976,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"149.840000\", \"bedTemp0\": \"50.090000\" }"}
+{"t":215975,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"148.900000\", \"bedTemp0\": \"50.170000\" }"}
+{"t":216978,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"147.970000\", \"bedTemp0\": \"50.290000\" }"}
+{"t":217975,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"146.740000\", \"bedTemp0\": \"50.360000\" }"}
+{"t":218979,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"145.820000\", \"bedTemp0\": \"50.420000\" }"}
+{"t":219980,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"144.910000\", \"bedTemp0\": \"50.470000\" }"}
+{"t":220990,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"143.700000\", \"bedTemp0\": \"50.460000\" }"}
+{"t":221995,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"142.810000\", \"bedTemp0\": \"50.410000\" }"}
+{"t":222986,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"141.930000\", \"bedTemp0\": \"50.300000\" }"}
+{"t":223991,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"140.750000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":224995,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"139.850000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":225997,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"138.950000\", \"bedTemp0\": \"50.320000\" }"}
+{"t":227009,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"137.790000\", \"bedTemp0\": \"50.380000\" }"}
+{"t":228007,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"136.950000\", \"bedTemp0\": \"50.430000\" }"}
+{"t":229007,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"136.110000\", \"bedTemp0\": \"50.450000\" }"}
+{"t":229256,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"135.830000\" }"}
+{"t":230511,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"134.720000\", \"bedTemp0\": \"50.380000\", \"curPosition\": \"X:0.00 Y:0.00 Z:0.00\" }"}
+{"t":230769,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"134.450000\", \"bedTemp0\": \"50.350000\", \"curPosition\": \"X:164.62 Y:304.41 Z:0.07\" }"}
+{"t":231021,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"134.180000\", \"bedTemp0\": \"50.330000\", \"curPosition\": \"X:165.11 Y:304.41 Z:0.16\" }"}
+{"t":231260,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"133.910000\", \"curPosition\": \"X:165.61 Y:304.41 Z:0.24\" }"}
+{"t":231537,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"133.640000\", \"bedTemp0\": \"50.300000\", \"curPosition\": \"X:166.10 Y:304.41 Z:0.33\" }"}
+{"t":231771,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"133.370000\", \"bedTemp0\": \"50.280000\", \"curPosition\": \"X:166.59 Y:304.41 Z:0.41\" }"}
+{"t":232024,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:167.09 Y:304.41 Z:0.50\" }"}
+{"t":232272,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"133.110000\", \"bedTemp0\": \"50.250000\", \"curPosition\": \"X:167.58 Y:304.41 Z:0.58\" }"}
+{"t":232519,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"132.850000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:168.08 Y:304.41 Z:0.67\" }"}
+{"t":232778,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"132.600000\", \"curPosition\": \"X:168.57 Y:304.41 Z:0.75\" }"}
+{"t":233025,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"132.360000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:169.07 Y:304.41 Z:0.84\" }"}
+{"t":233273,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"132.130000\", \"curPosition\": \"X:169.56 Y:304.41 Z:0.92\" }"}
+{"t":233520,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:170.06 Y:304.41 Z:1.01\" }"}
+{"t":233777,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"131.910000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:170.55 Y:304.41 Z:1.09\" }"}
+{"t":234043,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"131.710000\", \"curPosition\": \"X:171.04 Y:304.41 Z:1.18\" }"}
+{"t":234275,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"131.520000\", \"curPosition\": \"X:171.54 Y:304.41 Z:1.26\" }"}
+{"t":234524,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"131.350000\", \"curPosition\": \"X:172.03 Y:304.41 Z:1.35\" }"}
+{"t":234780,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"131.190000\", \"curPosition\": \"X:172.53 Y:304.41 Z:1.43\" }"}
+{"t":235033,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:173.02 Y:304.41 Z:1.52\" }"}
+{"t":235276,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"131.050000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:173.51 Y:304.41 Z:1.60\" }"}
+{"t":235525,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.920000\", \"curPosition\": \"X:174.01 Y:304.41 Z:1.69\" }"}
+{"t":235786,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.820000\", \"curPosition\": \"X:174.50 Y:304.41 Z:1.77\" }"}
+{"t":236034,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.730000\", \"curPosition\": \"X:175.00 Y:304.41 Z:1.86\" }"}
+{"t":236295,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.650000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:175.49 Y:304.41 Z:1.94\" }"}
+{"t":236535,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:175.99 Y:304.41 Z:2.03\" }"}
+{"t":236784,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.590000\", \"curPosition\": \"X:176.48 Y:304.41 Z:2.11\" }"}
+{"t":237038,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.530000\", \"bedTemp0\": \"50.250000\", \"curPosition\": \"X:176.97 Y:304.41 Z:2.20\" }"}
+{"t":237281,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.490000\", \"curPosition\": \"X:177.47 Y:304.41 Z:2.28\" }"}
+{"t":237539,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.460000\", \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:177.96 Y:304.41 Z:2.37\" }"}
+{"t":237789,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.440000\", \"curPosition\": \"X:178.46 Y:304.41 Z:2.45\" }"}
+{"t":238038,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:178.95 Y:304.41 Z:2.54\" }"}
+{"t":238288,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.430000\", \"curPosition\": \"X:179.45 Y:304.41 Z:2.62\" }"}
+{"t":238544,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.420000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:179.94 Y:304.41 Z:2.71\" }"}
+{"t":238792,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:180.44 Y:304.41 Z:2.79\" }"}
+{"t":239040,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:180.93 Y:304.41 Z:2.88\" }"}
+{"t":239290,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:181.43 Y:304.41 Z:2.96\" }"}
+{"t":239538,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:181.92 Y:304.41 Z:3.04\" }"}
+{"t":239799,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:182.41 Y:304.41 Z:3.13\" }"}
+{"t":240050,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:182.91 Y:304.41 Z:3.21\" }"}
+{"t":240292,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:183.40 Y:304.41 Z:3.30\" }"}
+{"t":240542,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:183.90 Y:304.41 Z:3.38\" }"}
+{"t":240802,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.110000\", \"curPosition\": \"X:184.39 Y:304.41 Z:3.47\" }"}
+{"t":241051,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:184.89 Y:304.41 Z:3.55\" }"}
+{"t":241302,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.080000\", \"curPosition\": \"X:185.38 Y:304.41 Z:3.64\" }"}
+{"t":241550,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.400000\", \"bedTemp0\": \"50.070000\", \"curPosition\": \"X:185.88 Y:304.41 Z:3.72\" }"}
+{"t":241798,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.390000\", \"bedTemp0\": \"50.060000\", \"curPosition\": \"X:186.37 Y:304.41 Z:3.81\" }"}
+{"t":242055,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.360000\", \"curPosition\": \"X:186.87 Y:304.41 Z:3.89\" }"}
+{"t":242306,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.330000\", \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:187.36 Y:304.41 Z:3.98\" }"}
+{"t":242551,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:187.85 Y:304.41 Z:4.06\" }"}
+{"t":242801,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.300000\", \"curPosition\": \"X:188.35 Y:304.41 Z:4.15\" }"}
+{"t":243048,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.270000\", \"bedTemp0\": \"50.060000\", \"curPosition\": \"X:188.84 Y:304.41 Z:4.23\" }"}
+{"t":243300,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.220000\", \"curPosition\": \"X:189.34 Y:304.41 Z:4.32\" }"}
+{"t":243553,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.180000\", \"curPosition\": \"X:189.83 Y:304.41 Z:4.40\" }"}
+{"t":243802,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.130000\", \"curPosition\": \"X:190.32 Y:304.41 Z:4.49\" }"}
+{"t":244062,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.070000\", \"curPosition\": \"X:190.82 Y:304.41 Z:4.57\" }"}
+{"t":244320,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.080000\", \"curPosition\": \"X:191.31 Y:304.41 Z:4.66\" }"}
+{"t":244556,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.020000\", \"bedTemp0\": \"50.080000\", \"curPosition\": \"X:191.81 Y:304.41 Z:4.74\" }"}
+{"t":244816,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.970000\", \"curPosition\": \"X:192.30 Y:304.41 Z:4.83\" }"}
+{"t":245061,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.910000\", \"curPosition\": \"X:192.79 Y:304.41 Z:4.91\" }"}
+{"t":245317,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.860000\", \"bedTemp0\": \"50.070000\", \"curPosition\": \"X:193.29 Y:304.41 Z:5.00\" }"}
+{"t":245562,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.060000\", \"curPosition\": \"X:193.78 Y:304.41 Z:5.08\" }"}
+{"t":245815,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.800000\", \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:194.17 Y:304.41 Z:5.15\" }"}
+{"t":245891,"type":"rx","len":21,"data":"{ \"withSelfTest\": 4 }"}
+{"t":246060,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"129.750000\", \"bedTemp0\": \"50.040000\", \"fan\": 0, \"fanAuxiliary\": 0, \"modelFanPct\": 0, \"auxiliaryFanPct\": 0 }"}
+{"t":246341,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.700000\", \"bedTemp0\": \"50.020000\", \"curPosition\": \"X:194.17 Y:304.41 Z:0.00\" }"}
+{"t":246589,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.650000\", \"curPosition\": \"X:194.10 Y:304.21 Z:0.00\" }"}
+{"t":246847,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.610000\", \"bedTemp0\": \"50.000000\", \"curPosition\": \"X:191.17 Y:295.30 Z:0.00\" }"}
+{"t":247096,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.570000\", \"bedTemp0\": \"49.980000\", \"curPosition\": \"X:188.03 Y:285.77 Z:0.00\" }"}
+{"t":247339,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.960000\", \"curPosition\": \"X:184.90 Y:276.23 Z:0.00\" }"}
+{"t":247592,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.540000\", \"bedTemp0\": \"49.940000\", \"curPosition\": \"X:181.76 Y:266.69 Z:0.00\" }"}
+{"t":247850,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.520000\", \"bedTemp0\": \"49.930000\", \"curPosition\": \"X:178.63 Y:257.18 Z:0.00\" }"}
+{"t":248100,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.500000\", \"curPosition\": \"X:175.49 Y:247.63 Z:0.00\" }"}
+{"t":248347,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.490000\", \"curPosition\": \"X:172.35 Y:238.10 Z:0.00\" }"}
+{"t":248596,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.500000\", \"curPosition\": \"X:169.22 Y:228.57 Z:0.00\" }"}
+{"t":248849,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:166.09 Y:219.04 Z:0.00\" }"}
+{"t":249108,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.520000\", \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:162.95 Y:209.50 Z:0.00\" }"}
+{"t":249347,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.550000\", \"bedTemp0\": \"49.930000\", \"curPosition\": \"X:159.82 Y:199.98 Z:0.00\" }"}
+{"t":249597,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.580000\", \"curPosition\": \"X:156.68 Y:190.46 Z:0.00\" }"}
+{"t":249855,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.630000\", \"curPosition\": \"X:153.55 Y:180.93 Z:0.00\" }"}
+{"t":250105,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.680000\", \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:150.42 Y:171.42 Z:0.00\" }"}
+{"t":250353,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.930000\", \"curPosition\": \"X:147.29 Y:161.91 Z:0.00\" }"}
+{"t":250599,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.730000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.00\" }"}
+{"t":251120,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.870000\", \"bedTemp0\": \"49.950000\" }"}
+{"t":251604,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"130.030000\" }"}
+{"t":252407,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.190000\", \"bedTemp0\": \"49.930000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.14\" }"}
+{"t":252605,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.270000\", \"bedTemp0\": \"49.900000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.17\" }"}
+{"t":252855,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.340000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.21\" }"}
+{"t":253114,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.410000\", \"bedTemp0\": \"49.890000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.24\" }"}
+{"t":253361,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.480000\", \"bedTemp0\": \"49.870000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.28\" }"}
+{"t":253613,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.840000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.00\" }"}
+{"t":255121,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.660000\", \"bedTemp0\": \"49.730000\" }"}
+{"t":255370,"type":"rx","len":42,"data":"{ \"bedTemp0\": \"49.720000\", \"boxTemp\": 31 }"}
+{"t":255625,"type":"rx","len":85,"data":"{ \"bedTemp0\": \"49.710000\", \"curPosition\": \"X:144.93 Y:154.72 Z:1.71\", \"boxTemp\": 32 }"}
+{"t":255864,"type":"rx","len":88,"data":"{ \"nozzleTemp\": \"130.640000\", \"curPosition\": \"X:144.93 Y:154.72 Z:4.22\", \"boxTemp\": 31 }"}
+{"t":256120,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.620000\", \"curPosition\": \"X:144.93 Y:154.72 Z:6.00\" }"}
+{"t":256615,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"130.580000\", \"bedTemp0\": \"49.720000\", \"boxTemp\": 32 }"}
+{"t":256873,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"130.540000\", \"bedTemp0\": \"49.730000\", \"boxTemp\": 31 }"}
+{"t":257120,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.500000\", \"bedTemp0\": \"49.740000\" }"}
+{"t":258120,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.330000\", \"bedTemp0\": \"49.760000\", \"curPosition\": \"X:144.93 Y:154.72 Z:0.28\" }"}
+{"t":258380,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.270000\", \"bedTemp0\": \"49.750000\", \"curPosition\": \"X:144.93 Y:154.72 Z:2.79\" }"}
+{"t":258626,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.210000\", \"bedTemp0\": \"49.740000\", \"curPosition\": \"X:144.93 Y:154.72 Z:5.30\" }"}
+{"t":258875,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.150000\", \"curPosition\": \"X:144.93 Y:154.72 Z:6.00\" }"}
+{"t":259132,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.100000\", \"bedTemp0\": \"49.720000\" }"}
+{"t":260125,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.960000\", \"bedTemp0\": \"49.630000\" }"}
+{"t":260887,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.890000\", \"bedTemp0\": \"49.610000\", \"curPosition\": \"X:144.93 Y:154.72 Z:1.30\" }"}
+{"t":261136,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.620000\", \"curPosition\": \"X:144.93 Y:154.72 Z:3.80\" }"}
+{"t":261387,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.880000\", \"bedTemp0\": \"49.640000\", \"curPosition\": \"X:144.93 Y:154.72 Z:6.00\" }"}
+{"t":261637,"type":"rx","len":27,"data":"{ \"bedTemp0\": \"49.670000\" }"}
+{"t":261885,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.890000\", \"curPosition\": \"X:147.92 Y:152.38 Z:6.00\" }"}
+{"t":262134,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.910000\", \"bedTemp0\": \"49.710000\", \"curPosition\": \"X:150.41 Y:150.42 Z:6.00\" }"}
+{"t":262383,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.950000\", \"bedTemp0\": \"49.760000\", \"curPosition\": \"X:150.37 Y:150.38 Z:5.98\" }"}
+{"t":262641,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.800000\", \"curPosition\": \"X:150.40 Y:149.92 Z:5.99\" }"}
+{"t":262891,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.980000\", \"bedTemp0\": \"49.850000\", \"curPosition\": \"X:150.91 Y:150.53 Z:5.95\" }"}
+{"t":263139,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.030000\", \"bedTemp0\": \"49.890000\", \"curPosition\": \"X:150.18 Y:150.92 Z:6.11\" }"}
+{"t":263389,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.080000\", \"curPosition\": \"X:149.91 Y:150.07 Z:5.83\" }"}
+{"t":263639,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.130000\", \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:150.88 Y:149.92 Z:6.24\" }"}
+{"t":263899,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.180000\", \"bedTemp0\": \"49.940000\", \"curPosition\": \"X:150.82 Y:150.92 Z:5.79\" }"}
+{"t":264139,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.950000\", \"curPosition\": \"X:149.91 Y:150.92 Z:6.25\" }"}
+{"t":264397,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.240000\", \"bedTemp0\": \"49.960000\", \"curPosition\": \"X:150.01 Y:149.92 Z:5.80\" }"}
+{"t":264646,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.300000\", \"curPosition\": \"X:150.91 Y:150.14 Z:6.14\" }"}
+{"t":264900,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.360000\", \"bedTemp0\": \"49.950000\", \"curPosition\": \"X:150.57 Y:150.92 Z:5.92\" }"}
+{"t":265149,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.410000\", \"curPosition\": \"X:149.91 Y:150.46 Z:6.02\" }"}
+{"t":265392,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.460000\", \"bedTemp0\": \"49.940000\", \"curPosition\": \"X:150.49 Y:149.92 Z:6.04\" }"}
+{"t":265652,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:150.91 Y:150.62 Z:5.90\" }"}
+{"t":265902,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.500000\", \"bedTemp0\": \"49.900000\", \"curPosition\": \"X:150.09 Y:150.92 Z:6.16\" }"}
+{"t":266152,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.530000\", \"bedTemp0\": \"49.880000\", \"curPosition\": \"X:150.41 Y:150.42 Z:6.00\" }"}
+{"t":266916,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.590000\", \"bedTemp0\": \"49.860000\" }"}
+{"t":268911,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.490000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":269406,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.410000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":270916,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.170000\", \"bedTemp0\": \"50.040000\" }"}
+{"t":272169,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.950000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":272424,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.890000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":272671,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.850000\", \"curPosition\": \"X:150.41 Y:150.42 Z:5.71\" }"}
+{"t":272919,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.800000\", \"bedTemp0\": \"49.980000\", \"curPosition\": \"X:150.41 Y:150.42 Z:5.00\" }"}
+{"t":274933,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.640000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":275438,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.630000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":277701,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.750000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":278956,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.940000\", \"bedTemp0\": \"49.900000\" }"}
+{"t":279186,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.000000\", \"bedTemp0\": \"49.880000\" }"}
+{"t":279239,"type":"rx","len":23,"data":"{ \"withSelfTest\": 100 }"}
+{"t":280714,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.260000\", \"bedTemp0\": \"49.850000\", \"TotalLayer\": 15 }"}
+{"t":280980,"type":"rx","len":2041,"data":"{ \"current_object\": \"CYLINDER_ID_0_COPY_0\", \"excluded_objects\": \"[ ]\", \"objects\": \"[ { \\\"name\\\": \\\"CYLINDER_ID_0_COPY_0\\\", \\\"center\\\": [ 150, 150 ], \\\"polygon\\\": [ [ 150.392, 145.015 ], [ 150.653, 145.043 ], [ 151.082, 145.118 ], [ 151.504, 145.231 ], [ 151.994, 145.415 ], [ 152.231, 145.525 ], [ 152.462, 145.648 ], [ 152.832, 145.879 ], [ 153.044, 146.033 ], [ 153.442, 146.373 ], [ 153.802, 146.753 ], [ 153.967, 146.956 ], [ 154.217, 147.313 ], [ 154.352, 147.538 ], [ 154.585, 148.006 ], [ 154.769, 148.496 ], [ 154.841, 148.748 ], [ 154.932, 149.175 ], [ 154.968, 149.434 ], [ 154.991, 149.695 ], [ 154.998, 150.131 ], [ 154.985, 150.392 ], [ 154.957, 150.653 ], [ 154.882, 151.082 ], [ 154.769, 151.504 ], [ 154.585, 151.994 ], [ 154.475, 152.231 ], [ 154.352, 152.462 ], [ 154.121, 152.832 ], [ 153.967, 153.044 ], [ 153.627, 153.442 ], [ 153.247, 153.802 ], [ 153.044, 153.967 ], [ 152.687, 154.217 ], [ 152.462, 154.352 ], [ 151.994, 154.585 ], [ 151.504, 154.769 ], [ 151.252, 154.841 ], [ 150.825, 154.932 ], [ 150.566, 154.968 ], [ 150.305, 154.991 ], [ 149.869, 154.998 ], [ 149.608, 154.985 ], [ 149.347, 154.957 ], [ 148.918, 154.882 ], [ 148.496, 154.769 ], [ 148.006, 154.585 ], [ 147.769, 154.475 ], [ 147.538, 154.352 ], [ 147.168, 154.121 ], [ 146.956, 153.967 ], [ 146.558, 153.627 ], [ 146.198, 153.247 ], [ 146.033, 153.044 ], [ 145.783, 152.687 ], [ 145.648, 152.462 ], [ 145.415, 151.994 ], [ 145.231, 151.504 ], [ 145.159, 151.252 ], [ 145.068, 150.825 ], [ 145.032, 150.566 ], [ 145.009, 150.305 ], [ 145.002, 149.869 ], [ 145.015, 149.608 ], [ 145.043, 149.347 ], [ 145.118, 148.918 ], [ 145.231, 148.496 ], [ 145.415, 148.006 ], [ 145.525, 147.769 ], [ 145.648, 147.538 ], [ 145.879, 147.168 ], [ 146.033, 146.956 ], [ 146.373, 146.558 ], [ 146.753, 146.198 ], [ 146.956, 146.033 ], [ 147.313, 145.783 ], [ 147.538, 145.648 ], [ 148.006, 145.415 ], [ 148.496, 145.231 ], [ 148.748, 145.159 ], [ 149.175, 145.068 ], [ 149.434, 145.032 ], [ 149.695, 145.009 ], [ 150.131, 145.002 ], [ 150.392, 145.015 ] ] } ]\" }"}
+{"t":280989,"type":"rx","len":53,"data":"{ \"printLeftTime\": 139, \"realTimeSpeed\": \"5.000000\" }"}
+{"t":281207,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"130.300000\", \"curPosition\": \"X:-156.25 Y:150.42 Z:5.00\" }"}
+{"t":281454,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"130.340000\", \"bedTemp0\": \"49.860000\", \"curPosition\": \"X:-154.95 Y:150.42 Z:5.00\" }"}
+{"t":285719,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"130.070000\", \"bedTemp0\": \"49.760000\", \"curPosition\": \"X:0.45 Y:150.42 Z:5.00\" }"}
+{"t":285970,"type":"rx","len":128,"data":"{ \"nozzleTemp\": \"130.020000\", \"bedTemp0\": \"49.750000\", \"realTimeSpeed\": \"60.000000\", \"curPosition\": \"X:306.50 Y:150.42 Z:5.00\" }"}
+{"t":286216,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.960000\", \"bedTemp0\": \"49.740000\", \"curPosition\": \"X:301.46 Y:150.42 Z:5.00\" }"}
+{"t":286472,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"129.900000\", \"curPosition\": \"X:296.50 Y:150.42 Z:5.00\" }"}
+{"t":288478,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"129.630000\", \"bedTemp0\": \"49.730000\", \"curPosition\": \"X:296.50 Y:459.22 Z:5.00\" }"}
+{"t":288726,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"49.740000\", \"curPosition\": \"X:296.50 Y:458.70 Z:5.00\" }"}
+{"t":291241,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.800000\", \"bedTemp0\": \"49.730000\" }"}
+{"t":292493,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.000000\", \"bedTemp0\": \"49.660000\" }"}
+{"t":292747,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.050000\", \"bedTemp0\": \"49.650000\", \"curPosition\": \"X:296.50 Y:305.77 Z:5.00\" }"}
+{"t":292999,"type":"rx","len":72,"data":"{ \"nozzleTemp\": \"130.110000\", \"curPosition\": \"X:296.50 Y:-2.00 Z:5.00\" }"}
+{"t":293242,"type":"rx","len":68,"data":"{ \"bedTemp0\": \"49.660000\", \"curPosition\": \"X:296.50 Y:4.75 Z:5.00\" }"}
+{"t":293502,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"130.160000\", \"bedTemp0\": \"49.670000\", \"curPosition\": \"X:296.50 Y:8.00 Z:5.00\" }"}
+{"t":295505,"type":"rx","len":97,"data":"{ \"nozzleTemp\": \"130.370000\", \"bedTemp0\": \"49.850000\", \"curPosition\": \"X:-154.95 Y:8.00 Z:5.00\" }"}
+{"t":295756,"type":"rx","len":72,"data":"{ \"nozzleTemp\": \"130.380000\", \"curPosition\": \"X:-145.55 Y:8.00 Z:5.00\" }"}
+{"t":296008,"type":"rx","len":68,"data":"{ \"bedTemp0\": \"49.860000\", \"curPosition\": \"X:306.50 Y:8.00 Z:5.00\" }"}
+{"t":296252,"type":"rx","len":68,"data":"{ \"bedTemp0\": \"49.870000\", \"curPosition\": \"X:300.42 Y:8.00 Z:5.00\" }"}
+{"t":296511,"type":"rx","len":71,"data":"{ \"nozzleTemp\": \"130.370000\", \"curPosition\": \"X:296.50 Y:8.00 Z:5.00\" }"}
+{"t":298515,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"130.170000\", \"bedTemp0\": \"49.800000\", \"curPosition\": \"X:296.50 Y:458.70 Z:5.00\" }"}
+{"t":298774,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"130.130000\", \"curPosition\": \"X:296.50 Y:449.62 Z:5.00\" }"}
+{"t":299014,"type":"rx","len":72,"data":"{ \"nozzleTemp\": \"130.090000\", \"curPosition\": \"X:296.50 Y:-2.00 Z:5.00\" }"}
+{"t":299262,"type":"rx","len":71,"data":"{ \"nozzleTemp\": \"130.040000\", \"curPosition\": \"X:296.50 Y:3.46 Z:5.00\" }"}
+{"t":299519,"type":"rx","len":43,"data":"{ \"curPosition\": \"X:296.50 Y:8.00 Z:5.00\" }"}
+{"t":300016,"type":"rx","len":61,"data":"{ \"nozzleTemp\": \"129.960000\", \"realTimeSpeed\": \"100.000000\" }"}
+{"t":301022,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"129.840000\", \"bedTemp0\": \"49.830000\" }"}
+{"t":302026,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"129.730000\", \"bedTemp0\": \"49.850000\", \"curPosition\": \"X:294.72 Y:7.95 Z:4.99\" }"}
+{"t":302285,"type":"rx","len":71,"data":"{ \"nozzleTemp\": \"129.720000\", \"curPosition\": \"X:273.03 Y:7.37 Z:4.79\" }"}
+{"t":302534,"type":"rx","len":43,"data":"{ \"curPosition\": \"X:247.96 Y:6.69 Z:4.57\" }"}
+{"t":302784,"type":"rx","len":151,"data":"{ \"nozzleTemp\": \"129.710000\", \"bedTemp0\": \"49.840000\", \"realTimeSpeed\": \"10.000000\", \"curPosition\": \"X:222.90 Y:6.01 Z:4.36\", \"targetNozzleTemp\": 220 }"}
+{"t":303035,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"129.700000\", \"bedTemp0\": \"49.830000\", \"curPosition\": \"X:197.77 Y:5.34 Z:4.16\" }"}
+{"t":303280,"type":"rx","len":43,"data":"{ \"curPosition\": \"X:172.72 Y:4.66 Z:3.96\" }"}
+{"t":303528,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"129.710000\", \"bedTemp0\": \"49.820000\", \"curPosition\": \"X:147.64 Y:3.98 Z:3.76\" }"}
+{"t":303785,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"129.720000\", \"bedTemp0\": \"49.800000\", \"curPosition\": \"X:122.55 Y:3.31 Z:3.55\" }"}
+{"t":304036,"type":"rx","len":67,"data":"{ \"bedTemp0\": \"49.780000\", \"curPosition\": \"X:97.42 Y:2.63 Z:3.33\" }"}
+{"t":304293,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"129.750000\", \"bedTemp0\": \"49.760000\", \"curPosition\": \"X:72.33 Y:1.95 Z:3.11\" }"}
+{"t":304534,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"129.790000\", \"bedTemp0\": \"49.740000\", \"curPosition\": \"X:47.27 Y:1.27 Z:2.90\" }"}
+{"t":304782,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"129.860000\", \"curPosition\": \"X:22.21 Y:0.60 Z:2.71\" }"}
+{"t":305070,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"129.990000\", \"bedTemp0\": \"49.730000\", \"curPosition\": \"X:1.26 Y:0.03 Z:2.57\" }"}
+{"t":305291,"type":"rx","len":69,"data":"{ \"nozzleTemp\": \"130.180000\", \"curPosition\": \"X:0.00 Y:0.00 Z:0.76\" }"}
+{"t":305545,"type":"rx","len":66,"data":"{ \"bedTemp0\": \"49.720000\", \"curPosition\": \"X:0.00 Y:0.00 Z:0.66\" }"}
+{"t":306044,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"130.790000\", \"bedTemp0\": \"49.750000\" }"}
+{"t":306291,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"131.230000\" }"}
+{"t":306797,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"132.360000\", \"bedTemp0\": \"49.780000\" }"}
+{"t":307292,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"133.060000\", \"bedTemp0\": \"49.840000\" }"}
+{"t":307796,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"134.640000\", \"bedTemp0\": \"49.880000\" }"}
+{"t":308045,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"135.530000\" }"}
+{"t":308294,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"136.470000\", \"bedTemp0\": \"49.900000\" }"}
+{"t":308798,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"137.500000\", \"bedTemp0\": \"49.930000\" }"}
+{"t":309048,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"138.550000\", \"bedTemp0\": \"49.940000\" }"}
+{"t":309305,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"139.630000\", \"bedTemp0\": \"49.950000\" }"}
+{"t":309555,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"140.750000\" }"}
+{"t":309813,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"141.880000\", \"bedTemp0\": \"49.940000\" }"}
+{"t":310308,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"143.040000\", \"bedTemp0\": \"49.920000\" }"}
+{"t":310557,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"144.210000\", \"bedTemp0\": \"49.900000\" }"}
+{"t":310808,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"145.390000\", \"bedTemp0\": \"49.890000\" }"}
+{"t":311057,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"146.590000\" }"}
+{"t":311308,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"147.790000\", \"bedTemp0\": \"49.870000\" }"}
+{"t":311566,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"149.000000\" }"}
+{"t":312062,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"150.240000\", \"bedTemp0\": \"49.860000\" }"}
+{"t":312306,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"151.470000\", \"bedTemp0\": \"49.850000\" }"}
+{"t":312559,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"152.700000\" }"}
+{"t":312809,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"153.930000\" }"}
+{"t":313312,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"155.160000\", \"bedTemp0\": \"49.860000\" }"}
+{"t":313564,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"156.390000\" }"}
+{"t":313813,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"157.620000\", \"bedTemp0\": \"49.870000\" }"}
+{"t":314062,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"158.840000\" }"}
+{"t":314314,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"160.060000\", \"bedTemp0\": \"49.890000\" }"}
+{"t":314574,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"161.280000\", \"bedTemp0\": \"49.900000\" }"}
+{"t":315065,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"162.490000\", \"bedTemp0\": \"49.930000\" }"}
+{"t":315315,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"163.700000\", \"bedTemp0\": \"49.950000\" }"}
+{"t":315571,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"164.910000\" }"}
+{"t":315820,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"166.160000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":316068,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"167.400000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":316569,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"168.620000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":316834,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"169.830000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":317067,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"171.020000\" }"}
+{"t":317323,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"172.210000\" }"}
+{"t":317569,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"173.390000\" }"}
+{"t":318074,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"174.570000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":318330,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"175.750000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":318580,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"176.920000\" }"}
+{"t":318835,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"178.080000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":319078,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"179.240000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":319577,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"180.390000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":319837,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"181.530000\", \"bedTemp0\": \"49.950000\" }"}
+{"t":320077,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"182.670000\" }"}
+{"t":320334,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"183.810000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":320581,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"184.940000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":321086,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"186.060000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":321336,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"187.180000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":321583,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"188.290000\" }"}
+{"t":321840,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"189.390000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":322090,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"190.500000\" }"}
+{"t":322586,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"191.590000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":322835,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"192.680000\" }"}
+{"t":323084,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"193.770000\" }"}
+{"t":323334,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"194.860000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":323585,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"195.950000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":324092,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"197.010000\", \"bedTemp0\": \"49.930000\" }"}
+{"t":324338,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"198.080000\", \"bedTemp0\": \"49.910000\" }"}
+{"t":324597,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"199.160000\", \"bedTemp0\": \"49.890000\" }"}
+{"t":324845,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"200.230000\" }"}
+{"t":325094,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"201.290000\", \"bedTemp0\": \"49.880000\" }"}
+{"t":325599,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"202.350000\", \"bedTemp0\": \"49.870000\" }"}
+{"t":325845,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"203.400000\" }"}
+{"t":326105,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"204.450000\", \"bedTemp0\": \"49.860000\" }"}
+{"t":326347,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"205.500000\" }"}
+{"t":326603,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"206.520000\", \"bedTemp0\": \"49.870000\" }"}
+{"t":327102,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"207.550000\" }"}
+{"t":327352,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"208.580000\", \"bedTemp0\": \"49.890000\" }"}
+{"t":327618,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"209.590000\", \"bedTemp0\": \"49.900000\" }"}
+{"t":327855,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"210.590000\" }"}
+{"t":328103,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"211.570000\", \"bedTemp0\": \"49.910000\" }"}
+{"t":328607,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"212.510000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":328856,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"213.430000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":329104,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"214.300000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":329354,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"215.130000\" }"}
+{"t":329605,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"215.920000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":330115,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"216.650000\" }"}
+{"t":330364,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"217.330000\" }"}
+{"t":330859,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"218.540000\" }"}
+{"t":331108,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"219.040000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":332119,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"220.160000\", \"bedTemp0\": \"49.960000\" }"}
+{"t":333373,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"221.010000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":333878,"type":"rx","len":59,"data":"{ \"accelerationLimits\": 12000, \"accelToDecelLimits\": 6000 }"}
+{"t":333932,"type":"rx","len":149,"data":"{ \"nozzleTemp\": \"221.190000\", \"bedTemp0\": \"49.980000\", \"usedMaterialLength\": 9, \"realTimeSpeed\": \"50.000000\", \"curPosition\": \"X:0.00 Y:0.00 Z:0.00\" }"}
+{"t":334121,"type":"rx","len":116,"data":"{ \"nozzleTemp\": \"221.220000\", \"bedTemp0\": \"50.000000\", \"printLeftTime\": 138, \"curPosition\": \"X:0.00 Y:0.00 Z:1.16\" }"}
+{"t":334381,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.250000\", \"bedTemp0\": \"50.020000\", \"curPosition\": \"X:0.07 Y:13.48 Z:1.39\" }"}
+{"t":334630,"type":"rx","len":86,"data":"{ \"bedTemp0\": \"50.030000\", \"printJobTime\": 1, \"curPosition\": \"X:0.10 Y:28.73 Z:0.82\" }"}
+{"t":334880,"type":"rx","len":67,"data":"{ \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:0.10 Y:41.28 Z:0.81\" }"}
+{"t":335134,"type":"rx","len":144,"data":"{ \"bedTemp0\": \"50.060000\", \"printLeftTime\": 137, \"usedMaterialLength\": 19, \"realTimeFlow\": \"23.450000\", \"curPosition\": \"X:0.10 Y:53.84 Z:0.80\" }"}
+{"t":335384,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"221.240000\", \"curPosition\": \"X:0.10 Y:66.41 Z:0.79\" }"}
+{"t":335640,"type":"rx","len":114,"data":"{ \"nozzleTemp\": \"221.230000\", \"bedTemp0\": \"50.080000\", \"printJobTime\": 2, \"curPosition\": \"X:0.10 Y:78.97 Z:0.78\" }"}
+{"t":335877,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.240000\", \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:0.10 Y:91.48 Z:0.77\" }"}
+{"t":336136,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.080000\", \"printLeftTime\": 136, \"curPosition\": \"X:0.10 Y:104.05 Z:0.76\" }"}
+{"t":336379,"type":"rx","len":43,"data":"{ \"curPosition\": \"X:0.10 Y:116.59 Z:0.74\" }"}
+{"t":336640,"type":"rx","len":87,"data":"{ \"bedTemp0\": \"50.070000\", \"printJobTime\": 3, \"curPosition\": \"X:0.10 Y:129.13 Z:0.72\" }"}
+{"t":336891,"type":"rx","len":71,"data":"{ \"nozzleTemp\": \"221.230000\", \"curPosition\": \"X:0.10 Y:141.65 Z:0.70\" }"}
+{"t":337137,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"221.260000\", \"printLeftTime\": 135, \"curPosition\": \"X:0.10 Y:154.20 Z:0.68\" }"}
+{"t":337385,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"221.300000\", \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:0.10 Y:166.75 Z:0.66\" }"}
+{"t":337636,"type":"rx","len":62,"data":"{ \"printJobTime\": 4, \"curPosition\": \"X:0.10 Y:179.28 Z:0.64\" }"}
+{"t":337895,"type":"rx","len":96,"data":"{ \"nozzleTemp\": \"221.350000\", \"bedTemp0\": \"50.040000\", \"curPosition\": \"X:0.40 Y:168.82 Z:0.65\" }"}
+{"t":338141,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"221.410000\", \"printLeftTime\": 134, \"curPosition\": \"X:0.40 Y:156.28 Z:0.68\" }"}
+{"t":338389,"type":"rx","len":71,"data":"{ \"nozzleTemp\": \"221.490000\", \"curPosition\": \"X:0.40 Y:143.75 Z:0.70\" }"}
+{"t":338644,"type":"rx","len":90,"data":"{ \"nozzleTemp\": \"221.600000\", \"printJobTime\": 5, \"curPosition\": \"X:0.40 Y:131.20 Z:0.72\" }"}
+{"t":338892,"type":"rx","len":101,"data":"{ \"nozzleTemp\": \"221.700000\", \"realTimeSpeed\": \"10.000000\", \"curPosition\": \"X:0.40 Y:118.68 Z:0.74\" }"}
+{"t":339141,"type":"rx","len":30,"data":"{ \"accelerationLimits\": 2000 }"}
+{"t":339197,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.050000\", \"printLeftTime\": 133, \"curPosition\": \"X:0.40 Y:106.13 Z:0.76\" }"}
+{"t":339388,"type":"rx","len":70,"data":"{ \"nozzleTemp\": \"221.800000\", \"curPosition\": \"X:0.40 Y:93.57 Z:0.77\" }"}
+{"t":339649,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"221.880000\", \"printJobTime\": 6, \"realTimeSpeed\": \"500.000000\", \"curPosition\": \"X:0.40 Y:81.01 Z:0.78\" }"}
+{"t":339899,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.990000\", \"bedTemp0\": \"50.070000\", \"curPosition\": \"X:0.40 Y:68.47 Z:0.79\" }"}
+{"t":340178,"type":"rx","len":82,"data":"{ \"nozzleTemp\": \"222.090000\", \"curPosition\": \"X:0.40 Y:54.38 Z:0.80\", \"layer\": 1 }"}
+{"t":340233,"type":"rx","len":86,"data":"{ \"accelerationLimits\": 1000, \"cornerVelocityLimits\": 20, \"accelToDecelLimits\": 1000 }"}
+{"t":340246,"type":"rx","len":2041,"data":"{ \"current_object\": \"CYLINDER_ID_0_COPY_0\", \"excluded_objects\": \"[ ]\", \"objects\": \"[ { \\\"name\\\": \\\"CYLINDER_ID_0_COPY_0\\\", \\\"center\\\": [ 150, 150 ], \\\"polygon\\\": [ [ 150.392, 145.015 ], [ 150.653, 145.043 ], [ 151.082, 145.118 ], [ 151.504, 145.231 ], [ 151.994, 145.415 ], [ 152.231, 145.525 ], [ 152.462, 145.648 ], [ 152.832, 145.879 ], [ 153.044, 146.033 ], [ 153.442, 146.373 ], [ 153.802, 146.753 ], [ 153.967, 146.956 ], [ 154.217, 147.313 ], [ 154.352, 147.538 ], [ 154.585, 148.006 ], [ 154.769, 148.496 ], [ 154.841, 148.748 ], [ 154.932, 149.175 ], [ 154.968, 149.434 ], [ 154.991, 149.695 ], [ 154.998, 150.131 ], [ 154.985, 150.392 ], [ 154.957, 150.653 ], [ 154.882, 151.082 ], [ 154.769, 151.504 ], [ 154.585, 151.994 ], [ 154.475, 152.231 ], [ 154.352, 152.462 ], [ 154.121, 152.832 ], [ 153.967, 153.044 ], [ 153.627, 153.442 ], [ 153.247, 153.802 ], [ 153.044, 153.967 ], [ 152.687, 154.217 ], [ 152.462, 154.352 ], [ 151.994, 154.585 ], [ 151.504, 154.769 ], [ 151.252, 154.841 ], [ 150.825, 154.932 ], [ 150.566, 154.968 ], [ 150.305, 154.991 ], [ 149.869, 154.998 ], [ 149.608, 154.985 ], [ 149.347, 154.957 ], [ 148.918, 154.882 ], [ 148.496, 154.769 ], [ 148.006, 154.585 ], [ 147.769, 154.475 ], [ 147.538, 154.352 ], [ 147.168, 154.121 ], [ 146.956, 153.967 ], [ 146.558, 153.627 ], [ 146.198, 153.247 ], [ 146.033, 153.044 ], [ 145.783, 152.687 ], [ 145.648, 152.462 ], [ 145.415, 151.994 ], [ 145.231, 151.504 ], [ 145.159, 151.252 ], [ 145.068, 150.825 ], [ 145.032, 150.566 ], [ 145.009, 150.305 ], [ 145.002, 149.869 ], [ 145.015, 149.608 ], [ 145.043, 149.347 ], [ 145.118, 148.918 ], [ 145.231, 148.496 ], [ 145.415, 148.006 ], [ 145.525, 147.769 ], [ 145.648, 147.538 ], [ 145.879, 147.168 ], [ 146.033, 146.956 ], [ 146.373, 146.558 ], [ 146.753, 146.198 ], [ 146.956, 146.033 ], [ 147.313, 145.783 ], [ 147.538, 145.648 ], [ 148.006, 145.415 ], [ 148.496, 145.231 ], [ 148.748, 145.159 ], [ 149.175, 145.068 ], [ 149.434, 145.032 ], [ 149.695, 145.009 ], [ 150.131, 145.002 ], [ 150.392, 145.015 ] ] } ]\" }"}
+{"t":340296,"type":"rx","len":74,"data":"{ \"printProgress\": 1, \"printLeftTime\": 132, \"realTimeSpeed\": \"20.000000\" }"}
+{"t":340431,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"222.180000\", \"bedTemp0\": \"50.080000\", \"curPosition\": \"X:0.40 Y:41.84 Z:0.81\" }"}
+{"t":340680,"type":"rx","len":114,"data":"{ \"nozzleTemp\": \"222.270000\", \"bedTemp0\": \"50.090000\", \"printJobTime\": 7, \"curPosition\": \"X:0.40 Y:29.31 Z:0.82\" }"}
+{"t":340929,"type":"rx","len":95,"data":"{ \"bedTemp0\": \"50.110000\", \"realTimeFlow\": \"0.100000\", \"curPosition\": \"X:0.40 Y:16.85 Z:0.83\" }"}
+{"t":341179,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"222.340000\", \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:0.40 Y:10.00 Z:1.82\" }"}
+{"t":341234,"type":"rx","len":24,"data":"{ \"printLeftTime\": 131 }"}
+{"t":341448,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"222.390000\", \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:0.40 Y:10.00 Z:1.10\" }"}
+{"t":341689,"type":"rx","len":115,"data":"{ \"nozzleTemp\": \"222.420000\", \"printJobTime\": 8, \"usedMaterialLength\": 20, \"curPosition\": \"X:0.40 Y:10.00 Z:2.77\" }"}
+{"t":341937,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"222.440000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:0.40 Y:10.00 Z:2.09\" }"}
+{"t":342199,"type":"rx","len":92,"data":"{ \"nozzleTemp\": \"222.450000\", \"printLeftTime\": 130, \"curPosition\": \"X:1.43 Y:10.99 Z:0.75\" }"}
+{"t":342441,"type":"rx","len":43,"data":"{ \"curPosition\": \"X:33.61 Y:42.13 Z:0.71\" }"}
+{"t":342690,"type":"rx","len":92,"data":"{ \"nozzleTemp\": \"222.420000\", \"printJobTime\": 9, \"curPosition\": \"X:103.85 Y:110.09 Z:0.70\" }"}
+{"t":342938,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"222.380000\", \"bedTemp0\": \"50.130000\", \"realTimeFlow\": \"1.660000\", \"curPosition\": \"X:145.36 Y:150.25 Z:0.72\" }"}
+{"t":343189,"type":"rx","len":141,"data":"{ \"nozzleTemp\": \"222.320000\", \"printProgress\": 2, \"printLeftTime\": 129, \"usedMaterialLength\": 21, \"curPosition\": \"X:148.36 Y:153.78 Z:0.32\" }"}
+{"t":343447,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"222.250000\", \"curPosition\": \"X:145.88 Y:149.79 Z:0.33\" }"}
+{"t":343702,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"222.140000\", \"bedTemp0\": \"50.110000\", \"printJobTime\": 10, \"curPosition\": \"X:148.75 Y:146.07 Z:0.33\" }"}
+{"t":343941,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:153.24 Y:147.46 Z:0.32\" }"}
+{"t":344191,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"222.030000\", \"bedTemp0\": \"50.080000\", \"curPosition\": \"X:153.52 Y:152.16 Z:0.32\" }"}
+{"t":344448,"type":"rx","len":166,"data":"{ \"nozzleTemp\": \"221.910000\", \"bedTemp0\": \"50.060000\", \"printProgress\": 3, \"printLeftTime\": 128, \"usedMaterialLength\": 22, \"curPosition\": \"X:149.40 Y:154.13 Z:0.32\" }"}
+{"t":344701,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"221.780000\", \"bedTemp0\": \"50.050000\", \"printJobTime\": 11, \"curPosition\": \"X:146.16 Y:152.51 Z:0.33\" }"}
+{"t":344944,"type":"rx","len":101,"data":"{ \"nozzleTemp\": \"221.670000\", \"realTimeFlow\": \"1.600000\", \"curPosition\": \"X:146.01 Y:147.74 Z:0.33\" }"}
+{"t":345195,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"221.550000\", \"bedTemp0\": \"50.040000\", \"printLeftTime\": 127, \"curPosition\": \"X:150.16 Y:145.40 Z:0.33\" }"}
+{"t":345446,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.030000\", \"curPosition\": \"X:154.14 Y:148.04 Z:0.32\" }"}
+{"t":345704,"type":"rx","len":144,"data":"{ \"nozzleTemp\": \"221.430000\", \"bedTemp0\": \"50.040000\", \"printJobTime\": 12, \"usedMaterialLength\": 23, \"curPosition\": \"X:153.64 Y:152.77 Z:0.32\" }"}
+{"t":345952,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"221.300000\", \"curPosition\": \"X:149.79 Y:154.59 Z:0.32\" }"}
+{"t":346200,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.190000\", \"printLeftTime\": 126, \"curPosition\": \"X:151.68 Y:146.56 Z:0.72\" }"}
+{"t":346450,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"221.090000\", \"printProgress\": 4, \"curPosition\": \"X:153.41 Y:148.51 Z:0.32\" }"}
+{"t":346704,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.970000\", \"bedTemp0\": \"50.050000\", \"printJobTime\": 13, \"curPosition\": \"X:150.46 Y:146.25 Z:0.32\" }"}
+{"t":347015,"type":"rx","len":124,"data":"{ \"bedTemp0\": \"50.060000\", \"usedMaterialLength\": 24, \"realTimeFlow\": \"2.170000\", \"curPosition\": \"X:153.51 Y:149.49 Z:0.32\" }"}
+{"t":347200,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"220.880000\", \"bedTemp0\": \"50.070000\", \"printLeftTime\": 125, \"curPosition\": \"X:151.04 Y:147.69 Z:0.32\" }"}
+{"t":347455,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.830000\", \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:150.65 Y:147.97 Z:0.32\" }"}
+{"t":347710,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.780000\", \"bedTemp0\": \"50.100000\", \"printJobTime\": 14, \"curPosition\": \"X:153.37 Y:151.37 Z:0.32\" }"}
+{"t":347965,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.750000\", \"curPosition\": \"X:149.83 Y:147.82 Z:0.32\" }"}
+{"t":348206,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"220.730000\", \"bedTemp0\": \"50.110000\", \"printLeftTime\": 124, \"curPosition\": \"X:149.92 Y:148.58 Z:0.32\" }"}
+{"t":348455,"type":"rx","len":96,"data":"{ \"bedTemp0\": \"50.120000\", \"usedMaterialLength\": 25, \"curPosition\": \"X:153.12 Y:152.15 Z:0.32\" }"}
+{"t":348713,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.720000\", \"bedTemp0\": \"50.130000\", \"printJobTime\": 15, \"curPosition\": \"X:149.63 Y:148.96 Z:0.32\" }"}
+{"t":348967,"type":"rx","len":146,"data":"{ \"nozzleTemp\": \"220.700000\", \"bedTemp0\": \"50.120000\", \"printProgress\": 5, \"realTimeFlow\": \"1.610000\", \"curPosition\": \"X:148.53 Y:148.53 Z:0.33\" }"}
+{"t":349206,"type":"rx","len":67,"data":"{ \"printLeftTime\": 123, \"curPosition\": \"X:152.07 Y:152.07 Z:0.32\" }"}
+{"t":349487,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"220.730000\", \"printProgress\": 6, \"realTimeSpeed\": \"500.000000\", \"curPosition\": \"X:149.39 Y:150.06 Z:0.32\" }"}
+{"t":349734,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.760000\", \"bedTemp0\": \"50.110000\", \"printJobTime\": 16, \"curPosition\": \"X:147.52 Y:148.86 Z:0.33\" }"}
+{"t":349987,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.800000\", \"curPosition\": \"X:151.07 Y:152.41 Z:0.32\" }"}
+{"t":350236,"type":"rx","len":92,"data":"{ \"bedTemp0\": \"50.100000\", \"printLeftTime\": 122, \"curPosition\": \"X:149.18 Y:151.19 Z:0.32\" }"}
+{"t":350504,"type":"rx","len":30,"data":"{ \"accelerationLimits\": 5000 }"}
+{"t":350553,"type":"rx","len":115,"data":"{ \"nozzleTemp\": \"220.840000\", \"curPosition\": \"X:146.80 Y:149.48 Z:0.33\", \"fan\": 1, \"layer\": 2, \"modelFanPct\": 100 }"}
+{"t":350553,"type":"rx","len":30,"data":"{ \"accelToDecelLimits\": 5000 }"}
+{"t":350553,"type":"rx","len":52,"data":"{ \"printProgress\": 8, \"realTimeSpeed\": \"20.000000\" }"}
+{"t":350743,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.910000\", \"bedTemp0\": \"50.110000\", \"printJobTime\": 17, \"curPosition\": \"X:150.35 Y:153.03 Z:0.32\" }"}
+{"t":350991,"type":"rx","len":127,"data":"{ \"nozzleTemp\": \"220.970000\", \"usedMaterialLength\": 26, \"realTimeFlow\": \"0.720000\", \"curPosition\": \"X:147.97 Y:151.32 Z:0.33\" }"}
+{"t":351249,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"221.030000\", \"bedTemp0\": \"50.100000\", \"printLeftTime\": 121, \"curPosition\": \"X:147.50 Y:151.52 Z:0.33\" }"}
+{"t":351498,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"221.100000\", \"bedTemp0\": \"50.110000\", \"curPosition\": \"X:148.38 Y:153.06 Z:0.32\" }"}
+{"t":351749,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.120000\", \"printJobTime\": 18, \"curPosition\": \"X:147.34 Y:152.69 Z:0.33\" }"}
+{"t":351999,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"221.150000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:148.11 Y:150.69 Z:0.43\" }"}
+{"t":352247,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"221.190000\", \"bedTemp0\": \"50.160000\", \"printLeftTime\": 120, \"curPosition\": \"X:151.44 Y:146.39 Z:0.32\" }"}
+{"t":352499,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"221.240000\", \"bedTemp0\": \"50.180000\", \"usedMaterialLength\": 27, \"curPosition\": \"X:148.56 Y:153.61 Z:0.32\" }"}
+{"t":352746,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"221.250000\", \"printJobTime\": 19, \"curPosition\": \"X:149.33 Y:154.35 Z:0.52\" }"}
+{"t":352998,"type":"rx","len":101,"data":"{ \"nozzleTemp\": \"221.260000\", \"realTimeFlow\": \"1.620000\", \"curPosition\": \"X:145.81 Y:151.21 Z:0.53\" }"}
+{"t":353248,"type":"rx","len":92,"data":"{ \"bedTemp0\": \"50.190000\", \"printLeftTime\": 119, \"curPosition\": \"X:147.15 Y:146.67 Z:0.53\" }"}
+{"t":353504,"type":"rx","len":31,"data":"{ \"accelerationLimits\": 10000 }"}
+{"t":353557,"type":"rx","len":31,"data":"{ \"accelToDecelLimits\": 10000 }"}
+{"t":353557,"type":"rx","len":149,"data":"{ \"nozzleTemp\": \"221.270000\", \"bedTemp0\": \"50.200000\", \"printProgress\": 9, \"realTimeSpeed\": \"500.000000\", \"curPosition\": \"X:151.85 Y:146.04 Z:0.52\" }"}
+{"t":353749,"type":"rx","len":123,"data":"{ \"nozzleTemp\": \"221.280000\", \"printJobTime\": 20, \"realTimeSpeed\": \"20.000000\", \"curPosition\": \"X:154.37 Y:150.04 Z:0.52\" }"}
+{"t":354005,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"221.250000\", \"printProgress\": 10, \"curPosition\": \"X:151.77 Y:153.99 Z:0.52\" }"}
+{"t":354256,"type":"rx","len":121,"data":"{ \"nozzleTemp\": \"221.210000\", \"printLeftTime\": 118, \"usedMaterialLength\": 28, \"curPosition\": \"X:147.59 Y:154.11 Z:0.52\" }"}
+{"t":354504,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"221.160000\", \"curPosition\": \"X:145.24 Y:149.96 Z:0.53\" }"}
+{"t":354752,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.190000\", \"printJobTime\": 21, \"curPosition\": \"X:147.66 Y:145.85 Z:0.53\" }"}
+{"t":355000,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"221.090000\", \"bedTemp0\": \"50.180000\", \"realTimeFlow\": \"1.510000\", \"curPosition\": \"X:152.43 Y:145.89 Z:0.52\" }"}
+{"t":355258,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"221.020000\", \"bedTemp0\": \"50.160000\", \"printLeftTime\": 117, \"curPosition\": \"X:154.77 Y:150.06 Z:0.52\" }"}
+{"t":355507,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.930000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:152.31 Y:154.16 Z:0.52\" }"}
+{"t":355766,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"220.800000\", \"printJobTime\": 22, \"usedMaterialLength\": 29, \"curPosition\": \"X:151.16 Y:153.88 Z:0.83\" }"}
+{"t":356008,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"220.670000\", \"bedTemp0\": \"50.130000\", \"printProgress\": 11, \"curPosition\": \"X:153.68 Y:151.72 Z:0.52\" }"}
+{"t":356258,"type":"rx","len":92,"data":"{ \"bedTemp0\": \"50.120000\", \"printLeftTime\": 116, \"curPosition\": \"X:150.82 Y:153.89 Z:0.52\" }"}
+{"t":356518,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.530000\", \"bedTemp0\": \"50.110000\", \"curPosition\": \"X:154.11 Y:150.12 Z:0.52\" }"}
+{"t":356777,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"220.390000\", \"printJobTime\": 23, \"curPosition\": \"X:150.61 Y:153.55 Z:0.52\" }"}
+{"t":357025,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"220.220000\", \"bedTemp0\": \"50.120000\", \"realTimeFlow\": \"1.600000\", \"curPosition\": \"X:152.11 Y:151.49 Z:0.52\" }"}
+{"t":357273,"type":"rx","len":121,"data":"{ \"nozzleTemp\": \"220.060000\", \"printLeftTime\": 115, \"usedMaterialLength\": 30, \"curPosition\": \"X:152.78 Y:150.26 Z:0.52\" }"}
+{"t":357523,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.890000\", \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:149.24 Y:153.81 Z:0.52\" }"}
+{"t":357771,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.730000\", \"bedTemp0\": \"50.140000\", \"printJobTime\": 24, \"curPosition\": \"X:151.64 Y:150.85 Z:0.52\" }"}
+{"t":358024,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:152.71 Y:149.22 Z:0.52\" }"}
+{"t":358093,"type":"rx","len":14,"data":"{ \"state\": 6 }"}
+{"t":358274,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.550000\", \"bedTemp0\": \"50.180000\", \"curPosition\": \"X:149.16 Y:152.77 Z:0.52\" }"}
+{"t":358523,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.390000\", \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:150.16 Y:151.22 Z:0.52\" }"}
+{"t":358782,"type":"rx","len":110,"data":"{ \"nozzleTemp\": \"219.250000\", \"curPosition\": \"X:153.38 Y:147.65 Z:0.52\", \"state\": 5, \"targetNozzleTemp\": 140 }"}
+{"t":359031,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.100000\", \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:149.86 Y:150.97 Z:0.52\" }"}
+{"t":359269,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"218.980000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:148.16 Y:152.12 Z:0.52\" }"}
+{"t":359528,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:151.70 Y:148.58 Z:0.52\" }"}
+{"t":359779,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"218.890000\", \"bedTemp0\": \"50.270000\", \"curPosition\": \"X:150.86 Y:148.86 Z:0.52\" }"}
+{"t":360034,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"218.810000\", \"curPosition\": \"X:147.31 Y:152.41 Z:0.53\" }"}
+{"t":360207,"type":"note","text":"Pause pressed"}
+{"t":360272,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"218.740000\", \"curPosition\": \"X:149.61 Y:149.56 Z:0.52\" }"}
+{"t":360522,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"218.680000\", \"curPosition\": \"X:151.73 Y:146.89 Z:0.52\" }"}
+{"t":360781,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"218.600000\", \"curPosition\": \"X:148.17 Y:150.44 Z:0.53\" }"}
+{"t":361034,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:146.48 Y:152.14 Z:0.53\" }"}
+{"t":361284,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"218.520000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":361533,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"218.420000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:146.48 Y:152.14 Z:0.69\" }"}
+{"t":362285,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"217.930000\", \"bedTemp0\": \"50.210000\" }"}
+{"t":363536,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"216.940000\", \"bedTemp0\": \"50.160000\" }"}
+{"t":364537,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"215.970000\", \"bedTemp0\": \"50.180000\" }"}
+{"t":365042,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"215.230000\", \"bedTemp0\": \"50.190000\" }"}
+{"t":365295,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"214.860000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:146.48 Y:152.14 Z:40.52\" }"}
+{"t":365541,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.230000\", \"curPosition\": \"X:146.48 Y:152.14 Z:43.03\" }"}
+{"t":365790,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"214.460000\", \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:146.48 Y:152.14 Z:45.54\" }"}
+{"t":366041,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"214.070000\", \"bedTemp0\": \"50.260000\", \"curPosition\": \"X:146.48 Y:152.14 Z:48.04\" }"}
+{"t":366295,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"213.680000\", \"bedTemp0\": \"50.270000\", \"curPosition\": \"X:146.48 Y:152.14 Z:50.04\" }"}
+{"t":366541,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"213.280000\" }"}
+{"t":366791,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"212.890000\", \"curPosition\": \"X:233.87 Y:152.64 Z:50.04\" }"}
+{"t":367050,"type":"rx","len":46,"data":"{ \"curPosition\": \"X:296.50 Y:153.00 Z:50.04\" }"}
+{"t":367803,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"211.660000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":368304,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"210.830000\", \"bedTemp0\": \"50.240000\" }"}
+{"t":369058,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"210.010000\", \"bedTemp0\": \"50.200000\" }"}
+{"t":369308,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"209.610000\", \"bedTemp0\": \"50.190000\" }"}
+{"t":369803,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"208.780000\" }"}
+{"t":370566,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"207.970000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":371062,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"207.160000\", \"bedTemp0\": \"50.250000\" }"}
+{"t":371311,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"206.760000\", \"bedTemp0\": \"50.270000\" }"}
+{"t":372061,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"205.940000\", \"bedTemp0\": \"50.330000\" }"}
+{"t":372824,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"204.750000\", \"bedTemp0\": \"50.350000\" }"}
+{"t":373073,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"204.350000\" }"}
+{"t":373429,"type":"rx","len":14,"data":"{ \"state\": 8 }"}
+{"t":373579,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"203.950000\", \"bedTemp0\": \"50.330000\" }"}
+{"t":374325,"type":"rx","len":80,"data":"{ \"nozzleTemp\": \"202.780000\", \"bedTemp0\": \"50.310000\", \"targetNozzleTemp\": 220 }"}
+{"t":375075,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"201.990000\", \"bedTemp0\": \"50.260000\" }"}
+{"t":375162,"type":"note","text":"Resume pressed"}
+{"t":375833,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"200.870000\", \"bedTemp0\": \"50.220000\" }"}
+{"t":377089,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"199.950000\", \"bedTemp0\": \"50.120000\" }"}
+{"t":378088,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"200.150000\", \"bedTemp0\": \"50.060000\" }"}
+{"t":378844,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"201.160000\", \"bedTemp0\": \"50.050000\" }"}
+{"t":379098,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"201.650000\", \"bedTemp0\": \"50.060000\" }"}
+{"t":379590,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"202.210000\", \"bedTemp0\": \"50.080000\" }"}
+{"t":380099,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"203.480000\", \"bedTemp0\": \"50.110000\" }"}
+{"t":380350,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"204.200000\" }"}
+{"t":381102,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"205.740000\", \"bedTemp0\": \"50.140000\" }"}
+{"t":381356,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"206.560000\", \"bedTemp0\": \"50.150000\" }"}
+{"t":381605,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"207.400000\" }"}
+{"t":381853,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"208.250000\" }"}
+{"t":382101,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"209.130000\" }"}
+{"t":382603,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"210.010000\", \"bedTemp0\": \"50.130000\" }"}
+{"t":383110,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"211.810000\", \"bedTemp0\": \"50.100000\" }"}
+{"t":383361,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"212.700000\" }"}
+{"t":383609,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"213.570000\", \"bedTemp0\": \"50.080000\" }"}
+{"t":383858,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"214.440000\", \"bedTemp0\": \"50.060000\" }"}
+{"t":384371,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"215.280000\", \"bedTemp0\": \"50.010000\" }"}
+{"t":384622,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"216.100000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":385115,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"217.550000\", \"bedTemp0\": \"49.980000\" }"}
+{"t":385372,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"218.190000\", \"bedTemp0\": \"49.970000\" }"}
+{"t":386123,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"219.320000\", \"bedTemp0\": \"49.990000\" }"}
+{"t":386620,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"220.200000\", \"bedTemp0\": \"50.000000\" }"}
+{"t":387125,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"220.530000\", \"bedTemp0\": \"50.040000\" }"}
+{"t":387634,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"221.010000\", \"bedTemp0\": \"50.060000\" }"}
+{"t":388376,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"221.360000\", \"bedTemp0\": \"50.070000\" }"}
+{"t":388636,"type":"rx","len":46,"data":"{ \"curPosition\": \"X:296.50 Y:153.00 Z:47.88\" }"}
+{"t":388884,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"221.390000\", \"bedTemp0\": \"50.060000\", \"curPosition\": \"X:296.50 Y:153.00 Z:45.37\" }"}
+{"t":389137,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"221.370000\", \"curPosition\": \"X:296.50 Y:153.00 Z:42.87\" }"}
+{"t":389379,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"221.330000\", \"curPosition\": \"X:296.50 Y:153.00 Z:40.35\" }"}
+{"t":389636,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"221.260000\", \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:296.50 Y:153.00 Z:37.84\" }"}
+{"t":389885,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"221.160000\", \"bedTemp0\": \"50.040000\", \"curPosition\": \"X:296.50 Y:153.00 Z:35.34\" }"}
+{"t":390137,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.020000\", \"curPosition\": \"X:296.50 Y:153.00 Z:32.83\" }"}
+{"t":390383,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"221.070000\", \"bedTemp0\": \"50.000000\", \"curPosition\": \"X:296.50 Y:153.00 Z:30.32\" }"}
+{"t":390641,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"221.000000\", \"bedTemp0\": \"49.980000\", \"curPosition\": \"X:296.50 Y:153.00 Z:27.82\" }"}
+{"t":390888,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"220.910000\", \"curPosition\": \"X:296.50 Y:153.00 Z:25.32\" }"}
+{"t":391136,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"220.830000\", \"bedTemp0\": \"49.960000\", \"curPosition\": \"X:296.50 Y:153.00 Z:22.80\" }"}
+{"t":391384,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"220.790000\", \"bedTemp0\": \"49.940000\", \"curPosition\": \"X:296.50 Y:153.00 Z:20.30\" }"}
+{"t":391643,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:296.50 Y:153.00 Z:17.79\" }"}
+{"t":391900,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"220.730000\", \"bedTemp0\": \"49.910000\", \"curPosition\": \"X:296.50 Y:153.00 Z:15.29\" }"}
+{"t":392144,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"220.700000\", \"curPosition\": \"X:296.50 Y:153.00 Z:12.78\" }"}
+{"t":392419,"type":"rx","len":46,"data":"{ \"curPosition\": \"X:296.50 Y:153.00 Z:10.28\" }"}
+{"t":392645,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.720000\", \"curPosition\": \"X:296.50 Y:153.00 Z:7.77\" }"}
+{"t":392897,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.750000\", \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:296.50 Y:153.00 Z:5.27\" }"}
+{"t":393146,"type":"rx","len":45,"data":"{ \"curPosition\": \"X:296.50 Y:153.00 Z:3.04\" }"}
+{"t":393395,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"220.790000\" }"}
+{"t":393652,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"220.860000\", \"bedTemp0\": \"49.930000\" }"}
+{"t":393908,"type":"rx","len":76,"data":"{ \"nozzleTemp\": \"220.950000\", \"printJobTime\": 25, \"usedMaterialLength\": 31 }"}
+{"t":393951,"type":"rx","len":85,"data":"{ \"printProgress\": 12, \"printLeftTime\": 114, \"realTimeFlow\": \"0.070000\", \"state\": 1 }"}
+{"t":394168,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"221.040000\", \"curPosition\": \"X:286.61 Y:152.94 Z:2.87\" }"}
+{"t":394404,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.140000\", \"printLeftTime\": 113, \"curPosition\": \"X:274.09 Y:152.87 Z:2.65\" }"}
+{"t":394655,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"221.250000\", \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:261.52 Y:152.80 Z:2.44\" }"}
+{"t":394913,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"49.910000\", \"printJobTime\": 26, \"curPosition\": \"X:248.97 Y:152.73 Z:2.23\" }"}
+{"t":395167,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"221.380000\", \"bedTemp0\": \"49.900000\", \"realTimeFlow\": \"0.300000\", \"curPosition\": \"X:236.45 Y:152.66 Z:2.01\" }"}
+{"t":395409,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"221.500000\", \"printLeftTime\": 112, \"curPosition\": \"X:223.91 Y:152.58 Z:1.79\" }"}
+{"t":395658,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"221.610000\", \"curPosition\": \"X:211.37 Y:152.51 Z:1.58\" }"}
+{"t":395920,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"221.720000\", \"bedTemp0\": \"49.890000\", \"printJobTime\": 27, \"curPosition\": \"X:198.86 Y:152.44 Z:1.38\" }"}
+{"t":396172,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"221.830000\", \"curPosition\": \"X:186.31 Y:152.37 Z:1.17\" }"}
+{"t":396412,"type":"rx","len":67,"data":"{ \"printLeftTime\": 111, \"curPosition\": \"X:173.75 Y:152.29 Z:0.97\" }"}
+{"t":396670,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"221.920000\", \"bedTemp0\": \"49.900000\", \"usedMaterialLength\": 32, \"curPosition\": \"X:161.23 Y:152.22 Z:0.77\" }"}
+{"t":396919,"type":"rx","len":139,"data":"{ \"nozzleTemp\": \"221.980000\", \"bedTemp0\": \"49.910000\", \"printProgress\": 13, \"printJobTime\": 28, \"curPosition\": \"X:148.68 Y:152.15 Z:0.56\" }"}
+{"t":397271,"type":"rx","len":30,"data":"{ \"accelerationLimits\": 5000 }"}
+{"t":397319,"type":"rx","len":30,"data":"{ \"accelToDecelLimits\": 5000 }"}
+{"t":397319,"type":"rx","len":223,"data":"{ \"nozzleTemp\": \"222.030000\", \"bedTemp0\": \"49.930000\", \"printProgress\": 15, \"printLeftTime\": 110, \"realTimeFlow\": \"1.300000\", \"curPosition\": \"X:150.22 Y:147.84 Z:0.52\", \"fanAuxiliary\": 1, \"layer\": 3, \"auxiliaryFanPct\": 80 }"}
+{"t":397507,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"222.080000\", \"bedTemp0\": \"49.950000\", \"curPosition\": \"X:149.71 Y:147.80 Z:0.53\" }"}
+{"t":397766,"type":"rx","len":65,"data":"{ \"printJobTime\": 29, \"curPosition\": \"X:146.15 Y:151.36 Z:0.53\" }"}
+{"t":398014,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"222.070000\", \"bedTemp0\": \"49.980000\", \"curPosition\": \"X:149.18 Y:147.77 Z:0.53\" }"}
+{"t":398261,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"222.040000\", \"bedTemp0\": \"50.010000\", \"printLeftTime\": 109, \"curPosition\": \"X:149.06 Y:147.34 Z:0.53\" }"}
+{"t":398519,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:145.91 Y:149.94 Z:0.53\" }"}
+{"t":398767,"type":"rx","len":144,"data":"{ \"nozzleTemp\": \"221.990000\", \"bedTemp0\": \"50.090000\", \"printJobTime\": 30, \"usedMaterialLength\": 33, \"curPosition\": \"X:149.46 Y:146.39 Z:0.53\" }"}
+{"t":399016,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"221.920000\", \"bedTemp0\": \"50.130000\", \"realTimeFlow\": \"1.080000\", \"curPosition\": \"X:146.77 Y:148.52 Z:0.53\" }"}
+{"t":399264,"type":"rx","len":116,"data":"{ \"nozzleTemp\": \"221.840000\", \"printProgress\": 16, \"printLeftTime\": 108, \"curPosition\": \"X:148.26 Y:146.48 Z:0.53\" }"}
+{"t":399516,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"221.740000\", \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:153.82 Y:151.32 Z:0.52\" }"}
+{"t":399768,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"221.600000\", \"bedTemp0\": \"50.210000\", \"printJobTime\": 31, \"curPosition\": \"X:149.32 Y:153.93 Z:0.92\" }"}
+{"t":400021,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.240000\", \"curPosition\": \"X:146.54 Y:152.69 Z:0.73\" }"}
+{"t":400268,"type":"rx","len":146,"data":"{ \"nozzleTemp\": \"221.470000\", \"bedTemp0\": \"50.270000\", \"printLeftTime\": 107, \"usedMaterialLength\": 34, \"curPosition\": \"X:146.14 Y:147.97 Z:0.73\" }"}
+{"t":400523,"type":"rx","len":60,"data":"{ \"accelerationLimits\": 10000, \"accelToDecelLimits\": 10000 }"}
+{"t":400578,"type":"rx","len":149,"data":"{ \"nozzleTemp\": \"221.330000\", \"bedTemp0\": \"50.300000\", \"printProgress\": 17, \"realTimeSpeed\": \"45.000000\", \"curPosition\": \"X:150.25 Y:145.61 Z:0.72\" }"}
+{"t":400776,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"221.180000\", \"printJobTime\": 32, \"curPosition\": \"X:154.07 Y:148.42 Z:0.72\" }"}
+{"t":401024,"type":"rx","len":156,"data":"{ \"nozzleTemp\": \"221.030000\", \"bedTemp0\": \"50.320000\", \"realTimeSpeed\": \"20.000000\", \"realTimeFlow\": \"1.370000\", \"curPosition\": \"X:153.13 Y:153.04 Z:0.72\" }"}
+{"t":401274,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"220.860000\", \"bedTemp0\": \"50.350000\", \"printLeftTime\": 106, \"curPosition\": \"X:149.16 Y:154.69 Z:0.72\" }"}
+{"t":401521,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.370000\", \"curPosition\": \"X:145.51 Y:151.61 Z:0.73\" }"}
+{"t":401780,"type":"rx","len":144,"data":"{ \"nozzleTemp\": \"220.710000\", \"bedTemp0\": \"50.400000\", \"printJobTime\": 33, \"usedMaterialLength\": 35, \"curPosition\": \"X:146.36 Y:146.89 Z:0.73\" }"}
+{"t":402029,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"220.560000\", \"bedTemp0\": \"50.420000\", \"printProgress\": 18, \"curPosition\": \"X:150.88 Y:145.32 Z:0.72\" }"}
+{"t":402278,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"220.410000\", \"printLeftTime\": 105, \"curPosition\": \"X:154.50 Y:148.42 Z:0.72\" }"}
+{"t":402525,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.280000\", \"bedTemp0\": \"50.430000\", \"curPosition\": \"X:153.63 Y:153.12 Z:0.72\" }"}
+{"t":402782,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.160000\", \"bedTemp0\": \"50.450000\", \"printJobTime\": 34, \"curPosition\": \"X:149.78 Y:154.78 Z:0.72\" }"}
+{"t":403031,"type":"rx","len":98,"data":"{ \"bedTemp0\": \"50.460000\", \"realTimeFlow\": \"1.640000\", \"curPosition\": \"X:152.78 Y:146.96 Z:0.72\" }"}
+{"t":403282,"type":"rx","len":121,"data":"{ \"nozzleTemp\": \"220.040000\", \"printLeftTime\": 104, \"usedMaterialLength\": 36, \"curPosition\": \"X:151.76 Y:146.50 Z:0.72\" }"}
+{"t":403528,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"219.940000\", \"curPosition\": \"X:153.25 Y:148.54 Z:0.72\" }"}
+{"t":403780,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"219.850000\", \"printJobTime\": 35, \"curPosition\": \"X:151.82 Y:147.67 Z:0.72\" }"}
+{"t":404042,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.800000\", \"bedTemp0\": \"50.450000\", \"curPosition\": \"X:150.90 Y:147.30 Z:0.72\" }"}
+{"t":404285,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"219.750000\", \"bedTemp0\": \"50.440000\", \"printLeftTime\": 103, \"curPosition\": \"X:154.00 Y:150.95 Z:0.72\" }"}
+{"t":404538,"type":"rx","len":91,"data":"{ \"bedTemp0\": \"50.430000\", \"printProgress\": 19, \"curPosition\": \"X:150.45 Y:147.41 Z:0.72\" }"}
+{"t":404784,"type":"rx","len":144,"data":"{ \"nozzleTemp\": \"219.730000\", \"bedTemp0\": \"50.410000\", \"printJobTime\": 36, \"usedMaterialLength\": 37, \"curPosition\": \"X:150.44 Y:147.95 Z:0.72\" }"}
+{"t":405034,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.390000\", \"curPosition\": \"X:153.82 Y:151.52 Z:0.72\" }"}
+{"t":405294,"type":"rx","len":67,"data":"{ \"printLeftTime\": 102, \"curPosition\": \"X:150.37 Y:148.43 Z:0.72\" }"}
+{"t":405542,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.760000\", \"bedTemp0\": \"50.360000\", \"curPosition\": \"X:148.97 Y:147.59 Z:0.73\" }"}
+{"t":405792,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.800000\", \"bedTemp0\": \"50.350000\", \"printJobTime\": 37, \"curPosition\": \"X:152.51 Y:151.13 Z:0.72\" }"}
+{"t":406041,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.330000\", \"curPosition\": \"X:151.05 Y:150.22 Z:0.72\" }"}
+{"t":406295,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"219.840000\", \"bedTemp0\": \"50.310000\", \"printLeftTime\": 101, \"curPosition\": \"X:147.50 Y:146.73 Z:0.73\" }"}
+{"t":406541,"type":"rx","len":124,"data":"{ \"nozzleTemp\": \"219.920000\", \"bedTemp0\": \"50.300000\", \"usedMaterialLength\": 38, \"curPosition\": \"X:150.52 Y:150.25 Z:0.72\" }"}
+{"t":406789,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"219.970000\", \"printJobTime\": 38, \"curPosition\": \"X:152.04 Y:152.31 Z:0.72\" }"}
+{"t":407042,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"220.040000\", \"bedTemp0\": \"50.290000\", \"realTimeFlow\": \"1.490000\", \"curPosition\": \"X:148.50 Y:148.77 Z:0.73\" }"}
+{"t":407300,"type":"rx","len":141,"data":"{ \"nozzleTemp\": \"220.080000\", \"bedTemp0\": \"50.280000\", \"printProgress\": 20, \"printLeftTime\": 100, \"curPosition\": \"X:148.42 Y:149.25 Z:0.72\" }"}
+{"t":407540,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.290000\", \"curPosition\": \"X:151.97 Y:152.80 Z:0.72\" }"}
+{"t":407790,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"220.130000\", \"printJobTime\": 39, \"curPosition\": \"X:149.38 Y:150.76 Z:0.72\" }"}
+{"t":408041,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.190000\", \"curPosition\": \"X:146.63 Y:148.57 Z:0.73\" }"}
+{"t":408306,"type":"rx","len":30,"data":"{ \"accelerationLimits\": 5000 }"}
+{"t":408357,"type":"rx","len":136,"data":"{ \"nozzleTemp\": \"220.220000\", \"bedTemp0\": \"50.300000\", \"usedMaterialLength\": 39, \"curPosition\": \"X:150.17 Y:152.11 Z:0.72\", \"layer\": 4 }"}
+{"t":408357,"type":"rx","len":30,"data":"{ \"accelToDecelLimits\": 5000 }"}
+{"t":408357,"type":"rx","len":44,"data":"{ \"printProgress\": 22, \"printLeftTime\": 99 }"}
+{"t":408545,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.270000\", \"curPosition\": \"X:149.75 Y:152.24 Z:0.72\" }"}
+{"t":408791,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.320000\", \"bedTemp0\": \"50.310000\", \"printJobTime\": 40, \"curPosition\": \"X:146.20 Y:148.69 Z:0.73\" }"}
+{"t":409050,"type":"rx","len":98,"data":"{ \"bedTemp0\": \"50.320000\", \"realTimeFlow\": \"1.180000\", \"curPosition\": \"X:149.13 Y:152.18 Z:0.72\" }"}
+{"t":409299,"type":"rx","len":66,"data":"{ \"printLeftTime\": 98, \"curPosition\": \"X:149.11 Y:152.71 Z:0.72\" }"}
+{"t":409558,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.330000\", \"curPosition\": \"X:145.90 Y:150.05 Z:0.73\" }"}
+{"t":409817,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.320000\", \"bedTemp0\": \"50.310000\", \"printJobTime\": 41, \"curPosition\": \"X:149.45 Y:153.61 Z:0.72\" }"}
+{"t":410052,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.310000\", \"curPosition\": \"X:146.76 Y:151.47 Z:0.73\" }"}
+{"t":410303,"type":"rx","len":166,"data":"{ \"nozzleTemp\": \"220.280000\", \"bedTemp0\": \"50.300000\", \"printProgress\": 23, \"printLeftTime\": 97, \"usedMaterialLength\": 40, \"curPosition\": \"X:148.28 Y:153.54 Z:0.72\" }"}
+{"t":410560,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.240000\", \"bedTemp0\": \"50.280000\", \"curPosition\": \"X:153.80 Y:148.64 Z:0.72\" }"}
+{"t":410808,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.270000\", \"printJobTime\": 42, \"curPosition\": \"X:149.32 Y:154.34 Z:0.92\" }"}
+{"t":411057,"type":"rx","len":126,"data":"{ \"nozzleTemp\": \"220.200000\", \"bedTemp0\": \"50.250000\", \"realTimeFlow\": \"1.440000\", \"curPosition\": \"X:145.89 Y:151.48 Z:0.93\" }"}
+{"t":411307,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"220.120000\", \"bedTemp0\": \"50.230000\", \"printLeftTime\": 96, \"curPosition\": \"X:146.96 Y:146.87 Z:0.93\" }"}
+{"t":411563,"type":"rx","len":31,"data":"{ \"accelerationLimits\": 10000 }"}
+{"t":411616,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.050000\", \"curPosition\": \"X:151.58 Y:145.92 Z:0.92\" }"}
+{"t":411617,"type":"rx","len":31,"data":"{ \"accelToDecelLimits\": 10000 }"}
+{"t":411617,"type":"rx","len":53,"data":"{ \"printProgress\": 24, \"realTimeSpeed\": \"45.000000\" }"}
+{"t":411813,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"220.000000\", \"bedTemp0\": \"50.220000\", \"printJobTime\": 43, \"curPosition\": \"X:154.39 Y:149.75 Z:0.92\" }"}
+{"t":412064,"type":"rx","len":154,"data":"{ \"nozzleTemp\": \"219.930000\", \"bedTemp0\": \"50.200000\", \"usedMaterialLength\": 41, \"realTimeSpeed\": \"20.000000\", \"curPosition\": \"X:152.04 Y:153.87 Z:0.92\" }"}
+{"t":412311,"type":"rx","len":112,"data":"{ \"bedTemp0\": \"50.180000\", \"printProgress\": 25, \"printLeftTime\": 95, \"curPosition\": \"X:147.90 Y:154.28 Z:0.92\" }"}
+{"t":412570,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.860000\", \"bedTemp0\": \"50.170000\", \"curPosition\": \"X:145.25 Y:150.30 Z:0.93\" }"}
+{"t":412809,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.770000\", \"bedTemp0\": \"50.180000\", \"printJobTime\": 44, \"curPosition\": \"X:147.37 Y:146.03 Z:0.93\" }"}
+{"t":413066,"type":"rx","len":122,"data":"{ \"nozzleTemp\": \"219.700000\", \"printProgress\": 26, \"realTimeFlow\": \"1.470000\", \"curPosition\": \"X:152.13 Y:145.73 Z:0.92\" }"}
+{"t":413313,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"219.630000\", \"printLeftTime\": 94, \"curPosition\": \"X:154.76 Y:149.71 Z:0.92\" }"}
+{"t":413667,"type":"rx","len":111,"data":"{ \"nozzleTemp\": \"219.570000\", \"usedMaterialLength\": 42, \"curPosition\": \"X:150.88 Y:154.68 Z:0.92\", \"layer\": 5 }"}
+{"t":413720,"type":"rx","len":58,"data":"{ \"accelerationLimits\": 5000, \"accelToDecelLimits\": 5000 }"}
+{"t":413721,"type":"rx","len":23,"data":"{ \"printProgress\": 28 }"}
+{"t":413905,"type":"rx","len":93,"data":"{ \"nozzleTemp\": \"219.510000\", \"printJobTime\": 45, \"curPosition\": \"X:154.10 Y:150.26 Z:0.93\" }"}
+{"t":414169,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.460000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:151.73 Y:153.35 Z:0.92\" }"}
+{"t":414416,"type":"rx","len":91,"data":"{ \"bedTemp0\": \"50.200000\", \"printLeftTime\": 93, \"curPosition\": \"X:147.68 Y:152.51 Z:0.93\" }"}
+{"t":414668,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.420000\", \"bedTemp0\": \"50.210000\", \"curPosition\": \"X:146.98 Y:149.58 Z:0.93\" }"}
+{"t":414911,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.400000\", \"bedTemp0\": \"50.230000\", \"printJobTime\": 46, \"curPosition\": \"X:151.02 Y:150.53 Z:0.92\" }"}
+{"t":415002,"type":"note","text":"Stop pressed"}
+{"t":415165,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"219.380000\", \"curPosition\": \"X:153.62 Y:148.09 Z:0.92\" }"}
+{"t":415211,"type":"rx","len":51,"data":"{ \"printProgress\": 29, \"realTimeFlow\": \"1.420000\" }"}
+{"t":415421,"type":"rx","len":145,"data":"{ \"nozzleTemp\": \"219.370000\", \"bedTemp0\": \"50.240000\", \"printLeftTime\": 92, \"usedMaterialLength\": 43, \"curPosition\": \"X:150.01 Y:146.81 Z:0.93\" }"}
+{"t":415669,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.380000\", \"bedTemp0\": \"50.250000\", \"curPosition\": \"X:146.70 Y:147.68 Z:0.93\" }"}
+{"t":415916,"type":"rx","len":65,"data":"{ \"printJobTime\": 47, \"curPosition\": \"X:149.34 Y:154.35 Z:1.12\" }"}
+{"t":416168,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"219.400000\", \"curPosition\": \"X:145.87 Y:151.43 Z:1.13\" }"}
+{"t":416420,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"219.440000\", \"printLeftTime\": 91, \"curPosition\": \"X:146.99 Y:146.83 Z:1.13\" }"}
+{"t":416670,"type":"rx","len":60,"data":"{ \"accelerationLimits\": 10000, \"accelToDecelLimits\": 10000 }"}
+{"t":416723,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"219.470000\", \"printProgress\": 30, \"curPosition\": \"X:151.64 Y:145.95 Z:1.12\" }"}
+{"t":416874,"type":"rx","len":14,"data":"{ \"state\": 7 }"}
+{"t":416926,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.490000\", \"bedTemp0\": \"50.230000\", \"printJobTime\": 48, \"curPosition\": \"X:154.39 Y:149.82 Z:1.12\" }"}
+{"t":417176,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.560000\", \"bedTemp0\": \"50.220000\", \"curPosition\": \"X:151.98 Y:153.90 Z:1.12\" }"}
+{"t":417426,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.200000\", \"curPosition\": \"X:147.82 Y:154.25 Z:1.12\" }"}
+{"t":417674,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.610000\", \"bedTemp0\": \"50.190000\", \"curPosition\": \"X:145.25 Y:150.23 Z:1.13\" }"}
+{"t":417923,"type":"rx","len":118,"data":"{ \"nozzleTemp\": \"219.660000\", \"bedTemp0\": \"50.170000\", \"printJobTime\": 49, \"curPosition\": \"X:147.43 Y:145.99 Z:1.13\" }"}
+{"t":418172,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"219.730000\", \"curPosition\": \"X:152.21 Y:145.76 Z:1.12\" }"}
+{"t":418433,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.800000\", \"bedTemp0\": \"50.150000\", \"curPosition\": \"X:154.76 Y:149.79 Z:1.12\" }"}
+{"t":418680,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"219.860000\", \"bedTemp0\": \"50.140000\", \"curPosition\": \"X:152.55 Y:154.02 Z:1.12\" }"}
+{"t":418926,"type":"rx","len":90,"data":"{ \"bedTemp0\": \"50.130000\", \"printJobTime\": 50, \"curPosition\": \"X:150.24 Y:153.72 Z:1.32\" }"}
+{"t":419345,"type":"rx","len":183,"data":"{ \"nozzleTemp\": \"219.980000\", \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:153.66 Y:151.86 Z:1.12\", \"fanAuxiliary\": 0, \"targetNozzleTemp\": 0, \"targetBedTemp0\": 0, \"auxiliaryFanPct\": 0 }"}
+{"t":419391,"type":"rx","len":58,"data":"{ \"accelerationLimits\": 5000, \"accelToDecelLimits\": 2500 }"}
+{"t":419391,"type":"rx","len":89,"data":"{ \"current_object\": \"CYLINDER_ID_0_COPY_0\", \"excluded_objects\": \"[ ]\", \"objects\": \"[ ]\" }"}
+{"t":419592,"type":"rx","len":30,"data":"{ \"nozzleTemp\": \"220.060000\" }"}
+{"t":419850,"type":"rx","len":65,"data":"{ \"printJobTime\": 51, \"curPosition\": \"X:153.66 Y:151.86 Z:1.14\" }"}
+{"t":420096,"type":"rx","len":73,"data":"{ \"nozzleTemp\": \"220.120000\", \"curPosition\": \"X:158.24 Y:151.90 Z:3.11\" }"}
+{"t":420347,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.170000\", \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:275.07 Y:152.83 Z:3.16\" }"}
+{"t":420597,"type":"rx","len":98,"data":"{ \"nozzleTemp\": \"220.190000\", \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:296.50 Y:153.00 Z:4.71\" }"}
+{"t":420845,"type":"rx","len":65,"data":"{ \"printJobTime\": 52, \"curPosition\": \"X:296.50 Y:153.00 Z:7.23\" }"}
+{"t":421103,"type":"rx","len":70,"data":"{ \"bedTemp0\": \"50.130000\", \"curPosition\": \"X:296.50 Y:153.00 Z:9.74\" }"}
+{"t":421351,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.120000\", \"curPosition\": \"X:296.50 Y:153.00 Z:12.24\" }"}
+{"t":421598,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"220.150000\", \"curPosition\": \"X:296.50 Y:153.00 Z:14.75\" }"}
+{"t":421849,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"220.080000\", \"bedTemp0\": \"50.110000\", \"printJobTime\": 53, \"curPosition\": \"X:296.50 Y:153.00 Z:17.25\" }"}
+{"t":422107,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"219.990000\", \"bedTemp0\": \"50.100000\", \"curPosition\": \"X:296.50 Y:153.00 Z:19.76\" }"}
+{"t":422356,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"219.850000\", \"curPosition\": \"X:296.50 Y:153.00 Z:22.27\" }"}
+{"t":422608,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"219.690000\", \"bedTemp0\": \"50.090000\", \"curPosition\": \"X:296.50 Y:153.00 Z:24.77\" }"}
+{"t":422855,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"219.510000\", \"bedTemp0\": \"50.080000\", \"printJobTime\": 54, \"curPosition\": \"X:296.50 Y:153.00 Z:27.28\" }"}
+{"t":423106,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"50.050000\", \"curPosition\": \"X:296.50 Y:153.00 Z:29.79\" }"}
+{"t":423357,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"219.280000\", \"bedTemp0\": \"50.030000\", \"curPosition\": \"X:296.50 Y:153.00 Z:32.29\" }"}
+{"t":423606,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"219.010000\", \"bedTemp0\": \"50.000000\", \"curPosition\": \"X:296.50 Y:153.00 Z:34.80\" }"}
+{"t":423854,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"218.720000\", \"printJobTime\": 55, \"curPosition\": \"X:296.50 Y:153.00 Z:37.31\" }"}
+{"t":424113,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"218.410000\", \"bedTemp0\": \"49.980000\", \"curPosition\": \"X:296.50 Y:153.00 Z:39.82\" }"}
+{"t":424362,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"218.070000\", \"bedTemp0\": \"49.950000\", \"curPosition\": \"X:296.50 Y:153.00 Z:42.33\" }"}
+{"t":424612,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.920000\", \"curPosition\": \"X:296.50 Y:153.00 Z:44.84\" }"}
+{"t":424858,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"217.730000\", \"bedTemp0\": \"49.890000\", \"printJobTime\": 56, \"curPosition\": \"X:296.50 Y:153.00 Z:47.35\" }"}
+{"t":425106,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"217.370000\", \"bedTemp0\": \"49.870000\", \"curPosition\": \"X:296.50 Y:153.00 Z:49.85\" }"}
+{"t":425367,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"216.990000\", \"curPosition\": \"X:296.50 Y:153.00 Z:52.36\" }"}
+{"t":425617,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"216.610000\", \"bedTemp0\": \"49.830000\", \"curPosition\": \"X:296.50 Y:153.00 Z:54.86\" }"}
+{"t":425864,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"216.200000\", \"bedTemp0\": \"49.800000\", \"printJobTime\": 57, \"curPosition\": \"X:296.50 Y:153.00 Z:57.37\" }"}
+{"t":426112,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.770000\", \"curPosition\": \"X:296.50 Y:153.00 Z:59.87\" }"}
+{"t":426367,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"215.770000\", \"bedTemp0\": \"49.740000\", \"curPosition\": \"X:296.50 Y:153.00 Z:62.38\" }"}
+{"t":426616,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"215.340000\", \"bedTemp0\": \"49.710000\", \"curPosition\": \"X:296.50 Y:153.00 Z:64.88\" }"}
+{"t":426863,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"214.910000\", \"printJobTime\": 58, \"curPosition\": \"X:296.50 Y:153.00 Z:67.39\" }"}
+{"t":427113,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"214.480000\", \"bedTemp0\": \"49.670000\", \"curPosition\": \"X:296.50 Y:153.00 Z:69.89\" }"}
+{"t":427370,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"214.050000\", \"bedTemp0\": \"49.630000\", \"curPosition\": \"X:296.50 Y:153.00 Z:72.40\" }"}
+{"t":427620,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.600000\", \"curPosition\": \"X:296.50 Y:153.00 Z:74.91\" }"}
+{"t":427869,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"213.620000\", \"bedTemp0\": \"49.560000\", \"printJobTime\": 59, \"curPosition\": \"X:296.50 Y:153.00 Z:77.42\" }"}
+{"t":428117,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"213.180000\", \"bedTemp0\": \"49.540000\", \"curPosition\": \"X:296.50 Y:153.00 Z:79.93\" }"}
+{"t":428375,"type":"rx","len":74,"data":"{ \"nozzleTemp\": \"212.740000\", \"curPosition\": \"X:296.50 Y:153.00 Z:82.43\" }"}
+{"t":428622,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"212.310000\", \"bedTemp0\": \"49.500000\", \"curPosition\": \"X:296.50 Y:153.00 Z:84.94\" }"}
+{"t":428871,"type":"rx","len":119,"data":"{ \"nozzleTemp\": \"211.870000\", \"bedTemp0\": \"49.470000\", \"printJobTime\": 60, \"curPosition\": \"X:296.50 Y:153.00 Z:87.44\" }"}
+{"t":429119,"type":"rx","len":71,"data":"{ \"bedTemp0\": \"49.440000\", \"curPosition\": \"X:296.50 Y:153.00 Z:89.95\" }"}
+{"t":429376,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"211.430000\", \"bedTemp0\": \"49.400000\", \"curPosition\": \"X:296.50 Y:153.00 Z:92.45\" }"}
+{"t":429625,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"210.980000\", \"bedTemp0\": \"49.360000\", \"curPosition\": \"X:296.50 Y:153.00 Z:94.96\" }"}
+{"t":429875,"type":"rx","len":94,"data":"{ \"nozzleTemp\": \"210.530000\", \"printJobTime\": 61, \"curPosition\": \"X:296.50 Y:153.00 Z:97.47\" }"}
+{"t":430124,"type":"rx","len":99,"data":"{ \"nozzleTemp\": \"210.090000\", \"bedTemp0\": \"49.330000\", \"curPosition\": \"X:296.50 Y:153.00 Z:99.98\" }"}
+{"t":430377,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"209.650000\", \"bedTemp0\": \"49.300000\", \"curPosition\": \"X:296.50 Y:153.00 Z:102.48\" }"}
+{"t":430628,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"49.270000\", \"curPosition\": \"X:296.50 Y:153.00 Z:104.99\" }"}
+{"t":430873,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"209.220000\", \"bedTemp0\": \"49.240000\", \"printJobTime\": 62, \"curPosition\": \"X:296.50 Y:153.00 Z:107.49\" }"}
+{"t":431131,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"208.790000\", \"bedTemp0\": \"49.200000\", \"curPosition\": \"X:296.50 Y:153.00 Z:109.99\" }"}
+{"t":431378,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"208.360000\", \"curPosition\": \"X:296.50 Y:153.00 Z:112.50\" }"}
+{"t":431636,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"207.920000\", \"bedTemp0\": \"49.170000\", \"curPosition\": \"X:296.50 Y:153.00 Z:115.00\" }"}
+{"t":431874,"type":"rx","len":120,"data":"{ \"nozzleTemp\": \"207.500000\", \"bedTemp0\": \"49.140000\", \"printJobTime\": 63, \"curPosition\": \"X:296.50 Y:153.00 Z:117.51\" }"}
+{"t":432134,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"49.110000\", \"curPosition\": \"X:296.50 Y:153.00 Z:120.02\" }"}
+{"t":432382,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"207.070000\", \"bedTemp0\": \"49.080000\", \"curPosition\": \"X:296.50 Y:153.00 Z:122.53\" }"}
+{"t":432631,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"206.640000\", \"bedTemp0\": \"49.060000\", \"curPosition\": \"X:296.50 Y:153.00 Z:125.04\" }"}
+{"t":432882,"type":"rx","len":95,"data":"{ \"nozzleTemp\": \"206.230000\", \"printJobTime\": 64, \"curPosition\": \"X:296.50 Y:153.00 Z:127.55\" }"}
+{"t":433134,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"205.800000\", \"bedTemp0\": \"49.030000\", \"curPosition\": \"X:296.50 Y:153.00 Z:130.06\" }"}
+{"t":433382,"type":"rx","len":112,"data":"{ \"nozzleTemp\": \"205.380000\", \"bedTemp0\": \"48.990000\", \"curPosition\": \"X:296.50 Y:153.00 Z:132.56\", \"layer\": 0 }"}
+{"t":433427,"type":"rx","len":46,"data":"{ \"autohome\": \"X:0 Y:0 Z:0\", \"TotalLayer\": 0 }"}
+{"t":433890,"type":"rx","len":130,"data":"{ \"nozzleTemp\": \"204.980000\", \"bedTemp0\": \"48.940000\", \"curPosition\": \"X:296.50 Y:153.00 Z:137.57\", \"deviceState\": 0, \"state\": 4 }"}
+{"t":433897,"type":"rx","len":23426,"data":"{ \"totalJob\": 50, \"totalUsageTime\": 135669, \"totalUsageMaterial\": 349925, \"historyList\": [ { \"dateTime\": \"2026-10-30 14:14:46\", \"id\": 1793366086, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793366086, \"startway\": 1, \"usagetime\": 64, \"usagematerial\": 43.911799999999914, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793366086.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 14:08:29\", \"id\": 1793365709, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793365709, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793365709.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 14:01:46\", \"id\": 1793365306, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793365306, \"startway\": 1, \"usagetime\": 22, \"usagematerial\": 19.5, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793365306.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 13:47:04\", \"id\": 1793364424, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1793364424, \"startway\": 1, \"usagetime\": 202, \"usagematerial\": 83.343422857155275, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793364424.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 12:03:24\", \"id\": 1793358204, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Slicer Key_PLA_44m.gcode\", \"size\": 1333124, \"ctime\": 1793358094, \"starttime\": 1793358204, \"startway\": 1, \"usagetime\": 2629, \"usagematerial\": 2551.711249999762, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793358204.png\", \"filemd5\": \"12b2b8afbf1357fa7cf66c158fc3b6dc\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 12:01:43\", \"id\": 1793358103, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Slicer Key_PLA_44m.gcode\", \"size\": 1333124, \"ctime\": 1793358094, \"starttime\": 1793358103, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793358103.png\", \"filemd5\": \"12b2b8afbf1357fa7cf66c158fc3b6dc\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-30 10:26:35\", \"id\": 1793352395, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Haj Tom Barber 2_PLA_1h9m.gcode\", \"size\": 3941932, \"ctime\": 1790857897, \"starttime\": 1793352395, \"startway\": 1, \"usagetime\": 4157, \"usagematerial\": 11551.936529999512, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1793352395.png\", \"filemd5\": \"6e1b2ca03d7631dd422a33ce783c4bd8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-22 15:38:25\", \"id\": 1792676305, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Luckfox Pico Mini_PETG_32m.gcode\", \"size\": 1796664, \"ctime\": 1792676029, \"starttime\": 1792676305, \"startway\": 1, \"usagetime\": 1939, \"usagematerial\": 4132.6046700001589, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792676305.png\", \"filemd5\": \"e16fd2ea294b0199d63a69fda5c7aa24\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-20 10:22:44\", \"id\": 1792484564, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Cylinder_PLA_1m50s.gcode\", \"size\": 74167, \"ctime\": 1792173193, \"starttime\": 1792484564, \"startway\": 1, \"usagetime\": 139, \"usagematerial\": 87.658699999999897, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792484564.png\", \"filemd5\": \"ce05fd4e6cba08ea11b7735c113efc0b\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-16 09:27:57\", \"id\": 1792135677, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/ProGlide Case In_PLA_2h58m.gcode\", \"size\": 9843701, \"ctime\": 1791988449, \"starttime\": 1792135677, \"startway\": 1, \"usagetime\": 10973, \"usagematerial\": 23756.450819989699, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1792135677.png\", \"filemd5\": \"43abb7c011ccff05ce862ca4df522edf\", \"ismulticolor\": true, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-10-01 14:43:21\", \"id\": 1790858601, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Haj Tom Barber 2_PLA_1h9m.gcode\", \"size\": 3941932, \"ctime\": 1790857897, \"starttime\": 1790858601, \"startway\": 1, \"usagetime\": 4159, \"usagematerial\": 11551.936529999517, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790858601.png\", \"filemd5\": \"6e1b2ca03d7631dd422a33ce783c4bd8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-28 16:53:33\", \"id\": 1790607213, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790607213, \"startway\": 1, \"usagetime\": 4226, \"usagematerial\": 4915.2300800004568, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790607213.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 17:02:09\", \"id\": 1790262129, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790262129, \"startway\": 1, \"usagetime\": 4227, \"usagematerial\": 4915.2300799935365, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790262129.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 16:36:03\", \"id\": 1790260563, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Hyper_Hopper_PLA_1h10m.gcode\", \"size\": 10465468, \"ctime\": 1790087415, \"starttime\": 1790260563, \"startway\": 1, \"usagetime\": 334, \"usagematerial\": 298.98732999977437, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790260563.png\", \"filemd5\": \"e59061f0074354187c374cb10ff106a2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 13:35:08\", \"id\": 1790249708, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1790249708, \"startway\": 1, \"usagetime\": 4860, \"usagematerial\": 15103.490189992021, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790249708.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-24 12:35:25\", \"id\": 1790246125, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/BikeLampHolder_PETG_22m.gcode\", \"size\": 2033230, \"ctime\": 1790238437, \"starttime\": 1790246125, \"startway\": 1, \"usagetime\": 1391, \"usagematerial\": 3279.4804200000158, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1790246125.png\", \"filemd5\": \"2dcc692ae7ddf8bd843819b03717c38c\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-14 12:07:14\", \"id\": 1789380434, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Garden Lamp Pile_PETG_25m.gcode\", \"size\": 1478150, \"ctime\": 1789377234, \"starttime\": 1789380434, \"startway\": 1, \"usagetime\": 1513, \"usagematerial\": 3570.3080600000735, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1789380434.png\", \"filemd5\": \"053fd91f53a78eb3fb0b048d6b6be7f4\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-10 12:42:46\", \"id\": 1789036966, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Saw Handle_PETG_52m.gcode\", \"size\": 5011155, \"ctime\": 1789034338, \"starttime\": 1789036966, \"startway\": 1, \"usagetime\": 3261, \"usagematerial\": 11148.347340000484, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1789036966.png\", \"filemd5\": \"d905fc2409f321daa497d94ee9445d7a\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 21:33:40\", \"id\": 1788464020, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Sektion Endcap_PETG_18m.gcode\", \"size\": 875981, \"ctime\": 1788464016, \"starttime\": 1788464020, \"startway\": 11, \"usagetime\": 1132, \"usagematerial\": 2691.4896000002609, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788464020.png\", \"filemd5\": \"cfee419babcc6b45227f0edb3f196bfb\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 17:21:07\", \"id\": 1788448867, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Paddle Board Gasket_TPU_3m.gcode\", \"size\": 150609, \"ctime\": 1788446641, \"starttime\": 1788448867, \"startway\": 1, \"usagetime\": 195, \"usagematerial\": 155.83467000000383, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788448867.png\", \"filemd5\": \"38753661308cb47fa6f20f0ed0ed139d\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-03 16:52:41\", \"id\": 1788447161, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shelf Pins_PETG_8m.gcode\", \"size\": 700461, \"ctime\": 1788446196, \"starttime\": 1788447161, \"startway\": 1, \"usagetime\": 542, \"usagematerial\": 1146.8346699999929, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788447161.png\", \"filemd5\": \"5751d92651c89f9786afd7c3e194c6f4\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-09-02 21:03:01\", \"id\": 1788375781, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Paddle Board Pump_PETG_39m.gcode\", \"size\": 4001110, \"ctime\": 1788375390, \"starttime\": 1788375781, \"startway\": 1, \"usagetime\": 2350, \"usagematerial\": 4000.2527499995531, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1788375781.png\", \"filemd5\": \"ef30cad59938ecce584556d99adbff17\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-26 14:28:38\", \"id\": 1787747318, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Woopie Pedal_PETG_1h30m.gcode\", \"size\": 7165137, \"ctime\": 1785758189, \"starttime\": 1787747318, \"startway\": 1, \"usagetime\": 5387, \"usagematerial\": 11721.401517500828, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787747318.png\", \"filemd5\": \"bf992c5df851f73134f0e1a44c6145cf\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-26 12:43:39\", \"id\": 1787741019, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Woopie Pedal_PETG_1h30m.gcode\", \"size\": 7165137, \"ctime\": 1785758189, \"starttime\": 1787741019, \"startway\": 1, \"usagetime\": 5387, \"usagematerial\": 11721.401517500672, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787741019.png\", \"filemd5\": \"bf992c5df851f73134f0e1a44c6145cf\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-25 15:20:53\", \"id\": 1787664053, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Garden Lamp Dome_PETG_1h5m.gcode\", \"size\": 5718948, \"ctime\": 1753881627, \"starttime\": 1787664053, \"startway\": 1, \"usagetime\": 4529, \"usagematerial\": 6478.7529474990406, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1787664053.png\", \"filemd5\": \"b9015035ac6839e69ba4770af33e9374\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 17:47:11\", \"id\": 1786117631, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h25m.gcode\", \"size\": 4900093, \"ctime\": 1786117617, \"starttime\": 1786117631, \"startway\": 1, \"usagetime\": 5161, \"usagematerial\": 8536.0751899945135, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786117631.png\", \"filemd5\": \"4a9310ca1ca4933fb15028d5372b420c\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 14:47:06\", \"id\": 1786106826, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h25m.gcode\", \"size\": 4717637, \"ctime\": 1786106812, \"starttime\": 1786106826, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786106826.png\", \"filemd5\": \"fc32c2e6041f06198609ce63217bb8c8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-07 14:12:52\", \"id\": 1786104772, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/HajTomBarber_PETG_1h21m.gcode\", \"size\": 3418870, \"ctime\": 1786103431, \"starttime\": 1786104772, \"startway\": 1, \"usagetime\": 1261, \"usagematerial\": 3499.6285599999701, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1786104772.png\", \"filemd5\": \"8790c0eacda10749bf8234a6587ddb69\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-04 09:27:12\", \"id\": 1785828432, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Viktor_PETG_4h10m.gcode\", \"size\": 40596384, \"ctime\": 1771141636, \"starttime\": 1785828432, \"startway\": 1, \"usagetime\": 16016, \"usagematerial\": 64273.880110010075, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785828432.png\", \"filemd5\": \"9f2327614dbeaddd569244cb5da0e913\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 17:01:57\", \"id\": 1785769317, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Viktor_PETG_4h10m.gcode\", \"size\": 40596384, \"ctime\": 1771141636, \"starttime\": 1785769317, \"startway\": 1, \"usagetime\": 16016, \"usagematerial\": 64273.880110007165, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785769317.png\", \"filemd5\": \"9f2327614dbeaddd569244cb5da0e913\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 15:23:22\", \"id\": 1785763402, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Panni_PLA_55m.gcode\", \"size\": 952183, \"ctime\": 1785763335, \"starttime\": 1785763402, \"startway\": 1, \"usagetime\": 3338, \"usagematerial\": 3655.7172300004786, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785763402.png\", \"filemd5\": \"00b71faf658c00363ac99d97fb95ef73\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-08-03 13:52:39\", \"id\": 1785757959, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Panni_PLA_23m.gcode\", \"size\": 835755, \"ctime\": 1785754996, \"starttime\": 1785757959, \"startway\": 1, \"usagetime\": 1404, \"usagematerial\": 3587.1780800000738, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1785757959.png\", \"filemd5\": \"8fabf729ad2f7fb01d72c8ad284b541a\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 16:25:46\", \"id\": 1784643946, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shower Drain Hair Net_PETG_22m.gcode\", \"size\": 2124242, \"ctime\": 1784618478, \"starttime\": 1784643946, \"startway\": 1, \"usagetime\": 1402, \"usagematerial\": 1736.1855599985502, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784643946.png\", \"filemd5\": \"7ca2f924148fae76591a12b395c57b12\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 16:06:27\", \"id\": 1784642787, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1784642787, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784642787.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 14:31:41\", \"id\": 1784637101, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 21thick_PETG_1h23m.gcode\", \"size\": 9006320, \"ctime\": 1784619545, \"starttime\": 1784637101, \"startway\": 1, \"usagetime\": 4853, \"usagematerial\": 15103.441339997958, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784637101.png\", \"filemd5\": \"eecc4243d1080f2ab9d9eab99d997de8\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-21 12:26:48\", \"id\": 1784629608, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Toothpick Dispenser_PLA_1h11m.gcode\", \"size\": 8209339, \"ctime\": 1784628401, \"starttime\": 1784629608, \"startway\": 1, \"usagetime\": 4353, \"usagematerial\": 12252.7843399992, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784629608.png\", \"filemd5\": \"1d729a7af67f09060a0b039906032fd2\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-16 17:46:58\", \"id\": 1784216818, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Dimmer Switch Knob_PLA_14m.gcode\", \"size\": 1876097, \"ctime\": 1784216814, \"starttime\": 1784216818, \"startway\": 11, \"usagetime\": 886, \"usagematerial\": 1806.9506399999552, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784216818.png\", \"filemd5\": \"a4b1d7ad1c503a6870b94e0d7838033e\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-16 15:57:47\", \"id\": 1784210267, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Dimmer Switch Knob_PLA_14m.gcode\", \"size\": 1909008, \"ctime\": 1784210253, \"starttime\": 1784210267, \"startway\": 1, \"usagetime\": 878, \"usagematerial\": 1761.8193999999926, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1784210267.png\", \"filemd5\": \"0782a414bd0c6246bf2c95c059dabe75\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-13 15:42:05\", \"id\": 1783950125, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Table Cloth 25thick_PETG_1h18m.gcode\", \"size\": 6885232, \"ctime\": 1783935297, \"starttime\": 1783950125, \"startway\": 1, \"usagetime\": 4691, \"usagematerial\": 15385.733579992111, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1783950125.png\", \"filemd5\": \"8f7d878a1f3ca3bc9c5dce6d0e45f524\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-13 14:30:32\", \"id\": 1783945832, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Drain Yub Hair Trap_PETG_45m.gcode\", \"size\": 4084992, \"ctime\": 1783930395, \"starttime\": 1783945832, \"startway\": 1, \"usagetime\": 2690, \"usagematerial\": 3111.4259600002983, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1783945832.png\", \"filemd5\": \"87c91b810cc9aa0ae062300086599cb3\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-02 14:46:15\", \"id\": 1782996375, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Attic Door Hook_ABS_38m.gcode\", \"size\": 2281727, \"ctime\": 1761559746, \"starttime\": 1782996375, \"startway\": 1, \"usagetime\": 1568, \"usagematerial\": 4902.7161900003039, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782996375.png\", \"filemd5\": \"0b7138c86da740c9e4f946b9b4972afb\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-07-02 12:12:36\", \"id\": 1782987156, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Shower Rod Extension_ABS_35m.gcode\", \"size\": 2574048, \"ctime\": 1782942255, \"starttime\": 1782987156, \"startway\": 1, \"usagetime\": 2165, \"usagematerial\": 4742.2973300001941, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782987156.png\", \"filemd5\": \"5b4d98b1b3d28dd0f07da33466322774\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 23:17:19\", \"id\": 1782854239, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 6x35_PETG_18m.gcode\", \"size\": 1757636, \"ctime\": 1782847744, \"starttime\": 1782854239, \"startway\": 1, \"usagetime\": 1113, \"usagematerial\": 1364.3979100001511, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782854239.png\", \"filemd5\": \"ea87fb02ded1203b5e5f7e6b246a2878\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 21:29:21\", \"id\": 1782847761, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 6x35_PETG_18m.gcode\", \"size\": 1757636, \"ctime\": 1782847744, \"starttime\": 1782847761, \"startway\": 1, \"usagetime\": 1113, \"usagematerial\": 1364.3979099998858, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782847761.png\", \"filemd5\": \"ea87fb02ded1203b5e5f7e6b246a2878\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-30 19:05:44\", \"id\": 1782839144, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug 4x35_PETG_18m.gcode\", \"size\": 1874618, \"ctime\": 1782838645, \"starttime\": 1782839144, \"startway\": 1, \"usagetime\": 1120, \"usagematerial\": 1436.3081099998797, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782839144.png\", \"filemd5\": \"173db5323fbac23992ff6224fbf46161\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:32:42\", \"id\": 1782037962, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Clip_PETG_4m.gcode\", \"size\": 174523, \"ctime\": 1752842125, \"starttime\": 1782037962, \"startway\": 1, \"usagetime\": 279, \"usagematerial\": 263.11337999998091, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782037962.png\", \"filemd5\": \"93060a91113b14412869db3e3c843dab\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:16:55\", \"id\": 1782037015, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_8m.gcode\", \"size\": 843609, \"ctime\": 1782037010, \"starttime\": 1782037015, \"startway\": 11, \"usagetime\": 509, \"usagematerial\": 705.6494999999486, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782037015.png\", \"filemd5\": \"a2cd07ad75dbc1453e8acd728fe96213\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 12:14:09\", \"id\": 1782036849, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_8m.gcode\", \"size\": 875020, \"ctime\": 1782036827, \"starttime\": 1782036849, \"startway\": 1, \"usagetime\": 0, \"usagematerial\": 0.0, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782036849.png\", \"filemd5\": \"1d13440296c73d86772efca472103fb6\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-21 11:55:36\", \"id\": 1782035736, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Rawl Plug_PETG_14m.gcode\", \"size\": 1671602, \"ctime\": 1782035711, \"starttime\": 1782035736, \"startway\": 1, \"usagetime\": 460, \"usagematerial\": 630.10799000000668, \"printfinish\": 0, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1782035736.png\", \"filemd5\": \"e2113ad169c2fcd11a05fb360b7bd1cd\", \"ismulticolor\": false, \"iswaitbedsteady\": false }, { \"dateTime\": \"2026-06-18 18:47:55\", \"id\": 1781801275, \"filename\": \"\\/usr\\/data\\/printer_data\\/gcodes\\/Led Strip Holder_PETG_12m.gcode\", \"size\": 632986, \"ctime\": 1781796302, \"starttime\": 1781801275, \"startway\": 1, \"usagetime\": 775, \"usagematerial\": 629.70671000001857, \"printfinish\": 1, \"thumbnail\": \"\\/usr\\/data\\/\\/creality\\/userdata\\/history\\/humbnail\\/1781801275.png\", \"filemd5\": \"517cbb533197cfca2a5448759e463521\", \"ismulticolor\": false, \"iswaitbedsteady\": false } ] }"}
+{"t":434130,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"204.570000\", \"bedTemp0\": \"48.910000\", \"curPosition\": \"X:296.50 Y:153.00 Z:140.08\" }"}
+{"t":434388,"type":"rx","len":75,"data":"{ \"nozzleTemp\": \"204.170000\", \"curPosition\": \"X:296.50 Y:153.00 Z:142.58\" }"}
+{"t":434636,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"203.750000\", \"bedTemp0\": \"48.890000\", \"curPosition\": \"X:296.50 Y:153.00 Z:145.09\" }"}
+{"t":434884,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"203.350000\", \"bedTemp0\": \"48.850000\", \"curPosition\": \"X:296.50 Y:153.00 Z:147.59\" }"}
+{"t":435133,"type":"rx","len":72,"data":"{ \"bedTemp0\": \"48.820000\", \"curPosition\": \"X:296.50 Y:153.00 Z:150.03\" }"}
+{"t":435383,"type":"rx","len":100,"data":"{ \"nozzleTemp\": \"202.950000\", \"bedTemp0\": \"48.800000\", \"curPosition\": \"X:296.50 Y:153.00 Z:150.05\" }"}
+{"t":436136,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"201.720000\", \"bedTemp0\": \"48.750000\" }"}
+{"t":436897,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"200.920000\", \"bedTemp0\": \"48.670000\" }"}
+{"t":437642,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"199.710000\", \"bedTemp0\": \"48.610000\" }"}
+{"t":438398,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"198.930000\", \"bedTemp0\": \"48.520000\" }"}
+{"t":439150,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"197.760000\", \"bedTemp0\": \"48.470000\" }"}
+{"t":439907,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"196.990000\", \"bedTemp0\": \"48.390000\" }"}
+{"t":440661,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"195.860000\", \"bedTemp0\": \"48.350000\" }"}
+{"t":441167,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"195.100000\", \"bedTemp0\": \"48.290000\" }"}
+{"t":441665,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"194.730000\", \"bedTemp0\": \"48.240000\" }"}
+{"t":442162,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"193.970000\", \"bedTemp0\": \"48.220000\" }"}
+{"t":443165,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"192.850000\", \"bedTemp0\": \"48.120000\" }"}
+{"t":443921,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"191.750000\", \"bedTemp0\": \"48.070000\" }"}
+{"t":444667,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"191.020000\", \"bedTemp0\": \"47.990000\" }"}
+{"t":444919,"type":"rx","len":55,"data":"{ \"nozzleTemp\": \"190.660000\", \"bedTemp0\": \"47.960000\" }"}
+{"t":445166,"type":"close","code":1000,"reason":"","clean":true,"by":"client"}
