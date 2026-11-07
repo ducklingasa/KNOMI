@@ -1,10 +1,11 @@
 # KNOMI → Creality K-series WebSocket display: rework plan
 
-Status: **planning complete, ready for implementation** · Last update: 2026-11-05 (protocol plan reconciled with the checked-in K1 Max fixtures)
+Status: **Phases 0.1 and 0.2 completed; validated 40 MHz display SPI retained** · Last update: 2026-11-06
 
 Related documents:
 
 - [docs/CREALITY_WS_PROTOCOL.md](docs/CREALITY_WS_PROTOCOL.md): protocol reference and state-derivation rules (normative for Phase 4)
+- [CREALITY_WEBSOCKET_IMPL.md](CREALITY_WEBSOCKET_IMPL.md): implementation decisions, validation results, and pending acceptance
 - Documents still to be written are listed in §12
 
 ---
@@ -46,10 +47,17 @@ Related documents:
 | Printing layout | **Auto-rotating pages** (progress/time ↔ temperatures ↔ layer/file); a double-click jumps to the next page |
 | GUI library | **LVGL 8.4.0** (last v8; its GIF decoder needs ~20 % less RAM than v9) |
 | Web page security | **No admin password.** The device is LAN-only; risk accepted (see §11). |
-| Language / units | English, °C, 24 h time (defaults; no answer given) |
+| Language / units | English, °C, 24 h time (owner confirmed 2026-11-06) |
 | Reference captures | Owner's **K1 Max** legacy sessions: full print with calibration, print without calibration, pause → resume → stop, connect during a print (DWIN sw 1.3.3.8 / 1.3.3.29), plus idle connect on 1.3.5.19. In addition, `test/fixtures/` now contains 11 timed K1 Max 1.3.5.19 JSONL captures covering idle/reconnect/reboot, print, connect mid-print, pause/resume, cancel/stop, and recovery/runout scenarios. These combined sources inform the protocol doc; fixture gaps remain (see §10, Phase 0.4). |
 | Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x remains a compatibility target based on legacy owner captures, which are not checked in as fixtures |
-| Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (default; no answer given) |
+| Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (owner confirmed 2026-11-06) |
+| First implementation slice (2026-11-06) | Isolated **Phase 0.1** in `spikes/display`, using installed **ESP-IDF 5.5.5 with Arduino 3.3.12 as a component**, LVGL 8.4.0, and TFT_eSPI 2.5.43. Serial-debug wiring; flashing **COM7** authorized. Log free/largest/minimum internal heap and completed-refresh FPS before refactoring. Owner performs visual checks. |
+| Build-system scope (2026-11-06) | ESP-IDF/CMake replaces PlatformIO for the isolated spike only. Phase 0.1 passed; full-firmware build, native-test, and CI migration decisions remain separate follow-up decisions. §5.1 remains the earlier full-firmware draft. |
+| Git operations (2026-11-06) | Work on the current branch; **no branch or tag creation**. |
+| Display SPI speed (2026-11-06) | **40 MHz retained; Phase 0.2 complete.** The accepted Phase 0.1 run validates this baseline. Higher speeds, such as 80 MHz, are untested and deferred as an optional future performance improvement only if needed; not a current implementation or acceptance requirement. |
+| Network downloads (2026-11-06) | **No download was manually approved by the owner.** The network automatically approves packages after an initial attempt and a variable processing interval (about 30 s observed). Retry normally after allowing time; if necessary pause for the user to wait and retry when they return, without asking them to manually approve anything. Applies to other packages and future redownloads too; previous success does not guarantee immediate access. Keep network controls and certificate checks enabled; report persistent failures with the exact URL. All 34 dependency entries downloaded; versions and URLs are recorded in the lock file and implementation log. |
+| Phase 0.1 build/flash (2026-11-06) | **Passed:** corrected LVGL's IDF configuration override, built a 560,320-byte application, flashed COM7 with verified hashes. Standard IDF monitor confirms the intended versions, pins, 4 MiB flash, and DMA initialization. Captured through uptime 111 s without reset or decoder failure. Creality GIF: ~8 FPS, free heap 168,316 bytes; standby: ~27 FPS, free heap 223,612 bytes; largest block 98,304 bytes with either GIF loaded. Repeated Creality visit preserves these heap values. Owner confirmed all device tests, including the 10-minute stability run and manual reset, passed and accepts Phase 0.1 as complete. Longer-run acceptance is owner-observed, not a claimed ten-minute serial capture. |
+| Phase 0.1 stopwatch (2026-11-06; format updated 2026-11-07) | Stopwatch below the GIFs, starting with the first GIF and continuing across switches; excludes the RGB startup period and resets on reboot. Original build and COM7 upload passed (560,528-byte app); owner confirmed all checks, including the 10-minute run. Format changed to zero-padded `MM:SS` (e.g. `01:03`); build passed, format-only update not reflashed. Earlier heap/FPS measurements predate this label. |
 
 ## 3. Findings from the code review
 
@@ -65,7 +73,6 @@ The tested ESP-IDF network-clock reference project confirms the current 240×240
 | B2 | Full-frame 240×240 draw buffer (115 KB) from PSRAM | `lvgl_hal.cpp` | Two 240×24-line DMA buffers (2×11.5 KB) |
 | B3 | Board `esp32r8` declares PSRAM and 16 MB flash; `spiffs_16MB.csv` | `buildroot/boards`, `platformio.ini` | Board `wemos_d1_mini32` (4 MB, no PSRAM) plus the new partition table (§6) |
 | B4 | v1 pins differ from the tested target wiring; the tested project's default uses GPIO3 for reset and requires UART logging off | `pinout_knomi_v1.h`, tested network-clock reference | `board_pins.h` uses the production map by default and switches to the alternate map only in the serial-debug build |
-| B5 | `gif_print_ok` is 240×240 → the GIF decoder needs 4·W·H ≈ **225 KB RAM** | `src/gif/gif_print_ok.c` | Re-render at ≤ 150×150 |
 | B6 | Two GIF objects alive at the same time (welcome + main) → ~150 KB RAM | `lvgl_usr.cpp` | Exactly **one** GIF object in the whole UI (§8.4) |
 | B7 | Fonts are generated at **1 bpp** (jagged) | `src/ui/fonts` | Regenerate at 4 bpp with the needed glyphs |
 | B8 | LVGL 8.3.7 needs a manual `lv_disp.c` patch (PR 4487) | `platformio.ini` comment, `lv_disp_(bugfix_backup).c` | LVGL 8.4.0 contains the fix; delete the backup file |
@@ -507,17 +514,17 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 | # | Task | Size | Exit criteria |
 |---|---|---|---|
-| 0.1 | Toolchain spike: pioarduino 55.03.312 + `wemos_d1_mini32` + TFT_eSPI 2.5.43 + LVGL 8.4.0 "hello" with DMA flush on the real panel, using the tested production wiring | M | Colors, orientation, and inversion correct; no crash for 10 min. If TFT_eSPI fails on core 3.x, try LovyanGFX, then the official `espressif32@7.1.3` fallback. Record the decision in `docs/ARCHITECTURE.md`. |
-| 0.2 | SPI speed: use the tested 40 MHz baseline; optionally test 80 MHz only if the selected driver and wiring are stable at 40 MHz | S | No artifacts for 10 min of GIF playback at 40 MHz; keep 40 MHz if faster operation is unstable |
-| 0.3 | Heap budget: Wi-Fi STA + AsyncWebServer + WS client connected to the printer + one GIF; log `heap_caps_get_free_size`/`get_largest_free_block`/`get_minimum_free_size` every 5 s | M | Numbers recorded in `docs/ARCHITECTURE.md`. Decide on downscaling `gif_print_green` and `gif_creality` (both 87.9 KB canvases, §3.3). |
+| 0.1 | **Completed and owner-accepted, 2026-11-06:** isolated ESP-IDF 5.5.5 + Arduino component 3.3.12 + TFT_eSPI 2.5.43 + LVGL 8.4.0 spike in `spikes/display`, ESP32 4 MiB/no PSRAM, **serial-debug wiring on COM7**. Two 240×24 DMA buffers; RGB/orientation pattern, one GIF object alternating idle GIFs, and continuous playback stopwatch. Heap/FPS logged every 5 s. Existing firmware source is preserved. | M | **Passed:** build/flash, colors, orientation, inversion, both animations, stopwatch, 10-minute stability, and manual reset. Owner confirms every device test passed as expected. Serial evidence covers 111 s; longer-run acceptance is owner-observed. Display-only baseline does not close Phase 0.3 or later phases. Results are in `CREALITY_WEBSOCKET_IMPL.md`; architecture summary remains follow-up documentation. |
+| 0.2 | **Completed by owner decision, 2026-11-06:** retain display SPI at **40 MHz**, validated by the accepted Phase 0.1 GIF stability run. No speed increase now. | S | Accepted 10-minute playback at 40 MHz without reported artifacts. Higher speeds (e.g. 80 MHz) remain untested, optional future improvements only if needed; test stability before adopting any increase. |
+| 0.3 | Heap budget: Wi-Fi STA + AsyncWebServer + WS client connected to the printer + one GIF; log `heap_caps_get_free_size`/`get_largest_free_block`/`get_minimum_free_size` every 5 s | M | Numbers recorded in `docs/ARCHITECTURE.md`. Decide on downscaling `gif_creality` (87.9 KB canvas) and any other GIF that fails the measured budget; `gif_print_green` is 56.2 KB (§3.3). |
 | 0.4 | Protocol capture and fixture baseline. **K1 Max evidence now includes 11 checked-in 1.3.5.19 JSONL captures** plus separate legacy owner captures (print scenarios on 1.3.3.x; idle on 1.3.5.19).<br>• Inventory the checked-in captures and generate reviewed `*.expected.txt` replay baselines with `tools/derive_prototype.py`; protocol doc §5.5 describes legacy sequences and is not the expected output for these files.<br>• Convert legacy owner captures with `tools/convert_capture.py` only when available and needed for explicit 1.3.3.x compatibility coverage; they are not currently checked in.<br>• Record further captures with **`tools/WebSocketLogger.html`** (§4.2): keep auto-reconnect/keep-awake on, mark printer actions, record screen text (especially self-test labels), and note other connected clients.<br>• Remaining K1 Max evidence gaps: placeholder dump after boot, when/if `retGcodeFileInfo2` is pushed, and a naturally occurring nonzero `errcode`. The existing `error` fixture's simulated recovery/runout flows keep `errcode:0`; do not force a fault only to test it.<br>• Capture the K2 family scenarios (and K1/K1C if available); retain unknown results as explicit open points in protocol doc §7. | M | All checked-in fixtures have reviewed replay baselines; current K1 Max print/pause/stop/connect-mid-print paths are covered. ≥ 1 K2 trace per supported scenario where available. Every new capture has timing and markers. Remaining protocol questions are answered or explicitly deferred in §7. |
-| 0.5 | Asset prep: re-render `gif_print_ok` ≤ 150×150 (gifsicle `--resize-fit 150x150 -O3 --colors 64`, keep the green palette); `tools/bin2c.py`; generate 4 bpp fonts (`tools/fonts.md`) | S | Assets compile; RAM per GIF ≤ 90 KB; GIF flash total ≤ 470 KB (§3.3) |
+| 0.5 | Asset prep: generate C arrays with `tools/bin2c.py`; generate 4 bpp fonts (`tools/fonts.md`) | S | Assets compile; RAM per GIF ≤ 90 KB; GIF flash total ≤ 470 KB (§3.3) |
 
 ### Phase 1: Cleanup (remove everything not required)
 
 | # | Task | Size |
 |---|---|---|
-| 1.1 | Create branch `creality-rework`; tag the current state `pre-creality` | S |
+| 1.1 | **Superseded by owner decision 2026-11-06:** retain current branch; do not create a branch or tag | S |
 | 1.2 | Delete per the inventory in §10.1 | S |
 | 1.3 | Temporary `main.cpp` that boots the display only; build green | S |
 
@@ -553,7 +560,7 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | # | Task | Size |
 |---|---|---|
 | 2.1 | `platformio.ini` per §5.1; `partitions_4MB.csv` per §6; `lv_conf.h` per §5.2 | S |
-| 2.2 | `board_pins.h`, `tft_setup.h` (GC9A01, pins 23/18/5/26/33, no MISO, no BL, SPI frequency from Phase 0.2, color order and inversion from Phase 0.1) | S |
+| 2.2 | `board_pins.h`, `tft_setup.h` (GC9A01; production SCK16/MOSI17/DC21/CS22/RST3 by default; serial-debug SCK18/MOSI23/DC26/CS5/RST33; no MISO or BL; SPI frequency from Phase 0.2, color order and inversion from Phase 0.1). The isolated Phase 0.1 spike uses serial-debug wiring only. | S |
 | 2.3 | `display_hal`: `tft.begin()`, `initDMA()`, two 240×24 DMA buffers (`heap_caps_malloc(MALLOC_CAP_DMA)`), flush via `pushImageDMA`, rotation from settings (`tft.setRotation`); use the tested production pin map by default and the alternate map only for serial debugging | M |
 | 2.4 | `ui_task` skeleton on core 1: `lv_timer_handler()` loop with `vTaskDelay(5 ms)`; splash S0 | S |
 
