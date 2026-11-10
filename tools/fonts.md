@@ -22,7 +22,7 @@ $jobs = @(
     @{ Size = 14; Range = '0x20-0x7E,0xA0-0x17F,0x2103' },
     @{ Size = 18; Range = '0x20-0x7E,0xA0-0x17F,0x2103' },
     @{ Size = 24; Range = '0x20-0x7E,0xB0,0x2103' },
-    @{ Size = 48; Range = '0x20,0x25,0x30-0x3A,0x43,0xB0,0x2103' }
+    @{ Size = 48; Range = '0x20-0x7E,0xB0,0x2103' }
 )
 foreach ($job in $jobs) {
     $name = 'ui_font_InterSemiBold' + $job.Size
@@ -39,7 +39,7 @@ foreach ($job in $jobs) {
 |---|---|---|---|
 | 14 / 18 px | `ui_font_InterSemiBold14` / `ui_font_InterSemiBold18` | Printable ASCII, Latin-1 / Latin Extended-A, Celsius sign; exclusions below | 318 each |
 | 24 px | `ui_font_InterSemiBold24` | Printable ASCII, degree and Celsius signs | 97 |
-| 48 px | `ui_font_InterSemiBold48` | Space, percent, digits, colon, C, degree and Celsius signs | 16 |
+| 48 px | `ui_font_InterSemiBold48` | Printable ASCII, degree and Celsius signs; expanded in Phase 2 for the KNOMI splash | 97 |
 
 All four use **4 bpp**, uncompressed grayscale bitmaps and normal kerning. U+00B0 is the degree sign; U+2103 is the Celsius sign retained for compatibility. Inter 4.1 does not provide U+00AD (soft hyphen) or U+0149 (deprecated Latin small letter n preceded by apostrophe); those two are explicitly excluded from the extended ranges. Other missing characters still need a later UI fallback policy. The fonts include the Hungarian accented letters needed by the filename acceptance example.
 

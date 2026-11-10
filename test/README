@@ -18,5 +18,22 @@ Asset checks: python tools/check_assets.py --compile
 Original UI rendering: tools/screen_reference/README.md
 Firmware build: README.md (ESP-IDF 5.5.5, not PlatformIO).
 
-Production C++ model/parser tests will use native CMake/CTest during Phase 4.
-They are not implemented or claimed by this display-only checkpoint.
+Native C++ tests now include the Phase 2 hardware-rotation register mapping.
+With CMake/Ninja and the existing portable Zig host compiler available:
+
+	cmake -S test -B build/native -G Ninja -DCMAKE_CXX_COMPILER=<zig.exe> -DCMAKE_CXX_COMPILER_ARG1=c++
+	cmake --build build/native
+	ctest --test-dir build/native --output-on-failure
+
+For another native C++ compiler, use a separate build directory and omit the
+Zig-specific compiler argument. Fresh terminals may need absolute tool paths.
+The test covers four mappings, preserved default/BGR bits and all invalid
+8-bit indices; it does not prove physical panel orientation or SPI completion.
+
+Phase 2 shared-source splash preview:
+
+	cmake --build tools/screen_reference/build/zig --target splash_preview
+	python tools/screen_reference/render.py --splash
+
+The preview validates three label bounds and the round mask, not the physical
+1.5-second boot transition. Production C++ model/parser tests remain Phase 4.

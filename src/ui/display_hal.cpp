@@ -1,4 +1,5 @@
 #include "display_hal.h"
+#include "display_rotation.h"
 #include "board_pins.h"
 
 #include <driver/gpio.h>
@@ -17,6 +18,8 @@ spi_transaction_t pixel_transfer{};
 lv_disp_draw_buf_t draw_buffers;
 lv_disp_drv_t display_driver;
 lv_disp_drv_t *pending_flush = nullptr;
+bool initialized = false;
+uint8_t current_rotation = 0;
 
 void write_selected(bool data_mode, const void *data, size_t length)
 {
@@ -146,8 +149,9 @@ void wait_flush(lv_disp_drv_t *)
 }
 }
 
-bool display_hal::initialize()
+bool display_hal::initialize(uint8_t rotation)
 {
+    if (!valid_rotation(rotation) || display_spi != nullptr) return false;
     initialize_panel();
     auto *first = static_cast<lv_color_t *>(heap_caps_malloc(
         buffer_pixels * sizeof(lv_color_t), MALLOC_CAP_INTERNAL | MALLOC_CAP_DMA));
@@ -172,7 +176,20 @@ bool display_hal::initialize()
         heap_caps_free(second);
         return false;
     }
+    initialized = true;
     ESP_LOGI("display", "Native SPI2 GC9A01, GPIO1-5, 40 MHz, two internal 240x24 DMA strips");
+    return set_rotation(rotation);
+}
+
+bool display_hal::set_rotation(uint8_t rotation)
+{
+    if (!initialized || !valid_rotation(rotation)) return false;
+    if (rotation == current_rotation) return true;
+    finish_flush(portMAX_DELAY);
+    const uint8_t madctl = rotation_madctl(rotation);
+    display_command(0x36, &madctl, sizeof(madctl));
+    current_rotation = rotation;
+    lv_obj_invalidate(lv_scr_act());
     return true;
 }
 

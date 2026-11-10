@@ -1,0 +1,25 @@
+{
+  "kind": "phase2-firmware-splash-native-preview",
+  "lvgl": "8.4.0",
+  "python": "3.14.6",
+  "pillow": "12.3.0",
+  "resolution": [
+    240,
+    240
+  ],
+  "note": "Shared firmware splash source and target fonts; host unswapped RGB565 preview, not a device photo or timer test.",
+  "green_pixels": 2657,
+  "png_sha256": "2f3f76ae7bbff4413fe9956bc9579ea85ca7b953bff8ea0afb34ef89d6be3db5",
+  "source_sha256": {
+    "src/ui/splash.c": "c8020867b6192e37475471d371471097d700052b1cf631b958c52bbef38a4f81",
+    "src/ui/splash.h": "f4ff01c5b7b5a3f27aaeec3728260d11625553449317f5e8628faf30572e994d",
+    "src/app_config.h": "bde95523d53c07949b9f8cd0dfa16153ff2694a02a6d8a5892194b419f4905b0",
+    "tools/screen_reference/splash_preview.c": "c992bd095015cf3b34325f4310ebbf9265d412e09ee8f5c1eba7bbbc81b34888",
+    "tools/screen_reference/lv_conf.h": "8166e84968db86c2f11a3d7fd2a87a5f4b55e115762942740413be1f4a604abe",
+    "tools/screen_reference/CMakeLists.txt": "820c234ed68ade020fbc770a99d381a4bed66a531c2f12acf3db4b1e135bb370",
+    "tools/screen_reference/render.py": "bbdd20af15f353b25018b1cfd7b4de8a5bc92bdd2c5a0e9e015dc462306d9703",
+    "src/ui/assets/fonts/ui_font_InterSemiBold14.c": "66a696faa88f080ada6c908f80698578712d2e59adcbf5efbdead8e326d3d2c8",
+    "src/ui/assets/fonts/ui_font_InterSemiBold18.c": "95f8f8f55827b6938f7fd45de833b6df4ed101ea96447ea5cf83a8af85b78736",
+    "src/ui/assets/fonts/ui_font_InterSemiBold48.c": "441d448d31c36cb535f089f9956e187ed2914e309ec9ce93d147b0df519e8d0a"
+  }
+}

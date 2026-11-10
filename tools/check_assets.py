@@ -127,10 +127,8 @@ def check_fonts():
             raise ValueError(f"{symbol}: glyph annotations differ from LVGL character maps")
         if size in (14, 18):
             expected = (set(range(0x20, 0x7F)) | set(range(0xA0, 0x180)) | {0x2103}) - {0xAD, 0x149}
-        elif size == 24:
-            expected = set(range(0x20, 0x7F)) | {0xB0, 0x2103}
         else:
-            expected = set(range(0x30, 0x3B)) | {0x20, 0x25, 0x43, 0xB0, 0x2103}
+            expected = set(range(0x20, 0x7F)) | {0xB0, 0x2103}
         if actual != expected:
             missing = ", ".join(f"U+{point:04X}" for point in sorted(expected - actual))
             extra = ", ".join(f"U+{point:04X}" for point in sorted(actual - expected))

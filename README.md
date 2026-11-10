@@ -4,9 +4,9 @@ Read-only Creality K-series display firmware for an ESP32-S3-Zero and 240 x 240 
 
 ## Current Checkpoint
 
-The legacy Moonraker/touch/sensor/control application has been removed. The root ESP-IDF project currently builds a **display-only boot image**: RGB bars, a boot caption and uptime, with heap logs over native USB. It checks for 4 MiB flash and 2 MiB initialized PSRAM. Wi-Fi setup, web portal, printer connection, settings and production screens are not implemented in this image.
+The legacy Moonraker/touch/sensor/control application has been removed. The root project builds a **display-only Phase 2 image**: a 1.5-second KNOMI splash followed by RGB bars/caption/uptime, with native USB heap logs. It checks for 4 MiB flash and 2 MiB initialized PSRAM. Unused LVGL widgets/themes are disabled; the HAL has a hardware rotation API. Wi-Fi setup, web portal, printer connection, settings and production job screens are not implemented yet.
 
-The earlier network-loaded display spike remains under `spikes/display`. Its hardware acceptance is separate from this new image, which has **not been flashed or physically validated**.
+The owner flashed the preceding **440,432-byte Phase 1 image** and confirmed RGB/uptime all good. The current **467,616-byte Phase 2 image** adds the splash/configuration/rotation changes and has **not yet been flashed or physically validated**. Alternate orientations remain unverified. The earlier network-loaded spike under `spikes/display` is separate evidence.
 
 ## Hardware
 
@@ -51,5 +51,5 @@ No full-chip erase is required for the currently matching layout by default. Rev
 - [test/README](test/README): current Python reference tests and capture baselines.
 - [CREALITY_WEBSOCKET_PLAN.md](CREALITY_WEBSOCKET_PLAN.md), [CREALITY_WEBSOCKET_IMPL.md](CREALITY_WEBSOCKET_IMPL.md): scope, implementation evidence and pending hardware checks.
 
-This checkpoint builds at 440,432 bytes (89% app-partition headroom). That is not the final network/UI firmware size. Asset licensing and original upstream restrictions remain described in the plan; retaining a reference is not a new distribution license.
+This checkpoint builds at **467,616 bytes (88% app-partition headroom)**. That is not the final network/UI firmware size. The splash uses the shared firmware module, previewed at [docs/screens/phase2/splash.png](docs/screens/phase2/splash.png). Native rotation tests run with CMake/CTest; see [test/README](test/README). Asset licensing and original upstream restrictions remain described in the plan.
 # KNOMI1 and 2

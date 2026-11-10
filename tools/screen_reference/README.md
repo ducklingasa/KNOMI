@@ -44,3 +44,14 @@ Only off-screen host code uses an 8 MiB LVGL pool and a full-frame output array.
 The **75 original visual source files** were frozen in [docs/screens/original/legacy-source.zip](../../docs/screens/original/legacy-source.zip), with per-file hashes in [docs/screens/original/legacy-source.json](../../docs/screens/original/legacy-source.json). When the live generated UI is absent, CMake verifies the bundle hash and extracts it into the ignored native build directory. The archive-backed build was tested before cleanup: **all 28 PNGs were byte-identical** to live-source captures. Export/verification still passes after removal. `freeze.py` creates the initial bundle from live originals and must not be rerun against the cleaned tree.
 
 Missing/unknown printer values, paused styling, new timing/chamber fields and green target layouts must be validated in the new UI, not fabricated as original-screen behavior. The root firmware and host renderer have separate LVGL configuration: retained source images preserve original bytes, so their eventual swapped-RGB565 target rendering still needs a color/byte-order check before hardware acceptance.
+
+## Phase 2 Target Splash
+
+The separate `splash_preview` target compiles the **actual current firmware splash module and target fonts**, not archived constructors. It does not modify the original gallery:
+
+```powershell
+cmake --build tools/screen_reference/build/zig --target splash_preview --parallel 4
+python tools/screen_reference/render.py --splash
+```
+
+Output is under `docs/screens/phase2`, with a square/circular PNG and source manifest. The native executable checks all three label rectangles against the round area; the exporter rejects clipped/blank output and checks the green title. Current preview has 2,657 green title pixels. This host RGB565-unswapped render is not a physical panel or 1.5-second timer test. Hardware rotation tests are separate native C++ tests under `test`; no panel register is exercised by this preview.

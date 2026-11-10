@@ -24,7 +24,7 @@ if(NOT EXISTS "${LVGL_SOURCE_DIR}/lvgl.h")
     message(FATAL_ERROR "Set LVGL_SOURCE_DIR to an existing LVGL 8.4.0 source checkout")
 endif()
 
-add_compile_definitions(LV_CONF_INCLUDE_SIMPLE LV_KCONFIG_IGNORE)
+add_compile_definitions(LV_CONF_INCLUDE_SIMPLE LV_KCONFIG_IGNORE LV_USE_SNAPSHOT=1)
 include_directories("${CMAKE_CURRENT_LIST_DIR}" "${LVGL_SOURCE_DIR}")
 file(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS "${LVGL_SOURCE_DIR}/src/*.c")
 add_library(reference_lvgl OBJECT ${LVGL_SOURCES})
@@ -60,4 +60,14 @@ target_include_directories(screen_reference PRIVATE "${REFERENCE_SOURCE_ROOT}/sr
 target_link_libraries(screen_reference PRIVATE reference_lvgl)
 if(NOT WIN32)
     target_link_libraries(screen_reference PRIVATE m)
+endif()
+
+add_executable(splash_preview splash_preview.c "${KNOMI_ROOT}/src/ui/splash.c"
+    "${KNOMI_ROOT}/src/ui/assets/fonts/ui_font_InterSemiBold14.c"
+    "${KNOMI_ROOT}/src/ui/assets/fonts/ui_font_InterSemiBold18.c"
+    "${KNOMI_ROOT}/src/ui/assets/fonts/ui_font_InterSemiBold48.c")
+target_include_directories(splash_preview PRIVATE "${KNOMI_ROOT}/src" "${KNOMI_ROOT}/src/ui")
+target_link_libraries(splash_preview PRIVATE reference_lvgl)
+if(NOT WIN32)
+    target_link_libraries(splash_preview PRIVATE m)
 endif()

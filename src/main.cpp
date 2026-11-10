@@ -8,6 +8,8 @@
 #include <lvgl.h>
 
 #include "ui/display_hal.h"
+#include "ui/splash.h"
+#include "app_config.h"
 
 namespace {
 void ui_task(void *)
@@ -39,10 +41,19 @@ void ui_task(void *)
     lv_obj_set_style_text_color(uptime, lv_color_white(), 0);
     lv_obj_set_style_text_align(uptime, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_align(uptime, LV_ALIGN_BOTTOM_MID, 0, -25);
+    lv_obj_t *diagnostic = lv_scr_act();
+    lv_obj_t *splash = knomi_splash_create();
+    lv_scr_load(splash);
+    const int64_t splash_started = esp_timer_get_time();
     uint32_t displayed_seconds = UINT32_MAX;
     uint32_t logged_seconds = UINT32_MAX;
     while (true) {
         display_hal::poll();
+        if (splash != nullptr && esp_timer_get_time() - splash_started >= KNOMI_SPLASH_MS * 1000LL) {
+            lv_scr_load(diagnostic);
+            lv_obj_del(splash);
+            splash = nullptr;
+        }
         const uint32_t seconds = esp_timer_get_time() / 1000000;
         if (seconds != displayed_seconds) {
             lv_label_set_text_fmt(uptime, "%02lu:%02lu", static_cast<unsigned long>(seconds / 60),

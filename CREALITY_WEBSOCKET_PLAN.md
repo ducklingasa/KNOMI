@@ -1,6 +1,6 @@
 # KNOMI → Creality K-series WebSocket display: rework plan
 
-Status: **Phase 1 cleanup/display-only build implemented; root ESP-IDF/CMake approved; 440,432-byte image builds, hardware revalidation pending** · Last update: 2026-11-10
+Status: **Phase 1 RGB/uptime owner-validated; Phase 2 splash/configuration/rotation code builds (467,616 bytes), new hardware checks pending** · Last update: 2026-11-10
 
 Related documents:
 
@@ -54,7 +54,7 @@ Related documents:
 | Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x remains a compatibility target based on legacy owner captures, which are not checked in as fixtures |
 | Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (owner confirmed 2026-11-06) |
 | Validated implementation slice (2026-11-08) | Isolated `spikes/display`: **ESP-IDF 5.5.5 with Arduino 3.3.12 as a component**, LVGL 8.4.0, native IDF SPI2/GC9A01, PSRAM allocation and internal DMA strips. COM8 flash and network-loaded S3 validation passed; owner performs visible checks. |
-| Build-system scope (owner-approved 2026-11-10) | **ESP-IDF 5.5.5 / CMake for the full firmware**, with Arduino 3.3.12 as a component and LVGL 8.4.0, matching the accepted spike. PlatformIO removed. Production host tests use CMake/CTest; CI follows the IDF build rather than pioarduino. Root display-only build now passes; no new flash/HIL acceptance claimed. |
+| Build-system scope (owner-approved 2026-11-10) | **ESP-IDF 5.5.5 / CMake for the full firmware**, Arduino 3.3.12 component and LVGL 8.4.0. PlatformIO removed. Native CMake/CTest now covers rotation; production model/parser tests remain Phase 4. Owner accepted the Phase 1 RGB/uptime flash; latest Phase 2 changes still need hardware checks. |
 | Git operations (2026-11-06) | Work on the current branch; **no branch or tag creation**. |
 | Display SPI speed (2026-11-08) | **40 MHz retained**, validated by the accepted native IDF S3 run. Higher speeds, such as 80 MHz, are untested and optional future improvements only if needed. |
 | Network downloads | **No manual approval.** The network automatically processes packages after an initial attempt and a variable interval. Retry normally after processing; keep network controls and certificate checks enabled. Applies to clean builds/redownloads too. After several failed normal attempts with processing time allowed, report the **package name, version, exact attempted download URL, and error** to the user. Current versions are recorded in the spike lock file. |
@@ -283,7 +283,7 @@ idf.py -B $build -D IDF_TARGET=esp32s3 -D "SDKCONFIG=$build/sdkconfig" `
   -D SDKCONFIG_DEFAULTS=sdkconfig.defaults build
 ```
 
-Current root application is **display-only**, not a feature-complete Creality firmware. It compiles/links at **440,432 bytes**, with **89% factory-app partition headroom**. `src/main.cpp` checks capacity and starts one UI task on core 1; the HAL keeps two internal DMA strips and explicit LVGL PSRAM allocation. Networking/control code is absent from the application. No new flash/physical result is claimed. Debug options use SDK configuration; native model/parser tests will be separate CMake/CTest targets, not `env:native`.
+Current root application is **display-only**, not feature-complete. The Phase 1 440,432-byte RGB/uptime image was owner-flashed/validated. The current Phase 2 image builds at **467,616 bytes / 88% app headroom**, adding a shared-source 1.5-second splash, slim LVGL configuration and tested register-level rotation API. One UI task/core1, internal DMA strips and explicit PSRAM policy remain. New image/alternate orientations still need physical checks; application networking/control is absent. Native rotation CTest passes; model/parser tests remain Phase 4.
 
 ### 5.2 `lv_conf.h` key changes
 
@@ -351,7 +351,7 @@ General rules:
 - **Fonts** (Inter SemiBold, 4 bpp, regenerated):
   - 14 and 18 px: printable ASCII + Latin-1 + Latin Ext-A, so that accented filenames render; upstream Inter excludes U+00AD soft hyphen and deprecated U+0149 (documented in `tools/fonts.md`)
   - 24 px: printable ASCII plus degree and Celsius signs
-  - 48 px: digits, `% : ° C`, space, and the Celsius sign retained for compatibility
+  - 48 px: printable ASCII plus degree/Celsius signs; expanded from numeric-only coverage in Phase 2 so "KNOMI" can render on S0
   - LVGL Montserrat 16 for symbols
 - **Colors:**
   - KNOMI green `#329A40` (accent and progress; matches the green GIFs)
@@ -516,7 +516,7 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 |---|---|---|
 | 1.1 | **Superseded by owner decision 2026-11-06:** retain current branch; do not create a branch or tag | S |
 | 1.2 | **Implemented 2026-11-10:** 75 visual sources archived/hash-verified; 28 native reference captures remain reproducible and archive-backed PNGs match live-source output. Moved 10 GIFs, 4 fonts and 6 required static images/icons into `src/ui/assets`; decorative candidates retained unlinked under `reference` until replacement review. Removed Moonraker, generated control/touch UI, sensors, old pin profiles, OTA/PlatformIO files. Twenty selected asset sources compile; printer fixtures/baselines unchanged | S |
-| 1.3 | **Build passed 2026-11-10:** root IDF/CMake display-only `main.cpp` + extracted native HAL; RGB bars/caption/uptime and heap logs, no application networking/control. Final image **440,432 bytes / 89% app headroom**. Flash, rendering and cold-boot revalidation **pending**; no erase/flash performed | S |
+| 1.3 | **Owner flash/RGB/uptime validation passed 2026-11-10:** root IDF/CMake display-only `main.cpp` + extracted native HAL. Image **440,432 bytes / 89% app headroom**. Owner reports flashed successfully and RGB screen/uptime all good. No new serial capture, repeated-cold-boot claim or application networking/control is implied | S |
 
 #### 10.1 Removal and keep inventory
 
@@ -551,10 +551,10 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 | # | Task | Size |
 |---|---|---|
-| 2.1 | Root IDF/CMake/defaults/partition table implemented for display-only build. LVGL allocation/tick/byte swap corrected; complete feature/widget configuration per §5.2 and physical checks remain | S |
-| 2.2 | `board_pins.h`, display setup (GC9A01; native IDF SPI2/software CS; one map SCK1/MOSI2/DC3/CS4/RST5; native USB logging; no MISO/BL; accepted 40 MHz/reset/init sequence, MADCTL `0x48`, pixel format `0x55`, inversion on). | S |
-| 2.3 | `display_hal`: native IDF initialization, two internal 240×24 DMA buffers, queued SPI transactions; hold CS through command/pixels, release only after completion and then `lv_disp_flush_ready`. Initialize/verify PSRAM before LVGL. Add settings-based rotation with validated panel orientation; no alternate pin map or full-frame buffer. | M |
-| 2.4 | `ui_task` skeleton on core 1: `lv_timer_handler()` loop with `vTaskDelay(5 ms)`; splash S0 | S |
+| 2.1 | **Code/build passed:** root IDF/defaults/partitions, explicit PSRAM/tick/byte swap, 26 unused widget/theme options disabled and required read-only/GIF/QR/layout options retained. Full Phase 2 image **467,616 bytes**; new physical validation pending | S |
+| 2.2 | **Implemented:** fixed GPIO1-5/native USB/40MHz/GC9A01 setup. Validated default orientation/init sequence unchanged; no alternate pin map/MISO/backlight | S |
+| 2.3 | **Implemented rotation API:** default `0x48` preserved; 0/90/180/270-degree MADCTL values `48/28/88/E8`, BGR retained. UI task only; drain DMA before changing register, invalidate full screen; no software/full-frame rotation buffer. Native mapping/invalid-index CTest passes. **Physical alternate-orientation validation and binding to Phase 3 settings remain pending** | M |
+| 2.4 | **Implemented:** sole core1 UI task/5ms loop, 1.5-second S0 using actual 48/18/14px target fonts, then RGB/uptime diagnostic until network screens exist. Shared-source native splash preview passes label bounds/round-mask/pixel checks. Boot timing and rendering on the new device image still need confirmation | S |
 
 ### Phase 3: Settings, Wi-Fi, web portal
 
@@ -654,7 +654,7 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 ### 13.1 Automated
 
 - **Current Python reference checks:** `python -m unittest discover -s test -p test_derive_prototype.py -v` passes 16 focused tests. All 14 owner-approved baseline files match fresh `tools/derive_prototype.py` replay. They assert pre-debounce logical sequences, not wall-clock timing, physical UI transitions or production C++ behavior.
-- **Planned native CMake/CTest tests:** coercion, merge, derivation rules, freshness/debounce (injected clock), fixture replays, settings validation, time and temperature formatting. Not yet implemented by the display-only checkpoint.
+- **Current native CMake/CTest:** rotation register mapping/BGR/default preservation and invalid indices (1/1 passes). Production coercion/merge/model/parser/freshness/settings/formatting tests remain planned; no physical rotation is proven by native tests.
 - **Fake-printer integration** (manual run against the device on the LAN): all scenarios in Phase 4.5.
 
 ### 13.2 Hardware-in-the-loop checklist

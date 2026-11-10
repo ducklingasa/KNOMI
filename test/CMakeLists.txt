@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(knomi_native_tests LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_testing()
+add_executable(test_display_rotation test_display_rotation.cpp)
+target_include_directories(test_display_rotation PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../src")
+add_test(NAME display_rotation COMMAND test_display_rotation)

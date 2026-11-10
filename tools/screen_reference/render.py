@@ -79,21 +79,62 @@ def contact_sheet(output, captures):
     sheet.save(output / "contact-sheet.png")
 
 
+def export_splash(executable, output, mask, version):
+    ppm = executable.parent / "splash.ppm"
+    subprocess.run([str(executable), str(ppm)], check=True, cwd=ROOT)
+    with Image.open(ppm) as original:
+        image = original.convert("RGB")
+    colors = pixels(image)
+    green = sum(green > 80 and green > red * 1.5 and green > blue * 1.5
+                for red, green, blue in colors)
+    if image.size != (240, 240) or green < 100:
+        raise ValueError("Splash is blank, wrong-sized or missing its green title")
+    outside = ImageChops.multiply(image.convert("L"), ImageChops.invert(mask))
+    if outside.getbbox() is not None:
+        raise ValueError("Splash content is clipped by the round display")
+    image.save(output / "splash.png")
+    rounded = image.convert("RGBA")
+    rounded.putalpha(mask)
+    rounded.save(output / "splash.round.png")
+    names = ("src/ui/splash.c", "src/ui/splash.h", "src/app_config.h",
+             "tools/screen_reference/splash_preview.c", "tools/screen_reference/lv_conf.h",
+             "tools/screen_reference/CMakeLists.txt", "tools/screen_reference/render.py")
+    sources = [ROOT / name for name in names]
+    sources += [ROOT / "src/ui/assets/fonts" / f"ui_font_InterSemiBold{size}.c" for size in (14, 18, 48)]
+    manifest = {
+        "kind": "phase2-firmware-splash-native-preview", "lvgl": version,
+        "python": sys.version.split()[0], "pillow": pillow_version, "resolution": [240, 240],
+        "note": "Shared firmware splash source and target fonts; host unswapped RGB565 preview, not a device photo or timer test.",
+        "green_pixels": green, "png_sha256": hashlib.sha256((output / "splash.png").read_bytes()).hexdigest(),
+        "source_sha256": {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                          for path in sources},
+    }
+    (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(f"PASS: shared firmware splash, three label bounds, round-mask fit and {green} green title pixels")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--executable", type=Path, default=Path(__file__).parent / "build/zig/screen_reference.exe")
-    parser.add_argument("--output", type=Path, default=ROOT / "docs/screens/original")
+    parser.add_argument("--executable", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--splash", action="store_true", help="Render the actual Phase 2 firmware splash separately")
     parser.add_argument("--lvgl-source", type=Path, default=LVGL_SOURCE)
     args = parser.parse_args()
+    if args.executable is None:
+        name = "splash_preview.exe" if args.splash else "screen_reference.exe"
+        args.executable = Path(__file__).parent / "build/zig" / name
     versions = dict(re.findall(r"#define\s+LVGL_VERSION_(MAJOR|MINOR|PATCH)\s+(\d+)",
                               (args.lvgl_source / "lvgl.h").read_text(encoding="utf-8")))
     version = ".".join(versions.get(part, "?") for part in ("MAJOR", "MINOR", "PATCH"))
     if version != "8.4.0":
         raise ValueError(f"Reference LVGL version must be 8.4.0, found {version}")
-    output = args.output.resolve()
+    output = (args.output or ROOT / "docs/screens" / ("phase2" if args.splash else "original")).resolve()
     output.mkdir(parents=True, exist_ok=True)
     mask = Image.new("L", (240, 240))
     ImageDraw.Draw(mask).ellipse((0, 0, 239, 239), fill=255)
+    if args.splash:
+        export_splash(args.executable.resolve(), output, mask, version)
+        return
     captures = []
     for name, screen, value, time in scenarios():
         ppm = args.executable.resolve().parent / "capture.ppm"

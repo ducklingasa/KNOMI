@@ -2,6 +2,21 @@
 
 Final hardware: **ESP32-S3-Zero**, 4 MiB flash / 2 MiB PSRAM, GC9A01 on SCK1/MOSI2/DC3/CS4/RST5; native USB Serial/JTAG **COM8**. This log records S3 implementation and validation only.
 
+## 2026-11-10: Phase 2 splash, configuration and rotation checkpoint
+
+- Continued after owner accepted the Phase 1 RGB/uptime image. No new flash/erase/monitor was performed. The accepted default MADCTL0x48, panel initialization bytes, fixed pins, 40MHz SPI and internal DMA/PSRAM policies remain unchanged.
+- Added UI-task-only `display_hal::set_rotation()` with validity checks, pending-DMA drain, register0x36 update and full-screen invalidation. Mappings relative to the accepted base are **48/28/88/E8**; BGR retained. No software-rotation/frame buffer. Native CMake/CTest covers all four values/default preservation and invalid 8-bit indices: **1/1 test passes**. Alternate physical orientation and Phase 3 settings binding are not yet validated/implemented.
+- Added `app_config.h` and a shared C/LVGL S0 module: green 48px KNOMI, white 18px edition, gray 14px development version. Main UI loop shows it for **1,500 monotonic ms**, then returns to the diagnostic RGB/uptime screen. No placeholder network behavior or printer controls were added.
+- The previous numeric-only 48px font could not render KNOMI. Regenerated it with the same pinned Inter4.1/converter1.5.3 at 4bpp, now printable ASCII/degree/Celsius (**97 glyphs**). Verified actual cmap coverage and updated the validator/recipe. The original source archive and 28 legacy-reference screenshots remain unchanged.
+- Disabled 26 unused control/complex-widget/theme options; retained 13 required read-only widget/GIF/QR/layout options, including the non-interactive heater slider. Root dark default retained for the new UI; native legacy renderer has its independent configuration.
+- Full IDF configure/compile/link/partition-size gates pass: **467,616 bytes (`0x722a0`)**, **88% app-partition headroom**. This is the new unflashed Phase 2 image, not the earlier 440,432-byte owner-accepted image.
+- Added a separate native `splash_preview` executable compiling the **actual firmware S0 module and current fonts**. Exported `docs/screens/phase2/splash.png`, circular preview and source manifest, distinct from the original gallery. All three label rectangles fit the round area; mask/pixel check passes with **2,657 green title pixels**, and the image was visually inspected. This is a host unswapped-RGB565 preview, not a physical display/timer test.
+- All 20 retained asset sources compiled after the font extension; editor diagnostics clear. Native CMake/CTest is now an actual project under `test`, while production C++ model/parser tests and networking/settings remain future work. New splash/boot timing and rotated orientations still require owner hardware checks.
+
+## 2026-11-10: Owner validates the root display-only image
+
+Owner reports: **"Flashed and validated, RGB screen uptime all good."** This accepts the root Phase 1 image's flash and visible RGB/uptime behavior. It does not imply a newly captured serial log, repeated cold boots, rotated orientations, networking or production screens. The 440,432-byte image/build details are in the checkpoint below; Phase 2 continues from this validated default-orientation display path.
+
 ## 2026-11-10: Approved IDF migration and Phase 1 build checkpoint
 
 Status: **cleanup and display-only root build implemented; hardware revalidation pending**. Owner approved ESP-IDF/CMake for the full firmware after reference rendering. No new flash/erase/monitor, printer control, branch, tag or commit was performed.
