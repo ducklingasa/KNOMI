@@ -1,6 +1,6 @@
 # KNOMI Screen Preservation Guide
 
-Status: source-derived reference and owner-approved adaptation direction, 2026-11-10. This is a guide for the later hand-written LVGL UI, not implemented screens or verified full-screen screenshots.
+Status: source-derived reference, **native LVGL reference captures generated 2026-11-10**, and owner-approved adaptation direction. This is a guide for the later hand-written UI, not implemented target screens or device photographs.
 
 ## 1. Scope and Evidence
 
@@ -14,7 +14,7 @@ Owner decisions:
 - Use green for decorative/theme/progress accents. **Keep the original heater-fill graphics red.** Do not add temperature-threshold or cooldown-warning behavior; it was not selected.
 - Keep the existing read-only protocol/state rules. A visual reference does not restore Moonraker controls, touch, sensors, v2 features or old state derivation.
 
-Sources below are relative to the repository. Generated headers identify SquareLine Studio 1.3.1 / LVGL 8.3.6; the target is LVGL 8.4.0 with the Phase 0.5 4-bpp fonts. Current generated font files have already been regenerated in place, so this is not a claim of bit-identical original firmware rendering.
+Legacy source paths below are now **members of the preserved archive**, not live application files. The [docs/screens/original/legacy-source.json](screens/original/legacy-source.json) indexes their hashes, and [docs/screens/original/legacy-source.zip](screens/original/legacy-source.zip) contains the original files. Generated headers identify SquareLine Studio 1.3.1 / LVGL 8.3.6; the target is LVGL 8.4.0 with the Phase 0.5 4-bpp fonts. Captures used the already-regenerated fonts, so this is not a claim of bit-identical original firmware rendering.
 
 ## 2. Visual and Color Contract
 
@@ -27,13 +27,13 @@ Sources below are relative to the repository. Generated headers identify SquareL
 | Thermal fill | Gray base image plus red nozzle/bed image in the indicator part | **Retain original gray/red assets and their native red pixels**; no green recoloring |
 | Semantic states | New Creality plan | Paused amber `#F0A020`, error red `#E53935`, completed light green `#5DA910`, secondary/stopped gray `#808080` |
 
-The old theme helper in [src/ui_overlay/lv_theme_color.cpp](../src/ui_overlay/lv_theme_color.cpp) recolors the heating indicator images together with unrelated theme objects. **Do not reproduce that grouping.** Use role-specific styling: heater fills are excluded from theme recoloring, while printing/decorative arcs can be green. Error red and thermal red have different meanings; neither is a theme accent.
+The archived theme helper recolors heating indicator images together with unrelated theme objects. **Do not reproduce that grouping.** Use role-specific styling: heater fills are excluded from theme recoloring, while printing/decorative arcs can be green. Error red and thermal red have different meanings; neither is a theme accent.
 
 Heating fill is a visualization of `actual / target`, not an independent indication that a surface is safe or dangerous. Keep it red even when the target has just been reached. No new red threshold, hysteresis, cooldown screen or target-zero hot warning is specified. Existing first-target-reach logic determines when a heating phase ends; it does not recolor the asset.
 
 ## 3. Nozzle and Bed Heating
 
-Sources: [src/ui/screens/ui_ScreenHeatingNozzle.c](../src/ui/screens/ui_ScreenHeatingNozzle.c), [src/ui/screens/ui_ScreenHeatingBed.c](../src/ui/screens/ui_ScreenHeatingBed.c), and [src/ui_overlay/lv_moonraker_change_screen.cpp](../src/ui_overlay/lv_moonraker_change_screen.cpp).
+Archive sources: the HeatingNozzle/HeatingBed constructors and Moonraker screen/value overlay, indexed in the source manifest.
 
 | Element | Nozzle | Bed |
 |---|---|---|
@@ -52,7 +52,7 @@ Original assets, **not full-screen screenshots**:
 |---|---|---|---|
 | ![Nozzle gray asset](screens/png/nozzle_gray.png) | ![Nozzle red asset](screens/png/nozzle_red.png) | ![Bed gray asset](screens/png/bed_gray.png) | ![Bed red asset](screens/png/bed_red.png) |
 
-The runtime sets the selected indicator to integer `actual * 100 / target` with animation, only when target is nonzero and the corresponding screen is active. The generated screens do not explicitly set slider range/orientation, so do not claim a proven fill direction from these statements alone; verify actual LVGL rendering. The hand-written implementation must clamp the displayed ratio to 0..100, avoid division by zero, and distinguish unknown values from zero. It need not use the slider widget if an image mask reproduces the same appearance.
+The runtime sets the selected indicator to integer `actual * 100 / target` with animation, only when target is nonzero and the corresponding screen is active. The generated screens do not explicitly set slider range/orientation; the new native LVGL captures confirm automatic **bottom-to-top** fill and clamping above 100 for these dimensions. The nozzle capture includes a horizontal strip below the icon; preserve that observation rather than silently changing the reference. The hand-written implementation must clamp the displayed ratio to 0..100, avoid division by zero, and distinguish unknown values from zero. It need not use the slider widget if an image mask reproduces the same appearance.
 
 Retain the large icon with separate top actual and bottom target values. This replaces the draft's generic two-bar treatment when nozzle/bed heating is the primary operation. Keep the approved nozzle-first selection, exact first-target-reach completion and re-arm rules from [docs/CREALITY_WS_PROTOCOL.md](CREALITY_WS_PROTOCOL.md#54-knomi-derivation-rules-first-match-wins); do not copy the old +/-2-degree/overshoot state logic. During self-test, calibration and resuming, keep the operation identifiable and expose the selected heater without losing step/operation information. The exact combined composition must be reviewed in the future LVGL preview before implementation is accepted.
 
@@ -60,7 +60,7 @@ The bed source has a stray nozzle image assigned to the root scrollbar part. It 
 
 ## 4. Print Progress and Timing
 
-Source: [src/ui/screens/ui_ScreenPrinting.c](../src/ui/screens/ui_ScreenPrinting.c). Keep the original display identity without the unavailable accelerometer UI.
+Source: archived Printing constructor. Keep the original display identity without the unavailable accelerometer UI.
 
 | Element | Original Geometry / Style | Adaptation |
 |---|---|---|
@@ -70,7 +70,7 @@ Source: [src/ui/screens/ui_ScreenPrinting.c](../src/ui/screens/ui_ScreenPrinting
 | Segmented decorative ring | 230 x 230; segments 272..42, 47..134, 138..268 degrees; 4 px, square ends | Keep segment language; green |
 | X/Y/Z widgets | 18 x 58 bars near y=115; labels near y=175 | Remove sensor bars and X/Y/Z labels; reserve this lower central area for remaining and elapsed time |
 
-[src/lvgl_usr.cpp](../src/lvgl_usr.cpp) changes the generated layout under `#ifndef LIS2DW_SUPPORT`: the percentage is centered at y=0 and all X/Y/Z objects are deleted. This is the v1 runtime reference; the generated y=50 layout alone must not be presented as the original sensor-free screen.
+The archived UI-task setup changes the generated layout under `#ifndef LIS2DW_SUPPORT`: the percentage is centered at y=0 and all X/Y/Z objects are deleted. This is the v1 runtime reference; the generated y=50 layout alone must not be presented as the original sensor-free screen.
 
 Proposed new timing content: compact labeled `Left` and `Elapsed` values below the percentage, using the target 14/18 px fonts as space permits. Preserve the percentage/rings first; do not force three data columns into the old bar positions. Confirm exact time-row positions from font metrics and the round mask, rather than treating proposed positions as measured legacy geometry. Use planned time formatting and unknown-value placeholders; do not show zero remaining time as a proven completion signal.
 
@@ -78,7 +78,7 @@ Keep the approved auto-rotating progress/timing, temperature and layer/file page
 
 ## 5. Temperature Summary
 
-Source: [src/ui/screens/ui_ScreenTemp.c](../src/ui/screens/ui_ScreenTemp.c).
+Source: archived Temp constructor.
 
 - Original nozzle panel: 86 x 97, top-left x=25/y=57. Bed panel: 86 x 97, top-right x=-25/y=57. Each has a centered icon, actual at top-middle y=10 in warm yellow and target at bottom-middle y=-15, both 14 px.
 - Preserve the recognizable paired nozzle/bed presentation and actual-over-target hierarchy as read-only groups. Replace `lv_imgbtn` with non-clickable containers/images; retain no temperature-setting events or button affordance.
@@ -90,16 +90,16 @@ Source: [src/ui/screens/ui_ScreenTemp.c](../src/ui/screens/ui_ScreenTemp.c).
 
 | Original Source | Measured Reference | Target / Deliberate Differences |
 |---|---|---|
-| [src/ui/screens/ui_ScreenMainGif.c](../src/ui/screens/ui_ScreenMainGif.c) | Black, non-scrolling root; runtime centers the main GIF | S5 idle and processing/self-test/completed GIF presentations. Keep centered composition and approved green GIFs/Creality logo; remove old touch events and share one GIF object |
-| [src/ui/screens/ui_ScreenWelcome.c](../src/ui/screens/ui_ScreenWelcome.c) | White root; blue `#4082F4` connection text, bottom-middle y=-40; runtime puts welcome GIF at center y=-36 | S1 setup: recognizable centered Wi-Fi animation with compact SSID/URL text and alternate QR page. Use planned black/green theme; do not copy old paragraph wrapping or real credentials |
-| [src/ui/screens/ui_ScreenWIFIConnecting.c](../src/ui/screens/ui_ScreenWIFIConnecting.c) | 240 x 240 edge spinner, 16 px indicator, 1000 ms period / 45-degree arc; centered BTT logo | S2/S4b connecting: preserve ring scale/motion, use green for normal connection activity and semantic warning color when required. Replace BTT branding with relevant connection information; do not keep that logo asset |
-| [src/ui/screens/ui_ScreenWIFIDisconnect.c](../src/ui/screens/ui_ScreenWIFIDisconnect.c) | White root; centered disconnect image y=-17; blue explanatory text bottom-middle y=-30 | S3 lost: keep icon-over-status composition; adapt to black background, concise status and automatic retry information. Do not retain the old instruction to restart as recovery logic |
-| [src/ui/screens/ui_ScreenQRCode.c](../src/ui/screens/ui_ScreenQRCode.c) | Black root; bottom-middle caption x=-3/y=-30, original 16 px font | Runtime adds centered 130 x 130 QR with white modules on black. Reuse geometry for Wi-Fi join/device-URL pages, not the old BTT manual URL; verify quiet zone and phone scanning before choosing final polarity/size |
-| [src/ui/screens/ui_ScreenInfo.c](../src/ui/screens/ui_ScreenInfo.c) | Four framed rows centered at y=-58/-19/20/59; endcaps x=-91/+91; yellow key/white value hierarchy; value areas 110 x 20 with circular scrolling | S12 Info: preserve compact rows/alignment, paginate extra device/printer fields instead of shrinking everything into four rows. Use 14/18 px target fonts in place of unsupported legacy 16 px; native-drawn frames may replace bitmap caps after comparison |
-| [src/ui/screens/ui_ScreenPopup.c](../src/ui/screens/ui_ScreenPopup.c) | 175 x 130 frame, center y=-15; 135 x 90 content area, parent-centered y=-5; 14 px text | Read-only notification reference. Replace textarea with a wrapped label, drop touch OK button, and use GPIO0 only where a local action is allowed. Long error code/model content needs a separately checked S11 layout; do not blindly constrain it to the old popup |
-| [src/ui/screens/ui_ScreenDialog.c](../src/ui/screens/ui_ScreenDialog.c) | Black canvas; 24 px prompt top-middle y=74; touch confirm/cancel controls below | Typography/spacing reference only for permitted local setup/reset prompts. Do not carry over Start Printing, printer commands or on-screen touch controls. Local error acknowledgement never suppresses a nonzero ERROR |
+| MainGif (archived constructor) | Black, non-scrolling root; runtime centers the main GIF | S5 idle and processing/self-test/completed GIF presentations. Keep centered composition and approved green GIFs/Creality logo; remove old touch events and share one GIF object |
+| Welcome (archived constructor) | White root; blue `#4082F4` connection text, bottom-middle y=-40; runtime puts welcome GIF at center y=-36 | S1 setup: recognizable centered Wi-Fi animation with compact SSID/URL text and alternate QR page. Use planned black/green theme; do not copy old paragraph wrapping or real credentials |
+| WIFIConnecting (archived constructor) | 240 x 240 edge spinner, 16 px indicator, 1000 ms period / 45-degree arc; centered BTT logo | S2/S4b connecting: preserve ring scale/motion, use green for normal connection activity and semantic warning color when required. Replace BTT branding with relevant connection information; do not keep that logo asset |
+| WIFIDisconnect (archived constructor) | White root; centered disconnect image y=-17; blue explanatory text bottom-middle y=-30 | S3 lost: keep icon-over-status composition; adapt to black background, concise status and automatic retry information. Do not retain the old instruction to restart as recovery logic |
+| QRCode (archived constructor) | Black root; bottom-middle caption x=-3/y=-30, original 16 px font | Runtime adds centered 130 x 130 QR with white modules on black. Reuse geometry for Wi-Fi join/device-URL pages, not the old BTT manual URL; verify quiet zone and phone scanning before choosing final polarity/size |
+| Info (archived constructor) | Four framed rows centered at y=-58/-19/20/59; endcaps x=-91/+91; yellow key/white value hierarchy; value areas 110 x 20 with circular scrolling | S12 Info: preserve compact rows/alignment, paginate extra device/printer fields instead of shrinking everything into four rows. Use 14/18 px target fonts in place of unsupported legacy 16 px; native-drawn frames may replace bitmap caps after comparison |
+| Popup (archived constructor) | 175 x 130 frame, center y=-15; 135 x 90 content area, parent-centered y=-5; 14 px text | Read-only notification reference. Replace textarea with a wrapped label, drop touch OK button, and use GPIO0 only where a local action is allowed. Long error code/model content needs a separately checked S11 layout; do not blindly constrain it to the old popup |
+| Dialog (archived constructor) | Black canvas; 24 px prompt top-middle y=74; touch confirm/cancel controls below | Typography/spacing reference only for permitted local setup/reset prompts. Do not carry over Start Printing, printer commands or on-screen touch controls. Local error acknowledgement never suppresses a nonzero ERROR |
 
-Runtime sources: [src/lvgl_usr.cpp](../src/lvgl_usr.cpp) creates the welcome/main GIFs and QR; [src/ui_overlay/lv_wifi_change_screen.cpp](../src/ui_overlay/lv_wifi_change_screen.cpp) selects the old network screens; [src/ui_overlay/lv_theme_color.cpp](../src/ui_overlay/lv_theme_color.cpp) defines recoloring. Their appearance can inform the new implementation, but their duplicate GIFs and Moonraker/touch-specific wiring must not be copied.
+Archived runtime sources include the UI-task setup, Wi-Fi screen selector and theme overlay. Their appearance can inform the new implementation, but their duplicate GIFs and Moonraker/touch-specific wiring must not be copied.
 
 Welcome/disconnect black-background adaptations are intentional differences from their original white/blue screens. Original 16/20/32 px fonts are not silently restored; the selected 14/18/24/48 px family remains the target and any affected text box requires a render check.
 
@@ -143,4 +143,14 @@ Pre-cleanup requirements are steps 1-4. Target comparison/acceptance follows in 
 5. **Phase 5:** compare original/target geometry, text bounds, ring widths, native heater red, green decorative accents, typography and round-display clipping. Native LVGL rendering is authoritative for layout/defaults; the physical S3 display remains authoritative for orientation/color/legibility. New content is an adaptation, not a purported original screenshot.
 6. Preserve appearance, not defects: discard controls, touch navigation, accelerometer content, stray style assignments and invalid-zero assumptions. Do not restore the old cross-task LVGL calls, duplicate GIF objects or full-frame PSRAM draw buffer.
 
-Phase 1 may delete the generated runtime only after the preservation gate is met. This task does not perform that deletion, generate whole-screen renders, modify reference captures/baselines, or implement the new UI. Physical screen acceptance remains Phase 5/HIL work.
+The preservation gate was satisfied before Phase 1 removed the generated runtime: 75 original files were frozen/hash-verified, archive-backed captures matched live-source output, and required art/fonts were relocated. Unreviewed visual candidates remain unlinked under `src/ui/assets/reference` rather than being discarded. Raw printer captures/expected baselines were not changed. Physical target-screen acceptance remains Phase 5/HIL work.
+
+## 9. Native Reference Captures
+
+Generated from the preserved legacy source with the isolated [tools/screen_reference/README.md](../tools/screen_reference/README.md) harness. It invokes all 12 original constructors, supplies inert event stubs and synthetic values, and uses the legacy dark theme. The sensor-free progress variant applies the actual runtime centering/removal steps. After cleanup the renderer extracts the verified source archive; all 28 archived-source PNGs matched the pre-cleanup live-source captures.
+
+![Native source-reference contact sheet](screens/original/contact-sheet.png)
+
+The [docs/screens/original/manifest.json](screens/original/manifest.json) records source/executable/PNG hashes, tool versions, values and simulated times. **28 captures** pass nonblank/dimension, increasing-red-fill and GIF/spinner motion checks. Both unmasked RGB and circular-alpha PNGs are saved. The original welcome/disconnect paragraphs show round-edge clipping; their future layout must fix that defect, not reproduce it for fidelity's sake.
+
+These are LVGL **8.4.0** host renders using the current source and the already-regenerated fonts, not a claim of bit-identical LVGL 8.3.6 stock-firmware screenshots. Original red decoration, BTT branding, touch-control artwork and old message text remain in this historical gallery only. They are not approved additions to the new read-only UI. Green adaptation/new timing and chamber content remain Phase 5 work.

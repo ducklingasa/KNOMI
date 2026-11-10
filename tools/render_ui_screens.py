@@ -63,9 +63,10 @@ def render_c_array_to_png(c_file_path, output_png_path):
 
 def main():
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    gif_source_dir = os.path.join(repo_root, 'src', 'gif')
+    gif_source_dir = os.path.join(repo_root, 'src', 'ui', 'assets', 'gif')
     gif_target_dir = os.path.join(repo_root, 'docs', 'screens', 'gif')
-    png_source_dir = os.path.join(repo_root, 'src', 'ui', 'images')
+    png_source_dirs = [os.path.join(repo_root, 'src', 'ui', 'assets', name)
+                       for name in ('icons', 'images', 'reference')]
     png_target_dir = os.path.join(repo_root, 'docs', 'screens', 'png')
     os.makedirs(gif_target_dir, exist_ok=True)
     os.makedirs(png_target_dir, exist_ok=True)
@@ -75,10 +76,11 @@ def main():
         target = os.path.join(gif_target_dir, gif_file)
         render_c_array_to_gif(source, target)
 
-    for source in sorted(glob.glob(os.path.join(png_source_dir, 'ui_img_*_png.c'))):
-        png_file = os.path.basename(source)[7:-6] + '.png'
-        target = os.path.join(png_target_dir, png_file)
-        render_c_array_to_png(source, target)
+    for png_source_dir in png_source_dirs:
+        for source in sorted(glob.glob(os.path.join(png_source_dir, 'ui_img_*_png.c'))):
+            png_file = os.path.basename(source)[7:-6] + '.png'
+            target = os.path.join(png_target_dir, png_file)
+            render_c_array_to_png(source, target)
 
 
 if __name__ == '__main__':

@@ -1,3 +1,13 @@
+## Root Firmware Checkpoint (2026-11-10)
+
+The owner approved **ESP-IDF 5.5.5 / CMake for the full firmware**, with Arduino 3.3.12 as a component and LVGL 8.4.0. The root project now has a portable registry lock and separate ignored build/configuration/component output. PlatformIO and the obsolete Moonraker/control/touch/sensor application have been removed.
+
+The current application is deliberately **display-only**: capacity checks, one 8 KiB UI task pinned to core1, native SPI2 GC9A01, two internal 240x24 RGB565 DMA strips, explicit LVGL PSRAM allocation, RGB bars/caption/uptime and heap logs. Panel initialization bytes match the accepted spike. No application network task, settings, portal or printer client runs yet; the target two-task architecture remains future work.
+
+Root compile/link/partition gates pass at **440,432 bytes**, with **89% app-partition headroom**. This image has **not been flashed or physically revalidated**; the older spike's accepted rendering/network-loaded measurements below do not automatically validate the extracted HAL in this build. Generated UI evidence is preserved as 28 native captures plus a hash-verified 75-file source bundle. All selected image/GIF/font assets are retained under the new asset tree, with optional art unlinked pending visual review.
+
+See [README.md](../README.md) for root build commands, [docs/SCREENS.md](SCREENS.md) for visual preservation and [CREALITY_WEBSOCKET_IMPL.md](../CREALITY_WEBSOCKET_IMPL.md) for exact evidence. The following sections describe the separate historical/accepted spike workload.
+
 # Architecture and measured budgets
 
 ## Final hardware (2026-11-08)

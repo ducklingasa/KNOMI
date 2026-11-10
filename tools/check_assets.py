@@ -14,6 +14,7 @@ from bin2c import gif_info
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ASSETS = ROOT / "src/ui/assets"
 GIF_NAMES = (
     "creality", "standby_green", "wifi", "homing_green", "probing_green",
     "qgling_green", "heated_green", "print_green", "print_ok", "printed_green",
@@ -34,7 +35,7 @@ def check_gifs():
     maximum_canvas = 0
     for name in GIF_NAMES:
         symbol = f"gif_{name}"
-        source = (ROOT / "src/gif" / f"{symbol}.c").read_text(encoding="utf-8")
+        source = (ASSETS / "gif" / f"{symbol}.c").read_text(encoding="utf-8")
         array = re.search(
             r"uint8_t\s+" + re.escape(field(source, "data")) + r"\[\]\s*=\s*\{(.*?)\};",
             source, re.DOTALL,
@@ -115,7 +116,7 @@ def check_fonts():
         raise ValueError("Inter SemiBold source differs from the pinned 4.1 font")
     for size in FONT_SIZES:
         symbol = f"ui_font_InterSemiBold{size}"
-        source = (ROOT / "src/ui/fonts" / f"{symbol}.c").read_text(encoding="utf-8")
+        source = (ASSETS / "fonts" / f"{symbol}.c").read_text(encoding="utf-8")
         if not re.search(r"\.bpp\s*=\s*4\b", source):
             raise ValueError(f"{symbol}: not 4 bpp")
         if not re.search(r"\blv_font_t\s+" + symbol + r"\s*=", source):
@@ -139,9 +140,14 @@ def check_fonts():
 
 def compile_assets(build_dir):
     entries = json.loads((build_dir / "compile_commands.json").read_text(encoding="utf-8"))
-    entry = next(item for item in entries if item["file"].endswith("gif_creality.c"))
-    sources = [ROOT / "src/gif" / f"gif_{name}.c" for name in GIF_NAMES]
-    sources += [ROOT / "src/ui/fonts" / f"ui_font_InterSemiBold{size}.c" for size in FONT_SIZES]
+    entry = next((item for item in entries if item["file"].endswith("gif_creality.c")), None)
+    if entry is None:
+        entry = next(item for item in entries
+                     if item["file"].replace("\\", "/").endswith("/src/font/lv_font.c"))
+    sources = [ASSETS / "gif" / f"gif_{name}.c" for name in GIF_NAMES]
+    sources += [ASSETS / "fonts" / f"ui_font_InterSemiBold{size}.c" for size in FONT_SIZES]
+    sources += sorted((ASSETS / "icons").glob("*.c"))
+    sources += sorted((ASSETS / "images").glob("*.c"))
     for source in sources:
         command = re.sub(r' -(?:o|MF|MT) (?:"[^"]*"|\S+)', "", entry["command"])
         command = re.sub(r" -M(?:M)?D\b", "", command)
@@ -162,7 +168,7 @@ def compile_assets(build_dir):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--compile", action="store_true", help="Use the configured Windows S3 compile database")
-    parser.add_argument("--build-dir", type=Path, default=ROOT / "spikes/display/build/s3")
+    parser.add_argument("--build-dir", type=Path, default=ROOT / "build/esp32s3")
     args = parser.parse_args()
     check_gifs()
     check_fonts()

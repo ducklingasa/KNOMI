@@ -1,6 +1,6 @@
 # KNOMI → Creality K-series WebSocket display: rework plan
 
-Status: **S3 Phase 0.3 passed; Phase 0.4 extended to 14 owner-accepted baselines; Phase 0.5 assets prepared and compile-checked** · Last update: 2026-11-10
+Status: **Phase 1 cleanup/display-only build implemented; root ESP-IDF/CMake approved; 440,432-byte image builds, hardware revalidation pending** · Last update: 2026-11-10
 
 Related documents:
 
@@ -54,7 +54,7 @@ Related documents:
 | Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x remains a compatibility target based on legacy owner captures, which are not checked in as fixtures |
 | Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (owner confirmed 2026-11-06) |
 | Validated implementation slice (2026-11-08) | Isolated `spikes/display`: **ESP-IDF 5.5.5 with Arduino 3.3.12 as a component**, LVGL 8.4.0, native IDF SPI2/GC9A01, PSRAM allocation and internal DMA strips. COM8 flash and network-loaded S3 validation passed; owner performs visible checks. |
-| Build-system scope | ESP-IDF/CMake replaces PlatformIO for the isolated spike only. Full-firmware build, native-test, and CI migration decisions remain separate follow-up decisions. §5.1 remains the full-firmware draft. |
+| Build-system scope (owner-approved 2026-11-10) | **ESP-IDF 5.5.5 / CMake for the full firmware**, with Arduino 3.3.12 as a component and LVGL 8.4.0, matching the accepted spike. PlatformIO removed. Production host tests use CMake/CTest; CI follows the IDF build rather than pioarduino. Root display-only build now passes; no new flash/HIL acceptance claimed. |
 | Git operations (2026-11-06) | Work on the current branch; **no branch or tag creation**. |
 | Display SPI speed (2026-11-08) | **40 MHz retained**, validated by the accepted native IDF S3 run. Higher speeds, such as 80 MHz, are untested and optional future improvements only if needed. |
 | Network downloads | **No manual approval.** The network automatically processes packages after an initial attempt and a variable interval. Retry normally after processing; keep network controls and certificate checks enabled. Applies to clean builds/redownloads too. After several failed normal attempts with processing time allowed, report the **package name, version, exact attempted download URL, and error** to the user. Current versions are recorded in the spike lock file. |
@@ -157,19 +157,22 @@ Rules:
 - **Only `ui_task` calls LVGL.** Other tasks communicate through `PrinterSnapshot`, `NetStatus`, and FreeRTOS queues (fixes D1).
 - Snapshots are plain structs (fixed-size `char[]`, no `String`), copied under a mutex. A sequence number lets the UI skip redraws when nothing changed.
 - Web handlers never write settings directly. They validate input and post a `ConfigChange` to `net_task`, which persists and applies it (fixes D2 and D8).
-- The protocol logic (`PrinterModel`) is hardware-independent and lives in `lib/creality_model/`, so it can be unit-tested on the host (`env:native`).
+- The planned protocol logic (`PrinterModel`) is hardware-independent and lives in `lib/creality_model/`, so it can be unit-tested with native CMake/CTest. Only the Python reference exists at this checkpoint.
 
 ### 4.1 Target repository layout
 
 ```
-platformio.ini
+CMakeLists.txt               root ESP-IDF project (implemented)
+sdkconfig.defaults           tracked S3/PSRAM/USB defaults, no credentials
+dependencies.lock            portable registry dependency lock
 partitions_4MB.csv
 include/lv_conf.h
 src/
   main.cpp                    boot: serial, settings, tasks
   app_config.h                FW_VERSION, defaults (AP SSID prefix, port 9999, timeouts)
   board_pins.h                TFT + BOOT pins
-  tft_setup.h                 panel pins, dimensions, SPI frequency for native HAL
+  CMakeLists.txt             explicit application source list
+  idf_component.yml          pinned IDF/Arduino/LVGL dependencies
   settings/settings.{h,cpp}   NVS Preferences, validation, mutex
   net/wifi_manager.{h,cpp}
   net/web_portal.{h,cpp}
@@ -183,11 +186,12 @@ src/
   ui/assets/fonts/*.c         regenerated 4 bpp fonts
   ui/assets/icons/*.c         small nozzle/bed/chamber icons (≤ 32 px)
   ui/assets/images/*.c        original gray/red heater artwork (large native images; separately budgeted)
+  ui/assets/reference/*.c     unlinked decorative candidates retained until visual replacement review
 lib/Button/                   kept (GPIO0)
 lib/creality_model/           PrinterModel: merge, coercion, state derivation (no Arduino deps)
 lib/ws_stream/                RFC 6455 client-side frame parser/encoder (no Arduino deps) + thin WiFiClient adapter
 web/index.html                editable source of the settings page
-test/test_creality_model/     Unity tests (native)
+test/test_creality_model/     planned native CMake/CTest model tests
 test/fixtures/*.jsonl         14 captured printer traces with reviewed sibling *.expected.txt sequences (Phase 0.4 / 4.3)
 tools/WebSocketLogger.html    ✅ browser capture tool: records timed WS events + markers → capture file (§4.2)
 tools/convert_capture.py      legacy owner captures ("MESSAGE <- {json}" / "> RECEIVED: {json}") → capture file without timing (§4.2)
@@ -256,10 +260,10 @@ Rules:
 
 | Component | Current | Target (pinned) | Notes |
 |---|---|---|---|
-| PlatformIO platform | `espressif32@6.4.0` (Arduino 2.0.x) | **pioarduino `55.03.312`** (Arduino-ESP32 **3.3.12**, ESP-IDF 5.5.5) | The official `platformio/espressif32` (v7.1.3) still ships Arduino 2.0.17. **Fallback:** `espressif32@7.1.3` if Phase 0.1 fails. |
-| Board | Legacy `esp32r8` / `esp32s3r8` profiles | ESP32-S3-Zero, 4 MB flash, 2 MB quad-SPI PSRAM | IDF spike first; validate exact full-firmware board overrides before migration |
+| Build system | Root **ESP-IDF 5.5.5 / CMake**, Arduino component **3.3.12** | Same pinned stack | Owner approved full-firmware migration 2026-11-10; portable root registry lock, PlatformIO removed |
+| Board | ESP32-S3-Zero | 4 MiB flash, 2 MiB quad-SPI PSRAM | Root defaults and compile/link pass; new image still needs device verification |
 | LVGL | 8.3.7 + manual patch | **8.4.0** | Delete `lv_disp_(bugfix_backup).c` |
-| Display HAL | TFT_eSPI 2.5.0; historical spike 2.5.43 | **Native ESP-IDF SPI2 / GC9A01** | S3 spike rendering accepted using owner's working net-clock reset/init sequence and queued DMA strips. TFT_eSPI remains historical/unused in spike; full-firmware build migration is separate. |
+| Display HAL | **Native ESP-IDF SPI2 / GC9A01** | Same accepted command sequence | Extracted to `src/ui/display_hal.cpp`; initialization bytes match the accepted spike. Root image builds; no new hardware validation. TFT_eSPI remains unused/historical in the separate spike only |
 | ArduinoJson | ^6.19.4 | **7.4.3** | Use `JsonDocument` with a `DeserializationOption::Filter` |
 | WebSocket client | – (HTTPClient) | **Own minimal streaming client** (`lib/ws_stream`, ≈ 400 LOC) over `WiFiClient` | Checked-in K1 Max 1.3.5.19 fixtures contain unsolicited 23.4 KB `historyList`, up to 28.7 KB `elapseVideoList`, and two **79,463-byte `retGcodeFileInfo2`** frames during November 10 boot, before `connect:1`. File-list pushes are not observed on every connection. `links2004/WebSockets` 2.7.2 closes the connection (1009) above `WEBSOCKETS_MAX_DATA_SIZE` (15 KB default) and `malloc`s whole frames. Our client uses a static 4 KB buffer and stream-discards larger frames (protocol doc §4). |
 | Web server | ottowinter ESPAsyncWebServer-esphome 3.0 | **ESP32Async/ESPAsyncWebServer 3.12.1** + **ESP32Async/AsyncTCP 3.5.0** | Maintained fork (3.12.1 requires AsyncTCP ^3.5.0) |
@@ -267,55 +271,19 @@ Rules:
 | LIS2DW12, Adafruit_SHT4X, CST816S | v2 only | **removed** | |
 | Core libraries used | – | WiFi, WiFiClient, DNSServer, ESPmDNS, Preferences, esp_sntp, mbedtls (SHA-1/base64 for the WS handshake) | |
 
-### 5.1 `platformio.ini` (target draft)
+### 5.1 ESP-IDF/CMake Build
 
-The generic S3 board and memory/USB overrides below are **not yet full-firmware build-validated**. They must match the accepted IDF spike's 4 MiB flash/2 MiB quad-SPI PSRAM configuration before migration; do not use the board profile's default flash capacity or octal PSRAM settings.
+The root `CMakeLists.txt` registers `src` as the application component. `src/idf_component.yml` pins IDF 5.5.5, Arduino 3.3.12 and LVGL 8.4.0; `dependencies.lock` records registry hashes/versions. `managed_components/`, build output and local SDK configuration are ignored. The initial local-cache prototype was replaced with standard registry-managed dependencies before accepting the build; the root project no longer depends on the spike cache.
 
-```ini
-[platformio]
-default_envs = knomi
+From an activated ESP-IDF 5.5.5 PowerShell:
 
-[common]
-lib_deps =
-    lvgl/lvgl@8.4.0
-    bblanchon/ArduinoJson@7.4.3
-    ESP32Async/AsyncTCP@3.5.0
-    ESP32Async/ESPAsyncWebServer@3.12.1
-
-[env:knomi]
-platform  = https://github.com/pioarduino/platform-espressif32/releases/download/55.03.312/platform-espressif32.zip
-board     = esp32-s3-devkitc-1
-framework = arduino
-board_upload.flash_size = 4MB
-board_build.arduino.memory_type = qio_qspi
-board_build.flash_mode = dio
-board_build.f_flash = 40000000L
-board_build.partitions = partitions_4MB.csv
-monitor_speed   = 115200
-monitor_filters = esp32_exception_decoder
-extra_scripts   = pre:tools/build_web.py
-lib_deps  = ${common.lib_deps}
-build_flags =
-    -Iinclude -Isrc
-    -DLV_CONF_INCLUDE_SIMPLE
-    -DBOARD_HAS_PSRAM
-    -DARDUINO_USB_MODE=1
-    -DARDUINO_USB_CDC_ON_BOOT=1
-    -DCORE_DEBUG_LEVEL=1
-    -DKNOMI_LOG_LEVEL=2
-
-[env:knomi_debug]
-extends     = env:knomi
-build_type  = debug
-build_flags = ${env:knomi.build_flags}
-    -DCORE_DEBUG_LEVEL=3 -DKNOMI_LOG_LEVEL=4 -DKNOMI_HEAP_OVERLAY=1 -DLV_USE_PERF_MONITOR=1
-
-[env:native]
-platform  = native
-test_framework = unity
-lib_deps  = bblanchon/ArduinoJson@7.4.3
-build_flags = -std=gnu++17
+```powershell
+$build = Join-Path $PWD 'build/esp32s3'
+idf.py -B $build -D IDF_TARGET=esp32s3 -D "SDKCONFIG=$build/sdkconfig" `
+  -D SDKCONFIG_DEFAULTS=sdkconfig.defaults build
 ```
+
+Current root application is **display-only**, not a feature-complete Creality firmware. It compiles/links at **440,432 bytes**, with **89% factory-app partition headroom**. `src/main.cpp` checks capacity and starts one UI task on core 1; the HAL keeps two internal DMA strips and explicit LVGL PSRAM allocation. Networking/control code is absent from the application. No new flash/physical result is claimed. Debug options use SDK configuration; native model/parser tests will be separate CMake/CTest targets, not `env:native`.
 
 ### 5.2 `lv_conf.h` key changes
 
@@ -346,13 +314,12 @@ coredump, data, coredump, 0x3F0000, 0x10000,
 Changes from the hardware-proven `partition.csv`:
 
 - `otadata` and `spiffs` are removed (no OTA, no filesystem used).
-- NVS grows from 20 KB to 28 KB by using the freed gap before 0x10000.
+- NVS is **24 KiB** (`0x6000`, from `0x9000` through `0xefff`), verified by the generated root partition table. The earlier 28 KB description was inconsistent with those offsets.
 - The app is a `factory` partition of **3.875 MB**, compared with 3.125 MB before.
 
 Firmware estimate is ~1.8–2.2 MB (the Arduino 3.x baseline plus ≈ 0.46 MB of GIF assets, §3.3), leaving more than 40 % headroom.
 
-> When switching partition layouts, erase the chip once (`pio run -t erase`) so that stale `otadata`/NVS content is gone.
-> The coredump partition is used only if the Arduino core was built with `CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH`; verify this in Phase 0.1. If it is off, the partition stays reserved and harmless.
+> Partition changes and any deliberate erase are separate hardware actions; do not automatically erase existing settings. The current root build uses the same factory layout as the accepted S3 reference. The coredump partition remains reserved; use requires `CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH` and later validation.
 
 ## 7. Settings (NVS namespace `knomi`, schema version 1)
 
@@ -526,7 +493,7 @@ BOOT ─▶ no ssid ────────────────────
 
 ## 10. Implementation phases
 
-Each phase ends with a **green build** (`pio run -e knomi`), passing native tests (from Phase 4), and a short HIL check.
+Each implementation phase ends with a **green ESP-IDF build** (`idf.py -B build/esp32s3 build`), relevant tests (production native CMake/CTest from Phase 4), and a separately recorded HIL check. A compile/link pass alone is not device acceptance.
 Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 ### Phase 0: Spikes and data capture (de-risking)
@@ -548,8 +515,8 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | # | Task | Size |
 |---|---|---|
 | 1.1 | **Superseded by owner decision 2026-11-06:** retain current branch; do not create a branch or tag | S |
-| 1.2 | First satisfy `docs/SCREENS.md` preservation gate: retain required art, render selected original screens or obtain photos, save clearly labeled **original** references, and resolve retain/redraw strategy. Then delete per §10.1; do not remove generated evidence before it is preserved. Target comparison renders follow in Phase 5, not as a prerequisite for cleanup | S |
-| 1.3 | Temporary `main.cpp` that boots the display only; build green | S |
+| 1.2 | **Implemented 2026-11-10:** 75 visual sources archived/hash-verified; 28 native reference captures remain reproducible and archive-backed PNGs match live-source output. Moved 10 GIFs, 4 fonts and 6 required static images/icons into `src/ui/assets`; decorative candidates retained unlinked under `reference` until replacement review. Removed Moonraker, generated control/touch UI, sensors, old pin profiles, OTA/PlatformIO files. Twenty selected asset sources compile; printer fixtures/baselines unchanged | S |
+| 1.3 | **Build passed 2026-11-10:** root IDF/CMake display-only `main.cpp` + extracted native HAL; RGB bars/caption/uptime and heap logs, no application networking/control. Final image **440,432 bytes / 89% app headroom**. Flash, rendering and cold-boot revalidation **pending**; no erase/flash performed | S |
 
 #### 10.1 Removal and keep inventory
 
@@ -584,7 +551,7 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 | # | Task | Size |
 |---|---|---|
-| 2.1 | `platformio.ini` per §5.1; `partitions_4MB.csv` per §6; `lv_conf.h` per §5.2 | S |
+| 2.1 | Root IDF/CMake/defaults/partition table implemented for display-only build. LVGL allocation/tick/byte swap corrected; complete feature/widget configuration per §5.2 and physical checks remain | S |
 | 2.2 | `board_pins.h`, display setup (GC9A01; native IDF SPI2/software CS; one map SCK1/MOSI2/DC3/CS4/RST5; native USB logging; no MISO/BL; accepted 40 MHz/reset/init sequence, MADCTL `0x48`, pixel format `0x55`, inversion on). | S |
 | 2.3 | `display_hal`: native IDF initialization, two internal 240×24 DMA buffers, queued SPI transactions; hold CS through command/pixels, release only after completion and then `lv_disp_flush_ready`. Initialize/verify PSRAM before LVGL. Add settings-based rotation with validated panel orientation; no alternate pin map or full-frame buffer. | M |
 | 2.4 | `ui_task` skeleton on core 1: `lv_timer_handler()` loop with `vTaskDelay(5 ms)`; splash S0 | S |
@@ -638,7 +605,7 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | # | Task | Size |
 |---|---|---|
 | 8.1 | Write the documents in §12 | M |
-| 8.2 | GitHub Actions: `pio run -e knomi` + `pio test -e native` on push/PR; upload `firmware.bin` and the merged `knomi-full.bin` (bootloader + partitions + app, for the ESP Web Flasher) as artifacts | S |
+| 8.2 | GitHub Actions: pinned IDF 5.5.5 firmware build plus native CMake/CTest on push/PR; upload app/bootloader/partitions and a merged flash image for ESP Web Flasher. No PlatformIO pipeline | S |
 | 8.3 | Version `2.0.0-creality`, `CHANGELOG.md`, release with the binaries | S |
 
 ### Dependencies
@@ -677,7 +644,7 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 | `README.md` | Overview, photo, features, supported printers, hardware and wiring, build and flash (PlatformIO + ESP Web Flasher), first setup walkthrough, button actions, troubleshooting (Wi-Fi, printer unreachable, blank screen, colors inverted), licenses and credits | 8.1 |
 | `docs/HARDWARE.md` | S3-Zero 4 MB/2 MB configuration, single GPIO1–5 SPI pin table, native USB logging, GPIO3/GPIO0 strapping, 3.3 V signal/5 V power caveat, hard-wired backlight, GC9A01 SPI mode/CS/40 MHz settings, enclosure notes | 0.1 / 8.1 |
 | `docs/ARCHITECTURE.md` | Tasks and cores, data flow, snapshot and queue contracts, memory budget (Phase 0.3 numbers), Phase 0.1 platform decision, module responsibilities | 0.3 / 8.1 |
-| `docs/SCREENS.md` | **Written 2026-11-10:** source-derived measurements/mapping for all 12 adaptable screens, v1 runtime progress override, approved styling/thermal-red exception, measured keep assets and pre-cleanup gate. Full-screen native LVGL previews/device photos and final composed layouts remain pending, not claimed as generated screenshots | Before 1.2 / 5.3 |
+| `docs/SCREENS.md` | **Written and extended 2026-11-10:** source measurements, styling/red exception, asset budget, **28 native reference captures** and verified 75-file archive. Required art relocated; unreviewed candidates retained. New target layouts and physical comparison remain pending | Before 1.2 / 5.3 |
 | `docs/TESTING.md` | Native tests, fake printer usage, capture walkthrough (`tools/WebSocketLogger.html`, scenarios, markers, naming; §4.2), HIL checklist (§13) | 4.5 / 7.4 |
 | `tools/fonts.md` | Written: pinned Inter 4.1/OFL, converter commands, glyph ranges/exclusions, GIF regeneration and repeatable S3 compile-check instructions | 0.5 |
 | `CHANGELOG.md` | From 2.0.0-creality onward | 8.3 |
@@ -687,7 +654,7 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 ### 13.1 Automated
 
 - **Current Python reference checks:** `python -m unittest discover -s test -p test_derive_prototype.py -v` passes 16 focused tests. All 14 owner-approved baseline files match fresh `tools/derive_prototype.py` replay. They assert pre-debounce logical sequences, not wall-clock timing, physical UI transitions or production C++ behavior.
-- **Native unit tests** (`pio test -e native`): coercion, merge, derivation rules, freshness/debounce (with an injected clock), fixture replays, settings validation, time and temperature formatting.
+- **Planned native CMake/CTest tests:** coercion, merge, derivation rules, freshness/debounce (injected clock), fixture replays, settings validation, time and temperature formatting. Not yet implemented by the display-only checkpoint.
 - **Fake-printer integration** (manual run against the device on the LAN): all scenarios in Phase 4.5.
 
 ### 13.2 Hardware-in-the-loop checklist
@@ -719,7 +686,7 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 
 | Requirement | Verified by |
 |---|---|
-| v1 only, v2 removed | Phase 1 inventory; only `env:knomi`, `env:knomi_debug`, and `env:native` exist |
+| v1-only functions, no v2 hardware | Phase 1 inventory and explicit IDF application source list; no touch/sensor/control application code |
 | Moonraker → Creality WS | Phase 4; H2, H5, H6 |
 | Settings (WS IP, port) + screens after setup | §7, §9.3; H1–H2, S4a |
 | No control | Read-only guarantee test (§9.2) |
