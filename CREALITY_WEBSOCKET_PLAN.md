@@ -1,11 +1,12 @@
 # KNOMI → Creality K-series WebSocket display: rework plan
 
-Status: **Phases 0.1 and 0.2 completed; validated 40 MHz display SPI retained** · Last update: 2026-11-06
+Status: **S3 Phase 0.3 passed; Phase 0.4 extended to 14 owner-accepted baselines; Phase 0.5 assets prepared and compile-checked** · Last update: 2026-11-10
 
 Related documents:
 
 - [docs/CREALITY_WS_PROTOCOL.md](docs/CREALITY_WS_PROTOCOL.md): protocol reference and state-derivation rules (normative for Phase 4)
 - [CREALITY_WEBSOCKET_IMPL.md](CREALITY_WEBSOCKET_IMPL.md): implementation decisions, validation results, and pending acceptance
+- [docs/SCREENS.md](docs/SCREENS.md): source-derived original KNOMI visual references, owner-approved adaptations, thermal-red exception and pre-cleanup preservation gate
 - Documents still to be written are listed in §12
 
 ---
@@ -27,10 +28,9 @@ Related documents:
   * Update platform and libraries which are kept if possible
 
 * The project will run on a custom built hardware
-  * ESP32 Wemos D1 mini32 (ESP32-WROOM-32), 4 MiB flash, no PSRAM
+  * **Final hardware: ESP32-S3-Zero**, 4 MiB flash, 2 MiB embedded quad-SPI PSRAM
   * 1.28 inch TFT round LCD 240x240 GC9A01 driver
-  * Tested production wiring with serial logging disabled: SCK 16, MOSI 17, DC 21, CS 22, RST 3; MISO is not connected
-  * Optional serial-debug wiring: SCK 18, MOSI 23, DC 26, CS 5, RST 33
+  * One wiring with serial logging enabled through native USB Serial/JTAG: SCL/SCK GPIO1, SDA/MOSI GPIO2, DC GPIO3, CS GPIO4, RST GPIO5; MISO is not connected. SCL/SDA are the module's SPI labels, not an I2C bus.
   * LCD backlight is hard-wired on; GPIO signals are 3.3 V even if the display module accepts 5 V power
 
 * Change partition table to fit into the 4MB flash
@@ -42,42 +42,45 @@ Related documents:
 | Printer models | **K1, K1C, K1 Max, K2 / K2 Pro / K2 Plus**. All of them report a chamber temperature (`boxTemp`). |
 | Firmware update | **USB only.** No OTA: drop the OTA library, upload script, and second app slot. |
 | Visual style | **Mixed:** KNOMI GIF animations for setup, idle, processing, self-test, and completed; data screens for printing and temperatures |
-| GIF assets (2026-10-19) | Use the **green variants** `gif_*_green.c` instead of the original red `gif_*.c` wherever one exists; **`gif_creality.c` replaces `gif_voron.c`** (idle logo). `gif_qgling_green` is **kept** for the self-test auto-leveling step. UI accent follows the GIFs: **green**. |
+| Original-screen preservation (2026-11-10) | **All adaptable read-only screens** guide the hand-written UI. Closely preserve KNOMI geometry, large numerals, icons, ring framing and typography; add extra Creality information on rotating pages. Retain the original gray/red nozzle/bed heating fills unchanged; only decorative/theme/progress accents become green. **No new hot/cooldown thresholds or warnings.** Replace printing X/Y/Z sensor content with **remaining and elapsed time**. Source measurements, v1 runtime differences, assets and required render comparisons are in `docs/SCREENS.md`; generated screens are not deleted until that preservation gate is met. |
+| GIF assets (2026-10-19; step mapping confirmed 2026-11-09) | Use the **green variants** `gif_*_green.c` instead of the original red `gif_*.c` wherever one exists; **`gif_creality.c` replaces `gif_voron.c`** (idle logo). `gif_qgling_green` is **kept** for self-test step 5, Bed leveling. UI accent follows the GIFs: **green**. |
 | Physical input | **BOOT button on GPIO0** (on the board) is the only input. There is no touch screen and the backlight is hard-wired. |
+| Final hardware (2026-11-08) | **ESP32-S3-Zero**, 4 MiB flash and 2 MiB embedded PSRAM; owner chip report identifies ESP32-S3 QFN56 revision v0.2, XMC flash, AP_3v3 PSRAM, 40 MHz crystal. One display map: SCK1/MOSI2/DC3/CS4/RST5. Native USB-C flashing/reset authorized on **COM8**. BOOT GPIO0, no touch/sensors/MISO/backlight control; printer `192.168.0.55:9999`. Allocate LVGL/GIF memory explicitly in PSRAM; retain internal DMA buffers. S3 build/flash, memory margin, rendering, ten-minute playback and repeated cold boots passed. |
 | Printing layout | **Auto-rotating pages** (progress/time ↔ temperatures ↔ layer/file); a double-click jumps to the next page |
 | GUI library | **LVGL 8.4.0** (last v8; its GIF decoder needs ~20 % less RAM than v9) |
 | Web page security | **No admin password.** The device is LAN-only; risk accepted (see §11). |
 | Language / units | English, °C, 24 h time (owner confirmed 2026-11-06) |
-| Reference captures | Owner's **K1 Max** legacy sessions: full print with calibration, print without calibration, pause → resume → stop, connect during a print (DWIN sw 1.3.3.8 / 1.3.3.29), plus idle connect on 1.3.5.19. In addition, `test/fixtures/` now contains 11 timed K1 Max 1.3.5.19 JSONL captures covering idle/reconnect/reboot, print, connect mid-print, pause/resume, cancel/stop, and recovery/runout scenarios. These combined sources inform the protocol doc; fixture gaps remain (see §10, Phase 0.4). |
+| Reference captures | Owner's **K1 Max** legacy sessions: full print with calibration, print without calibration, pause → resume → stop, connect during a print (DWIN sw 1.3.3.8 / 1.3.3.29), plus idle connect on 1.3.5.19. In addition, `test/fixtures/` contains **14** timed K1 Max 1.3.5.19 JSONL captures with reviewed sibling expected sequences. November 10 adds connecting during an existing error/recovering/resuming/completing/menu leveling, plus boot-time placeholder/file-list/input-shaping/leveling evidence. All captures have `tx:0`. Remaining gaps are deferred in protocol doc §7. |
 | Target printer firmware | **Current Creality firmware (K1 family 1.3.5.x, K2 current)** is primary; 1.3.3.x remains a compatibility target based on legacy owner captures, which are not checked in as fixtures |
 | Completed/Stopped screen time | Default **10 min**, configurable; 0 = until the next state change (owner confirmed 2026-11-06) |
-| First implementation slice (2026-11-06) | Isolated **Phase 0.1** in `spikes/display`, using installed **ESP-IDF 5.5.5 with Arduino 3.3.12 as a component**, LVGL 8.4.0, and TFT_eSPI 2.5.43. Serial-debug wiring; flashing **COM7** authorized. Log free/largest/minimum internal heap and completed-refresh FPS before refactoring. Owner performs visual checks. |
-| Build-system scope (2026-11-06) | ESP-IDF/CMake replaces PlatformIO for the isolated spike only. Phase 0.1 passed; full-firmware build, native-test, and CI migration decisions remain separate follow-up decisions. §5.1 remains the earlier full-firmware draft. |
+| Validated implementation slice (2026-11-08) | Isolated `spikes/display`: **ESP-IDF 5.5.5 with Arduino 3.3.12 as a component**, LVGL 8.4.0, native IDF SPI2/GC9A01, PSRAM allocation and internal DMA strips. COM8 flash and network-loaded S3 validation passed; owner performs visible checks. |
+| Build-system scope | ESP-IDF/CMake replaces PlatformIO for the isolated spike only. Full-firmware build, native-test, and CI migration decisions remain separate follow-up decisions. §5.1 remains the full-firmware draft. |
 | Git operations (2026-11-06) | Work on the current branch; **no branch or tag creation**. |
-| Display SPI speed (2026-11-06) | **40 MHz retained; Phase 0.2 complete.** The accepted Phase 0.1 run validates this baseline. Higher speeds, such as 80 MHz, are untested and deferred as an optional future performance improvement only if needed; not a current implementation or acceptance requirement. |
-| Network downloads (2026-11-06) | **No download was manually approved by the owner.** The network automatically approves packages after an initial attempt and a variable processing interval (about 30 s observed). Retry normally after allowing time; if necessary pause for the user to wait and retry when they return, without asking them to manually approve anything. Applies to other packages and future redownloads too; previous success does not guarantee immediate access. Keep network controls and certificate checks enabled; report persistent failures with the exact URL. All 34 dependency entries downloaded; versions and URLs are recorded in the lock file and implementation log. |
-| Phase 0.1 build/flash (2026-11-06) | **Passed:** corrected LVGL's IDF configuration override, built a 560,320-byte application, flashed COM7 with verified hashes. Standard IDF monitor confirms the intended versions, pins, 4 MiB flash, and DMA initialization. Captured through uptime 111 s without reset or decoder failure. Creality GIF: ~8 FPS, free heap 168,316 bytes; standby: ~27 FPS, free heap 223,612 bytes; largest block 98,304 bytes with either GIF loaded. Repeated Creality visit preserves these heap values. Owner confirmed all device tests, including the 10-minute stability run and manual reset, passed and accepts Phase 0.1 as complete. Longer-run acceptance is owner-observed, not a claimed ten-minute serial capture. |
-| Phase 0.1 stopwatch (2026-11-06; format updated 2026-11-07) | Stopwatch below the GIFs, starting with the first GIF and continuing across switches; excludes the RGB startup period and resets on reboot. Original build and COM7 upload passed (560,528-byte app); owner confirmed all checks, including the 10-minute run. Format changed to zero-padded `MM:SS` (e.g. `01:03`); build passed, format-only update not reflashed. Earlier heap/FPS measurements predate this label. |
+| Display SPI speed (2026-11-08) | **40 MHz retained**, validated by the accepted native IDF S3 run. Higher speeds, such as 80 MHz, are untested and optional future improvements only if needed. |
+| Network downloads | **No manual approval.** The network automatically processes packages after an initial attempt and a variable interval. Retry normally after processing; keep network controls and certificate checks enabled. Applies to clean builds/redownloads too. After several failed normal attempts with processing time allowed, report the **package name, version, exact attempted download URL, and error** to the user. Current versions are recorded in the spike lock file. |
+| Playback stopwatch (S3-validated, 2026-11-08) | Zero-padded `MM:SS` below the GIFs; starts with the first GIF after network readiness, continues across switches, excludes the RGB startup period and resets on reboot. Owner confirmed visibility, continuity, ten-minute playback and repeated cold boots on the COM8 image. |
+| Phase 0.4 owner revalidation (2026-11-10) | Owner accepted all **14** regenerated sequences after revising the prototype: separate nozzle/bed heating, first observed actual >= target completes that heater until re-armed, nozzle priority, idle `deviceState:3` leveling / `4` input shaping, and calibration preempting stale results. **Every nonzero error in valid data produces ERROR, including paused/printing; local acknowledgement cannot suppress it.** Self-test labels remain in protocol doc §5.3. Sixteen focused Python tests and all 14 replay comparisons pass; no production C++/firmware claim. |
+| Post-print timing (2026-11-10) | New capture: raw `state:2 -> 0` after **733,479 ms (12 min 13.479 s)**, compared with about 63 s in an earlier fixture. Owner pressed the printer's completion **OK soon after finishing**, not after twelve minutes. No exact button marker: neither universal timeout nor OK-induced flag behavior is proven. Protocol doc §5.2b records the timeline and remaining uncertainty. |
 
 ## 3. Findings from the code review
 
 The repository is the BTT KNOMI firmware: `knomiv2` (ESP32-S3, touch, sensors) and `knomiv1` (ESP32 **with 8 MB PSRAM**).
 It uses SquareLine-generated LVGL 8.3.7 screens, polls Moonraker over HTTP, and provides an AsyncWebServer setup page.
-The tested ESP-IDF network-clock reference project confirms the current 240×240 GC9A01 wiring, 40 MHz write-only SPI, and 4 MiB flash setup documented in §1 and §6. Its default production pin map uses GPIO3 for display reset, so the UART console and bootloader logs are disabled; the ROM can still emit an initial boot message. Its alternate pin map keeps GPIO3 free for serial logging.
+The owner's working S3 net-clock reference and accepted native IDF spike validate the GC9A01 with the final GPIO1–5 wiring at 40 MHz. Retain this display path during migration; native USB GPIO19/20 are separate from the display pins.
 
 ### 3.1 Blockers for the target hardware (must fix)
 
 | # | Problem | Where | Fix |
 |---|---|---|---|
-| B1 | LVGL heap uses `ps_malloc`, which returns NULL without PSRAM | `include/lv_conf.h` `LV_MEM_CUSTOM_ALLOC` | Use `malloc`/`free`/`realloc` on the internal heap |
+| B1 | LVGL allocation assumed the original board's PSRAM configuration | `include/lv_conf.h` `LV_MEM_CUSTOM_ALLOC` | Initialize and verify 2 MiB S3 PSRAM; use explicit `heap_caps_malloc`/`heap_caps_realloc` with `MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT`, and `heap_caps_free`. Fail visibly rather than silently consuming internal DMA/network heap. |
 | B2 | Full-frame 240×240 draw buffer (115 KB) from PSRAM | `lvgl_hal.cpp` | Two 240×24-line DMA buffers (2×11.5 KB) |
-| B3 | Board `esp32r8` declares PSRAM and 16 MB flash; `spiffs_16MB.csv` | `buildroot/boards`, `platformio.ini` | Board `wemos_d1_mini32` (4 MB, no PSRAM) plus the new partition table (§6) |
-| B4 | v1 pins differ from the tested target wiring; the tested project's default uses GPIO3 for reset and requires UART logging off | `pinout_knomi_v1.h`, tested network-clock reference | `board_pins.h` uses the production map by default and switches to the alternate map only in the serial-debug build |
+| B3 | Legacy board profiles declare the wrong flash/PSRAM capacities | `buildroot/boards`, `platformio.ini` | ESP32-S3 target, 4 MiB flash, 2 MiB quad-SPI PSRAM, native USB logging, and the partition table (§6). Full-firmware PlatformIO profile remains a draft; spike uses IDF. |
+| B4 | Legacy v1/v2 display pins differ from the new custom board; TFT_eSPI S3 rendering failed | `pinout_knomi_v1.h`, `pinout_knomi_v2.h`, display HAL | One map SCK1/MOSI2/DC3/CS4/RST5. Use accepted native IDF SPI2/software CS and the owner's working net-clock GC9A01 sequence. Failed TFT_eSPI FSPI/SPI3 attempts are historical; no production/debug pin switch. |
 | B6 | Two GIF objects alive at the same time (welcome + main) → ~150 KB RAM | `lvgl_usr.cpp` | Exactly **one** GIF object in the whole UI (§8.4) |
-| B7 | Fonts are generated at **1 bpp** (jagged) | `src/ui/fonts` | Regenerate at 4 bpp with the needed glyphs |
+| B7 | Legacy fonts were generated at **1 bpp** (jagged) | `src/ui/fonts` | Phase 0.5 regenerated the target 14/18/24/48 px Inter fonts at 4 bpp; unused 16/20/32 px legacy files remain for Phase 1 cleanup. |
 | B8 | LVGL 8.3.7 needs a manual `lv_disp.c` patch (PR 4487) | `platformio.ini` comment, `lv_disp_(bugfix_backup).c` | LVGL 8.4.0 contains the fix; delete the backup file |
 
-**Tested display-bus reference:** the ESP-IDF project runs the GC9A01 in SPI mode 0 at 40 MHz, with no MISO, software-controlled CS, and `SPI_DEVICE_NO_DUMMY` for write-only transfers. Its panel init sets MADCTL (`0x36`) to `0x48` and RGB565 pixel format (`0x3A`) to `0x55`. Phase 0.1 must confirm the equivalent TFT_eSPI orientation/color configuration; do not assume the ESP-IDF driver's `NO_DUMMY` option maps directly to TFT_eSPI.
+**Accepted display-bus reference:** the owner's net-clock project and repaired S3 spike run the GC9A01 using native IDF SPI2, mode 0 at 40 MHz, no MISO, software-controlled CS, and `SPI_DEVICE_NO_DUMMY`. Retain the tested reset/init sequence, MADCTL (`0x36`) `0x48`, RGB565 pixel format (`0x3A`) `0x55`, and swapped LVGL pixels. Owner-confirmed orientation/colors/playback pass; do not reintroduce the failed TFT_eSPI path during full-firmware migration.
 
 ### 3.2 Defects in the existing design (avoid re-implementing them)
 
@@ -95,11 +98,14 @@ The tested ESP-IDF network-clock reference project confirms the current 240×240
 | D10 | OTA cannot work with the given partition table (otadata present but no `ota_1`); AsyncElegantOTA is an unmaintained BTT fork | `partition.csv`, `platformio.ini` |
 | D11 | `README.md` is empty and the repository has no LICENSE file (upstream BTT KNOMI has none either) | repo root |
 
-### 3.3 Memory facts (ESP32-WROOM-32, no PSRAM)
+### 3.3 Memory facts and S3 allocation policy
 
-- Internal DRAM is about 320 KB. With Wi-Fi, lwIP, and AsyncTCP running, expect roughly **150–190 KB free** and a **largest free block of about 100–110 KB**. Phase 0.3 measures the real numbers.
+- **Current target:** 2 MiB PSRAM for LVGL objects and GIF decoder allocations; two 240×24 RGB565 DMA buffers remain explicitly internal (23,040 bytes). Network stacks/tasks and the fixed JSON/WS reserves remain unchanged; PSRAM is not a replacement for internal DMA memory.
+- **SPI transfer behavior (verified source, 2026-11-08):** no application 32 KiB cap. ESP-IDF 5.5.5 validates transfers against the configured bus maximum; the accepted native SPI2 spike sets this to one **11,520-byte** strip. Retain two independent 240×24 RGB565 strips; extra PSRAM is for LVGL/GIF allocations, not larger internal buffers or full-frame transfers. Historical TFT_eSPI 2.5.43 requested a 65,536-byte bus maximum but chunked images above 16,384 pixels into blocking 1,024-pixel writes before queuing the remainder: library behavior, not a fixed IDF restriction, and no longer the active HAL.
+- Measure internal and PSRAM total/free/largest/minimum heap independently, plus internal DMA free/largest blocks and completed-refresh FPS. Verify detected flash/PSRAM sizes at boot. A PSRAM allocation failure must not silently fall back to internal memory.
+- **Measured S3 baseline:** network-ready internal free **203,499 bytes**, largest **131,072**; PSRAM free **2,090,348**, largest **2,064,384**. Under GIF/HTTP workload PSRAM largest remains **1,966,080**; final internal minimum **160,768**. See §10 and `CREALITY_WEBSOCKET_IMPL.md` for sample ranges and workload conditions.
 - LVGL 8 GIF decoder (16-bit color) RAM: `4·W·H` (canvas and frame) plus a transient LZW table of up to ~24 KB.
-- The tested direct-SPI clock project uses a full 240×240 RGB565 framebuffer (115,200 bytes). **Do not copy that buffer into KNOMI**; keep the two 240×24-line DMA draw buffers in B2 for LVGL on the no-PSRAM target.
+- The tested direct-SPI clock project uses a full 240×240 RGB565 framebuffer (115,200 bytes). **Do not copy that buffer into KNOMI**; keep the two internal 240×24-line DMA draw buffers in B2 on the S3 too.
 - Assets (re-measured 2026-10-19 from the GIF streams inside `src/gif/*.c`). KB = 1024 bytes. All of them loop forever, and the C arrays are `LV_IMG_CF_RAW_CHROMA_KEYED`. **Green variants are used wherever one exists** (§2). `gif_wifi` (white, neutral) and `gif_print_ok` (already green) have no `_green` file and are kept as they are.
 
 | GIF (used) | Replaces | Size | Frames × delay = loop | Flash | RAM (4·W·H) | Use |
@@ -109,18 +115,20 @@ The tested ESP-IDF network-clock reference project confirms the current 240×240
 | gif_wifi | – (kept) | 150×100 | 366 × 30 ms = 10.98 s | 35.6 KB | 58.6 KB | setup (S1) |
 | gif_homing_green | gif_homing | 96×96 | 25 × 40 ms = 1.00 s | 43.1 KB | 36.0 KB | processing: homing (S6) |
 | gif_probing_green | gif_probing | 155×123 | 30 × 40 ms = 1.20 s | 29.1 KB | 74.5 KB | self-test (S7) |
-| gif_qgling_green | gif_qgling | 207×104 | 200 × 40 ms = 8.00 s | 86.1 KB | 84.1 KB | self-test step 4 "Auto-leveling" (S7) |
+| gif_qgling_green | gif_qgling | 207×104 | 200 × 40 ms = 8.00 s | 86.1 KB | 84.1 KB | self-test step 5 "Bed leveling" (S7) |
 | gif_heated_green | gif_heated | 176×82 | 80 × 30 ms = 2.40 s | 7.5 KB | 56.4 KB | heating finished → printing (S8) |
 | gif_print_green | gif_print | 160×90 | 67 × 40 ms + 1 × 360 ms = 3.04 s | 45.7 KB | 56.2 KB | printing interstitial (S8) |
 | gif_print_ok | – (kept) | 144×144 | 31 frames (mostly 30 ms) = 1.80 s | 6.9 KB | 81.0 KB | completed (S10) |
 | gif_printed_green | gif_printed | 177×70 | 60 × 30 ms = 1.80 s | 82.6 KB | 48.4 KB | completed (S10) |
-| **Total** | | | | **≈ 448 KB** | max **87.9 KB** | |
+| **Total** | | | | **447.46 KiB (458,197 bytes)** | max **87.9 KiB (90,000 bytes)** | |
 
   Comment, plain-text, and XMP application extensions were stripped from these GIFs with `tools/strip_gif_meta.py` (≈ 1 KB each; `NETSCAPE2.0` is kept because LVGL's gifdec stops after one pass without it), then the C files were regenerated with `tools/bin2c.py`.
 
   Compared with the previous asset set, the change is **+85 KB flash** (`gif_creality` and `gif_qgling_green` added; `gif_homing_green` is 85 KB smaller than `gif_homing`). The peak RAM does not change: `gif_creality` has the same 150×150 canvas as the `gif_voron` it replaces, and the same peak as `gif_print`.
 - Deleted: `gif_voron` (Voron branding) and the original red `gif_heated`, `gif_homing`, `gif_print`, `gif_printed`, `gif_probing`, `gif_qgling`, and `gif_standby` (replaced by their `_green` variants).
-- **Rule:** at most one GIF is decoded at any time, and **max canvas ≤ 90 KB**. After full init (Wi-Fi, web server, and WS connected), the largest free block must be ≥ 1.25 × the largest canvas (**≥ 110 KB** for the 87.9 KB canvas of `gif_creality`). `gif_creality` is in the idle rotation, so it is loaded often. Phase 0.3 decides whether to downscale it.
+- **Rule:** at most one GIF is decoded at any time, and **max canvas ≤ 90 KB**. After full init (Wi-Fi, web server, and WS connected), the largest free block in the **actual GIF allocation heap (PSRAM)** must be ≥ 1.25 × the largest canvas (**112,500 bytes** for the 90,000-byte estimate of `gif_creality`). Check before first load and repeated swaps under HTTP traffic; track internal/DMA headroom separately. The S3 run passes this margin with the original 150×150 Creality asset; no downscale is required by this gate.
+- **Phase 0.5 verification:** `python tools/check_assets.py --compile` checks all ten source GIFs against their C arrays, decodes every frame, verifies descriptors/looping/budgets, checks the four fonts and compiles all 14 C assets against the configured S3/LVGL flags. Source GIFs already match, so no regeneration or downscaling was needed. See `tools/fonts.md` for pinned tools and exact commands; all-asset device playback remains separate.
+- **Original heater art retained (2026-11-10):** keep the four native gray/red heating images (**167,652 payload bytes**) plus the small nozzle/bed icons (**4,683 bytes**), total **172,335 bytes**. This static-image payload is additional to the GIF-only budget, not a new framebuffer or measured runtime allocation. Combined GIF/six-image payload is **630,532 bytes**, excluding fonts/code/descriptors. Recheck full-firmware flash after integration; avoid copying the 172,800-byte decorative background when close primitives can reproduce it after visual comparison. See `docs/SCREENS.md` for exact dimensions and reference-only assets.
 
 ## 4. Target architecture
 
@@ -128,7 +136,7 @@ The tested ESP-IDF network-clock reference project confirms the current 240×240
                     core 0                                   core 1
  ┌────────────────────────────────────────────┐   ┌────────────────────────────┐
  │ net_task (prio 5)                          │   │ ui_task (prio 4)           │
- │  WifiManager  (STA/AP state machine, mDNS, │   │  DisplayHal (TFT_eSPI DMA) │
+ │  WifiManager  (STA/AP state machine, mDNS, │   │  DisplayHal (IDF SPI2 DMA) │
  │                captive DNS, NTP)           │   │  LVGL 8.4 lv_timer_handler │
  │  CrealityClient (own streaming WS client,  │   │  UiManager (screen FSM,    │
  │                skips >4 KB frames, watch-  │   │   pages, timeouts, button) │
@@ -161,7 +169,7 @@ src/
   main.cpp                    boot: serial, settings, tasks
   app_config.h                FW_VERSION, defaults (AP SSID prefix, port 9999, timeouts)
   board_pins.h                TFT + BOOT pins
-  tft_setup.h                 TFT_eSPI user setup (picked up via __has_include)
+  tft_setup.h                 panel pins, dimensions, SPI frequency for native HAL
   settings/settings.{h,cpp}   NVS Preferences, validation, mutex
   net/wifi_manager.{h,cpp}
   net/web_portal.{h,cpp}
@@ -174,12 +182,13 @@ src/
   ui/assets/gif/*.c           kept GIFs (§3.3; `_green` file and symbol names unchanged)
   ui/assets/fonts/*.c         regenerated 4 bpp fonts
   ui/assets/icons/*.c         small nozzle/bed/chamber icons (≤ 32 px)
+  ui/assets/images/*.c        original gray/red heater artwork (large native images; separately budgeted)
 lib/Button/                   kept (GPIO0)
 lib/creality_model/           PrinterModel: merge, coercion, state derivation (no Arduino deps)
 lib/ws_stream/                RFC 6455 client-side frame parser/encoder (no Arduino deps) + thin WiFiClient adapter
 web/index.html                editable source of the settings page
 test/test_creality_model/     Unity tests (native)
-test/fixtures/*.jsonl         captured printer traces; *.expected.txt replay baselines are to be added (Phase 0.4 / 4.3)
+test/fixtures/*.jsonl         14 captured printer traces with reviewed sibling *.expected.txt sequences (Phase 0.4 / 4.3)
 tools/WebSocketLogger.html    ✅ browser capture tool: records timed WS events + markers → capture file (§4.2)
 tools/convert_capture.py      legacy owner captures ("MESSAGE <- {json}" / "> RECEIVED: {json}") → capture file without timing (§4.2)
 tools/derive_prototype.py     ✅ reference implementation of the state rules (replays capture files and legacy captures)
@@ -248,17 +257,19 @@ Rules:
 | Component | Current | Target (pinned) | Notes |
 |---|---|---|---|
 | PlatformIO platform | `espressif32@6.4.0` (Arduino 2.0.x) | **pioarduino `55.03.312`** (Arduino-ESP32 **3.3.12**, ESP-IDF 5.5.5) | The official `platformio/espressif32` (v7.1.3) still ships Arduino 2.0.17. **Fallback:** `espressif32@7.1.3` if Phase 0.1 fails. |
-| Board | `esp32r8` (custom, PSRAM) | `wemos_d1_mini32` (4 MB, DIO, 40 MHz) | Delete `buildroot/boards/` |
+| Board | Legacy `esp32r8` / `esp32s3r8` profiles | ESP32-S3-Zero, 4 MB flash, 2 MB quad-SPI PSRAM | IDF spike first; validate exact full-firmware board overrides before migration |
 | LVGL | 8.3.7 + manual patch | **8.4.0** | Delete `lv_disp_(bugfix_backup).c` |
-| TFT_eSPI | 2.5.0 | **2.5.43** | Core 3.x compatibility is verified in Phase 0.1. **Fallback:** LovyanGFX 1.2.x (same HAL interface). |
+| Display HAL | TFT_eSPI 2.5.0; historical spike 2.5.43 | **Native ESP-IDF SPI2 / GC9A01** | S3 spike rendering accepted using owner's working net-clock reset/init sequence and queued DMA strips. TFT_eSPI remains historical/unused in spike; full-firmware build migration is separate. |
 | ArduinoJson | ^6.19.4 | **7.4.3** | Use `JsonDocument` with a `DeserializationOption::Filter` |
-| WebSocket client | – (HTTPClient) | **Own minimal streaming client** (`lib/ws_stream`, ≈ 400 LOC) over `WiFiClient` | Checked-in K1 Max 1.3.5.19 fixtures contain unsolicited 23.4 KB `historyList` and up to 28.7 KB `elapseVideoList` frames around job events. An earlier capture showed a 78 KB `retGcodeFileInfo2` file list after connect, but this was not reproduced in the fixtures and must not be assumed on every connection. `links2004/WebSockets` 2.7.2 closes the connection (1009) above `WEBSOCKETS_MAX_DATA_SIZE` (15 KB default) and `malloc`s whole frames. Our client uses a static 4 KB buffer and stream-discards larger frames (protocol doc §4). |
+| WebSocket client | – (HTTPClient) | **Own minimal streaming client** (`lib/ws_stream`, ≈ 400 LOC) over `WiFiClient` | Checked-in K1 Max 1.3.5.19 fixtures contain unsolicited 23.4 KB `historyList`, up to 28.7 KB `elapseVideoList`, and two **79,463-byte `retGcodeFileInfo2`** frames during November 10 boot, before `connect:1`. File-list pushes are not observed on every connection. `links2004/WebSockets` 2.7.2 closes the connection (1009) above `WEBSOCKETS_MAX_DATA_SIZE` (15 KB default) and `malloc`s whole frames. Our client uses a static 4 KB buffer and stream-discards larger frames (protocol doc §4). |
 | Web server | ottowinter ESPAsyncWebServer-esphome 3.0 | **ESP32Async/ESPAsyncWebServer 3.12.1** + **ESP32Async/AsyncTCP 3.5.0** | Maintained fork (3.12.1 requires AsyncTCP ^3.5.0) |
 | OTA | bigtreetech/AsyncElegantOTA | **removed** | USB-only decision |
 | LIS2DW12, Adafruit_SHT4X, CST816S | v2 only | **removed** | |
 | Core libraries used | – | WiFi, WiFiClient, DNSServer, ESPmDNS, Preferences, esp_sntp, mbedtls (SHA-1/base64 for the WS handshake) | |
 
 ### 5.1 `platformio.ini` (target draft)
+
+The generic S3 board and memory/USB overrides below are **not yet full-firmware build-validated**. They must match the accepted IDF spike's 4 MiB flash/2 MiB quad-SPI PSRAM configuration before migration; do not use the board profile's default flash capacity or octal PSRAM settings.
 
 ```ini
 [platformio]
@@ -267,15 +278,18 @@ default_envs = knomi
 [common]
 lib_deps =
     lvgl/lvgl@8.4.0
-    bodmer/TFT_eSPI@2.5.43
     bblanchon/ArduinoJson@7.4.3
     ESP32Async/AsyncTCP@3.5.0
     ESP32Async/ESPAsyncWebServer@3.12.1
 
 [env:knomi]
 platform  = https://github.com/pioarduino/platform-espressif32/releases/download/55.03.312/platform-espressif32.zip
-board     = wemos_d1_mini32
+board     = esp32-s3-devkitc-1
 framework = arduino
+board_upload.flash_size = 4MB
+board_build.arduino.memory_type = qio_qspi
+board_build.flash_mode = dio
+board_build.f_flash = 40000000L
 board_build.partitions = partitions_4MB.csv
 monitor_speed   = 115200
 monitor_filters = esp32_exception_decoder
@@ -284,6 +298,9 @@ lib_deps  = ${common.lib_deps}
 build_flags =
     -Iinclude -Isrc
     -DLV_CONF_INCLUDE_SIMPLE
+    -DBOARD_HAS_PSRAM
+    -DARDUINO_USB_MODE=1
+    -DARDUINO_USB_CDC_ON_BOOT=1
     -DCORE_DEBUG_LEVEL=1
     -DKNOMI_LOG_LEVEL=2
 
@@ -304,11 +321,11 @@ build_flags = -std=gnu++17
 
 | Setting | Value | Reason |
 |---|---|---|
-| `LV_MEM_CUSTOM` | 1, with `malloc`/`free`/`realloc` | No PSRAM (B1). The GIF canvas cannot fit in a static LVGL pool. |
+| `LV_MEM_CUSTOM` | 1; `heap_caps_malloc` / `heap_caps_realloc` with `MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT`, `heap_caps_free` | Put LVGL/GIF allocations in verified S3 PSRAM, preserve internal DMA/network heap (B1). |
 | `LV_COLOR_DEPTH` / `LV_COLOR_16_SWAP` | 16 / **1** | DMA flush pushes pre-swapped pixels (remove the SquareLine `SWAP 0` check) |
 | `LV_DISP_DEF_REFR_PERIOD` | 20 ms | Smooth GIFs without starving Wi-Fi |
 | `LV_USE_GIF`, `LV_USE_QRCODE` | 1 | Setup QR codes |
-| Widgets | keep label, arc, img, bar, spinner, line, canvas (QR); **disable** roller, meter, keyboard, chart, calendar, colorwheel, imgbtn, msgbox, tabview, tileview, win, list, menu, span, spinbox, table, textarea | Flash and RAM |
+| Widgets | keep label, arc, img, bar, spinner, line, canvas (QR); retain slider only if needed as a non-interactive image-backed heater fill; **disable** roller, meter, keyboard, chart, calendar, colorwheel, imgbtn, msgbox, tabview, tileview, win, list, menu, span, spinbox, table, textarea | Preserve read-only visuals without printer-control/touch widgets |
 | Themes | default only (disable basic/mono) | |
 | Built-in fonts | Montserrat 16 (for `LV_SYMBOL_*` glyphs) | Inter fonts handle text |
 | `LV_USE_LOG` | 0 (release) / WARN in debug | |
@@ -363,14 +380,16 @@ Behavior:
 
 General rules:
 
-- **Safe area:** text stays inside a centered 170×170 square; arcs use the outer ring (r = 112–120).
+- **Visual reference:** `docs/SCREENS.md` records original source geometry and runtime changes. Preserve recognizable layouts rather than replacing them with generic bars/rows. New dense text defaults to the centered 170×170 safe area; original centered heater-value anchors require round-mask validation rather than a blanket inset. Printing uses the original 212/230/240 px concentric rings, not a single forced outer-radius geometry.
 - **Fonts** (Inter SemiBold, 4 bpp, regenerated):
-  - 14 and 18 px: ASCII + Latin-1 + Latin Ext-A, so that accented filenames render
-  - 24 px: ASCII
-  - 48 px: digits, `% : ° C`, and space
+  - 14 and 18 px: printable ASCII + Latin-1 + Latin Ext-A, so that accented filenames render; upstream Inter excludes U+00AD soft hyphen and deprecated U+0149 (documented in `tools/fonts.md`)
+  - 24 px: printable ASCII plus degree and Celsius signs
+  - 48 px: digits, `% : ° C`, space, and the Celsius sign retained for compatibility
   - LVGL Montserrat 16 for symbols
 - **Colors:**
   - KNOMI green `#329A40` (accent and progress; matches the green GIFs)
+  - original red pixels for nozzle/bed **heating-fill images**, with gray base art; exempt from all theme/GIF palette conversion. This preserves heating graphics only, not a new temperature-threshold/cooldown warning
+  - original warm yellow `#FFD164` for emphasized actual temperatures and large progress numerals; preserve the KNOMI numeric hierarchy
   - amber `#F0A020` (paused)
   - light green `#5DA910` (completed; with the ✓ symbol so that it stays distinct from the accent)
   - red `#E53935` (error)
@@ -399,7 +418,7 @@ General rules:
 | `PAUSED` | S8 with paused styling | State change |
 | `STOPPED` | S9 Stopped | `result_min` elapsed or state change |
 | `COMPLETED` | S10 Completed sequence | `result_min` elapsed or state change |
-| `ERROR` | S11 Error | errcode = 0, a job becomes active, or the button acknowledges it |
+| `ERROR` | S11 Error, including while paused/printing | Printer clears errcode to 0, or link/readiness changes; job activity/local acknowledgement alone never suppresses ERROR |
 | Button click | S12 Info overlay (10 s) | Timeout or click |
 
 ### 8.2 Screens
@@ -412,20 +431,20 @@ General rules:
 | S3 Wi-Fi lost | Wi-Fi symbol (grey), "Wi-Fi lost – retrying", SSID, elapsed time. After 5 min the AP starts **in addition** (AP+STA) so the user can reconfigure; the saved mode is **not** changed (fixes D5). |
 | S4a Configure printer | "Open http://<ip>" and "or http://<hostname>.local", plus a QR code of the URL |
 | S4b Printer offline | Spinner (red after the 3rd failure), "Printer <host>:<port>", "Connecting… / Unreachable, retry in N s", own IP (small) |
-| S5 Idle | Page A: `gif_creality` (Creality logo). Page B: `gif_standby_green`. Page C: three temperature rows (nozzle, bed, chamber) with icons, plus a line "Last: <file> ✓/✕" if there is a stale result. Pages rotate every `page_secs`; A → B swaps the source of the single GIF object. **If any target > 0 while idle** (manual preheat, or the post-print nozzle heating seen on the K1 Max), page C is shown permanently with the label "Heating". |
-| S6 Processing | Top label with the sub-label (Heating / Homing / Bed leveling / Preparing / Stopping… / Resuming…). Center: `gif_homing_green` when homing, otherwise two horizontal bars (nozzle, bed) showing actual/target, with numbers. |
-| S7 Self-test | `gif_probing_green` in the center, switching to `gif_qgling_green` while `withSelfTest` = 4 ("Auto-leveling"; the step name is still unverified, protocol doc §5.3). Label "Self-test · step N" plus the step name (protocol doc §5.3: Preparing / Heating / Nozzle cleaning / Auto-leveling / Calibrating), and nozzle/bed temperatures (small). `withSelfTest` is a **step number** (1–5, then 100), not a percentage. The outer ring shows 5 step segments, with completed steps filled. |
-| S8 Printing | The outer progress arc (`printProgress`) persists on all pages. P1: big `57%`, "1h 23m left" (`--` while `printLeftTime` is 0), status word "Printing" (or the transitional "Pausing / stopping…"). P2: nozzle/bed/chamber actual/target. P3: "Layer 57 / 240", "Elapsed 2h 01m", filename (basename, circular scrolling), optional "Fan 100 % · Speed 100 %". On the processing → printing transition, `gif_heated_green` plays for ≈ 7 s (3 loops of 2.4 s), then `gif_print_green` plays once (3.0 s) as an interstitial. **Paused:** amber arc, status word "Paused", rotation continues. **Error badge** (red dot + code) at the top if errcode ≠ 0. |
+| S5 Idle | Page A: `gif_creality` (Creality logo). Page B: `gif_standby_green`. Page C: read-only adaptation of the original paired nozzle/bed panels, preserving icons and actual-over-target hierarchy; use the removed Preheat-button area for chamber data if the render fits, plus "Last: <file> ✓/✕" when applicable. Pages rotate every `page_secs`; A → B swaps the source of the single GIF object. **If any target > 0 while idle**, keep page C visible. Label "Nozzle heating" or "Bed heating" until that heater first reaches target, nozzle first; after both reach target keep temperatures visible without a false heating label on later dips. No touch/preheat controls. |
+| S6 Processing | Nozzle/bed heating uses the original centered large gray/red icon-fill presentation: 24 px actual above and target below, native asset scale, selected heater first. This supersedes the generic two-bar heating draft. Red fill is clamped actual/target, never recolored green; unknown/zero target is handled safely. For Homing/Bed leveling/Input shaping/Preparing/Stopping/Resuming, keep the operation identifiable and expose the selected heater without losing step/operation information; combined layout requires preview per `docs/SCREENS.md`. Use `gif_homing_green` for homing. Idle `deviceState:3/4/7` preempts and clears a stale result latch even when the previous filename/progress 100 remain. |
+| S7 Self-test | `gif_probing_green` in the center, switching to `gif_qgling_green` while `withSelfTest` = 5 ("Bed leveling"). Label "Self-test · step N" plus the name in protocol doc §5.3, the selected pending heater (nozzle first), and nozzle/bed temperatures (small). `withSelfTest` is a **step number** (1–5, then 100), not a percentage. The outer ring shows 5 step segments, with completed steps filled. |
+| S8 Printing | Preserve the original 48 px warm-yellow percentage, 212 px / 20 px progress arc and 230/240 px decorative rings; theme arcs green. The sensor-free v1 runtime centers the percentage (generated v2 y=50 is not the whole reference). P1 adds compact **remaining and elapsed time** below the percentage instead of X/Y/Z sensor bars, plus job status/selected pending heater; exact spacing follows the render guide. P2 adapts original nozzle/bed temperature panels with chamber. P3 shows layer/total, filename and optional fan/speed. Keep auto-rotation and the progress frame on data pages. On processing → printing, the existing heated/print GIF interstitial sequence remains. **Paused:** same composition with amber state styling. **Any nonzero error switches to S11**, even while paused/printing. |
 | S9 Stopped | Grey ring, ✕ symbol, "Print stopped" (or "Print failed" for state 3), filename, "at 57 %", elapsed time |
 | S10 Completed | `gif_print_ok` (1.8 s, one loop) → `gif_printed_green` (≈ 7 s, 4 loops of 1.8 s) → summary: light-green ring, ✓, "Completed", filename, total time. On the summary, the button double-click replays the animation. |
-| S11 Error | Red ring, ⚠ symbol, "Printer error", `code 500 · key 121`, and the printer model. A click acknowledges the error (remembered until the errcode changes). |
+| S11 Error | Red ring, ⚠ symbol, "Printer error", code/key, and printer model. Takes precedence over all ready-printer job/calibration states. A click marks the error seen locally but leaves logical ERROR and the fault visible while errcode is nonzero; it never clears the printer's error or sends a command. Captures prove printer-side clearing during stop and manual recovery/resume, not a universal clearing rule. |
 | S12 Info | Device IP, hostname, RSSI, printer host:port, link state, printer model and firmware ("update available 1.3.5.22" from `linuxOtaInfo`, if pushed), FW version, free heap / largest block |
 
 ### 8.3 Button (GPIO0, active low, internal pull-up)
 
 | Action | Effect |
 |---|---|
-| Click | Show/hide S12 Info; acknowledge an error on S11 |
+| Click | Show/hide S12 Info; on S11 mark the error seen locally without clearing/suppressing active ERROR |
 | Double-click | Next page on rotating screens (S5, S8, S1); this pauses auto-rotation for 30 s |
 | Hold ≥ 5 s | The screen shows a countdown. On release: **start setup mode** (AP + captive portal). Settings are kept. |
 | Hold ≥ 15 s | **Factory reset** (erase NVS, reboot). The countdown screen turns red after 5 s. |
@@ -512,20 +531,24 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 
 ### Phase 0: Spikes and data capture (de-risking)
 
+**S3 acceptance criteria:** build/COM8 flash, native USB boot logs, detected 4 MiB flash/2 MiB PSRAM and memory test, internal/PSRAM/DMA heap and FPS with Wi-Fi/web/WS active, five diagnostic requests, and repeated GIF swaps using the original assets. Require PSRAM largest block ≥112,500 bytes before Creality loads, stable headroom with no decoder failure/reset, and owner-observed RGB/orientation, animations, ten-minute playback, and cold boots. These criteria passed on 2026-11-08. Long-term soak, other assets and oversized-message coverage remain separate gates.
+
+**Accepted S3 results (native IDF repair):** application **1,269,200 bytes**, COM8 hashes verified; 4 MiB flash, 2 MiB PSRAM at 40 MHz with passing memory test, 2 cores / 240 MHz. Replaced failing TFT_eSPI with native SPI2/software CS, using the owner's exact-wiring net-clock reset/init sequence and queued 11,520-byte DMA strips. Serial evidence reaches **1,554.7 s (~25.9 min)**, one boot/connection attempt, 369 messages, no panic/watchdog/decoder failure or JSON errors. Five HTTP requests passed; PSRAM largest block 2,064,384 before first GIF / 1,966,080 under GIF/HTTP workload; final internal minimum 160,768. Creality ~9 FPS, standby ~32 FPS. Owner confirms correct rendering, continuous stopwatch, **ten-minute playback and repeated cold boots pass**. **Phase 0.3 S3 rerun passed**; other assets, 24-hour soak and oversized-frame coverage remain separate gates. Earlier failed TFT_eSPI results are preserved as history in `CREALITY_WEBSOCKET_IMPL.md` and `docs/ARCHITECTURE.md`; no later phase has been started.
+
 | # | Task | Size | Exit criteria |
 |---|---|---|---|
-| 0.1 | **Completed and owner-accepted, 2026-11-06:** isolated ESP-IDF 5.5.5 + Arduino component 3.3.12 + TFT_eSPI 2.5.43 + LVGL 8.4.0 spike in `spikes/display`, ESP32 4 MiB/no PSRAM, **serial-debug wiring on COM7**. Two 240×24 DMA buffers; RGB/orientation pattern, one GIF object alternating idle GIFs, and continuous playback stopwatch. Heap/FPS logged every 5 s. Existing firmware source is preserved. | M | **Passed:** build/flash, colors, orientation, inversion, both animations, stopwatch, 10-minute stability, and manual reset. Owner confirms every device test passed as expected. Serial evidence covers 111 s; longer-run acceptance is owner-observed. Display-only baseline does not close Phase 0.3 or later phases. Results are in `CREALITY_WEBSOCKET_IMPL.md`; architecture summary remains follow-up documentation. |
-| 0.2 | **Completed by owner decision, 2026-11-06:** retain display SPI at **40 MHz**, validated by the accepted Phase 0.1 GIF stability run. No speed increase now. | S | Accepted 10-minute playback at 40 MHz without reported artifacts. Higher speeds (e.g. 80 MHz) remain untested, optional future improvements only if needed; test stability before adopting any increase. |
-| 0.3 | Heap budget: Wi-Fi STA + AsyncWebServer + WS client connected to the printer + one GIF; log `heap_caps_get_free_size`/`get_largest_free_block`/`get_minimum_free_size` every 5 s | M | Numbers recorded in `docs/ARCHITECTURE.md`. Decide on downscaling `gif_creality` (87.9 KB canvas) and any other GIF that fails the measured budget; `gif_print_green` is 56.2 KB (§3.3). |
-| 0.4 | Protocol capture and fixture baseline. **K1 Max evidence now includes 11 checked-in 1.3.5.19 JSONL captures** plus separate legacy owner captures (print scenarios on 1.3.3.x; idle on 1.3.5.19).<br>• Inventory the checked-in captures and generate reviewed `*.expected.txt` replay baselines with `tools/derive_prototype.py`; protocol doc §5.5 describes legacy sequences and is not the expected output for these files.<br>• Convert legacy owner captures with `tools/convert_capture.py` only when available and needed for explicit 1.3.3.x compatibility coverage; they are not currently checked in.<br>• Record further captures with **`tools/WebSocketLogger.html`** (§4.2): keep auto-reconnect/keep-awake on, mark printer actions, record screen text (especially self-test labels), and note other connected clients.<br>• Remaining K1 Max evidence gaps: placeholder dump after boot, when/if `retGcodeFileInfo2` is pushed, and a naturally occurring nonzero `errcode`. The existing `error` fixture's simulated recovery/runout flows keep `errcode:0`; do not force a fault only to test it.<br>• Capture the K2 family scenarios (and K1/K1C if available); retain unknown results as explicit open points in protocol doc §7. | M | All checked-in fixtures have reviewed replay baselines; current K1 Max print/pause/stop/connect-mid-print paths are covered. ≥ 1 K2 trace per supported scenario where available. Every new capture has timing and markers. Remaining protocol questions are answered or explicitly deferred in §7. |
-| 0.5 | Asset prep: generate C arrays with `tools/bin2c.py`; generate 4 bpp fonts (`tools/fonts.md`) | S | Assets compile; RAM per GIF ≤ 90 KB; GIF flash total ≤ 470 KB (§3.3) |
+| 0.1 | **S3 display validation passed, 2026-11-08:** isolated ESP-IDF 5.5.5 + Arduino 3.3.12 + LVGL 8.4.0/native SPI2 spike on final GPIO1–5 wiring, COM8. Two internal 240×24 DMA buffers, PSRAM-backed LVGL/GIF, one GIF object and continuous stopwatch. Validated as part of the network-loaded S3 run, not a separate display-only benchmark. | M | **Passed:** verified build/flash, colors/orientation, both animations, stopwatch, owner-observed ten-minute playback and repeated cold boots. Serial evidence reaches 1,554.7 s; no separate cold-boot trace is claimed. |
+| 0.2 | **40 MHz accepted on S3, 2026-11-08.** Retain the validated native SPI2 configuration; no speed increase now. | S | Owner-observed ten-minute playback without reported artifacts. Higher speeds remain untested and optional; test stability before adopting any increase. |
+| 0.3 | **S3 network-loaded validation passed, 2026-11-08:** Wi-Fi STA, ESPAsyncWebServer 3.12.1 / AsyncTCP 3.5.0, read-only WS to **192.168.0.55:9999**, one GIF and 40 MHz SPI. ArduinoJson 7.4.3 static 8 KiB arena; 4 KiB WS buffer. Menuconfig credentials; COM8 flash verified. Captured ~25.9 min with 369 messages, one connection attempt, zero JSON errors; five HTTP requests passed. | M | **Margin passed:** PSRAM largest 2,064,384 before first GIF / 1,966,080 under GIF/HTTP workload vs 112,500 required. Original assets retained; final internal minimum 160,768. Rendering, ten-minute playback and repeated cold boots passed. Other assets, 24-hour soak and oversized frames remain separate validation; production client/model hardening remains Phase 4. |
+| 0.4 | **Completed, extended and revalidated 2026-11-10:** 14 K1 Max 1.3.5.19 captures/sibling baselines are owner-approved. New captures verify an error present on initial connect, clearing before resume, completion/raw idle/menu leveling, boot `connect:0 -> 1`, two unsolicited 79,463-byte file lists, idle input shaping and 36-point leveling. Revised Python prototype: first-reach nozzle/bed heating with nozzle priority, calibration clears stale result latch, and every valid nonzero error overrides paused/printing. | M | **14/14 baselines match fresh replay; 16 Python regression tests pass.** Timing evidence and the owner's early completion-OK press are recorded separately; button effects/universal timeout remain unresolved. No firmware flash, production C++ implementation, fake printer or live oversized-frame device test. Other gaps remain in protocol doc §7. |
+| 0.5 | **Completed 2026-11-09:** verified all ten selected GIF sources already match their C arrays; regenerated 14/18/24/48 px Inter SemiBold fonts at **4 bpp**, preserving symbols. Pinned Inter 4.1 source/OFL, converter 1.5.3, glyph ranges/exclusions and regeneration commands in `tools/fonts.md`; repeatable validation in `tools/check_assets.py`. | S | **Passed:** all GIF frames decode/loop; GIF payload **458,197 bytes (447.46 KiB) ≤ 470 KiB**, maximum canvas/frame estimate **90,000 bytes**. Four fonts pass hash/4-bpp/glyph checks; **14/14 C assets compile-check** with accepted S3/LVGL flags. No new firmware image, flash or all-asset physical playback is claimed; UI integration and soak remain later work. |
 
 ### Phase 1: Cleanup (remove everything not required)
 
 | # | Task | Size |
 |---|---|---|
 | 1.1 | **Superseded by owner decision 2026-11-06:** retain current branch; do not create a branch or tag | S |
-| 1.2 | Delete per the inventory in §10.1 | S |
+| 1.2 | First satisfy `docs/SCREENS.md` preservation gate: retain required art, render selected original screens or obtain photos, save clearly labeled **original** references, and resolve retain/redraw strategy. Then delete per §10.1; do not remove generated evidence before it is preserved. Target comparison renders follow in Phase 5, not as a prerequisite for cleanup | S |
 | 1.3 | Temporary `main.cpp` that boots the display only; build green | S |
 
 #### 10.1 Removal and keep inventory
@@ -537,9 +560,11 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | `src/lis2dw12.cpp`, `src/sht4x.cpp`, `lib/CST816S/` | delete | v2-only sensors and touch |
 | `src/lvgl_hal.{h,cpp}` | rewrite → `ui/display_hal` | Remove touch, AW9346 backlight pulse code, and the PSRAM buffer |
 | `src/lvgl_usr.{h,cpp}` | rewrite → `ui/ui_manager` | Extrude/roller logic not needed |
-| `src/ui/` (SquareLine output: `ui.c/h`, `ui_helpers`, `components/`, `screens/*`, `images/*`, `CMakeLists.txt`, `filelist.txt`) | delete | Control screens; the SquareLine project file is not in the repo, so the generated code cannot be regenerated. New screens are hand-written. |
-| `src/ui/images/ui_img_nozzle_png.c`, `ui_img_bed_png.c` | **keep → `ui/assets/icons/`** (check size ≤ 40 px) | Small icons, reused |
-| `src/ui/fonts/*` | replace with regenerated 4 bpp fonts | B7 |
+| `src/ui/` (SquareLine output: `ui.c/h`, `ui_helpers`, `components/`, `screens/*`, `images/*`, `CMakeLists.txt`, `filelist.txt`) | delete **only after** reference/render preservation and moving the explicit keep assets/fonts below | Missing project does not make the generated visual evidence useless. New screens are hand-written to the measured guide; printer-control/touch callbacks are not ported |
+| `src/ui/images/ui_img_nozzle_png.c`, `ui_img_bed_png.c` | **keep → `ui/assets/icons/`** (24×30 and 29×29) | Small icons; 4,683 payload bytes combined |
+| `src/ui/images/ui_img_nozzle_gray_png.c`, `ui_img_nozzle_red_png.c`, `ui_img_bed_gray_png.c`, `ui_img_bed_red_png.c` | **keep → `ui/assets/images/`**, native dimensions and red pixels unchanged | Essential original heating visuals; 167,652 payload bytes combined, not subject to the small-icon limit |
+| Other original framing/background/network/notification images | Preserve exported reference images; decide retain versus close native-drawn equivalent with comparison renders **before deletion** | Avoid indiscriminate removal or copying large decorative bitmaps; measured candidates in `docs/SCREENS.md` |
+| `src/ui/fonts/*` | Keep/move regenerated 4-bpp Inter 14/18/24/48; remove unused legacy fonts after reference preservation | Preserve typography hierarchy without restoring the missing SquareLine project |
 | `src/ui_overlay/*` | delete (logic re-implemented in `ui_manager`/screens) | Moonraker-, touch-, and control-specific |
 | `src/gif/gif_voron.c` | delete → replaced by `gif_creality.c` | Voron branding (§2) |
 | `src/gif/gif_heated.c`, `gif_homing.c`, `gif_print.c`, `gif_printed.c`, `gif_probing.c`, `gif_qgling.c`, `gif_standby.c` | delete | Replaced by their `_green` variants (§2) |
@@ -560,8 +585,8 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | # | Task | Size |
 |---|---|---|
 | 2.1 | `platformio.ini` per §5.1; `partitions_4MB.csv` per §6; `lv_conf.h` per §5.2 | S |
-| 2.2 | `board_pins.h`, `tft_setup.h` (GC9A01; production SCK16/MOSI17/DC21/CS22/RST3 by default; serial-debug SCK18/MOSI23/DC26/CS5/RST33; no MISO or BL; SPI frequency from Phase 0.2, color order and inversion from Phase 0.1). The isolated Phase 0.1 spike uses serial-debug wiring only. | S |
-| 2.3 | `display_hal`: `tft.begin()`, `initDMA()`, two 240×24 DMA buffers (`heap_caps_malloc(MALLOC_CAP_DMA)`), flush via `pushImageDMA`, rotation from settings (`tft.setRotation`); use the tested production pin map by default and the alternate map only for serial debugging | M |
+| 2.2 | `board_pins.h`, display setup (GC9A01; native IDF SPI2/software CS; one map SCK1/MOSI2/DC3/CS4/RST5; native USB logging; no MISO/BL; accepted 40 MHz/reset/init sequence, MADCTL `0x48`, pixel format `0x55`, inversion on). | S |
+| 2.3 | `display_hal`: native IDF initialization, two internal 240×24 DMA buffers, queued SPI transactions; hold CS through command/pixels, release only after completion and then `lv_disp_flush_ready`. Initialize/verify PSRAM before LVGL. Add settings-based rotation with validated panel orientation; no alternate pin map or full-frame buffer. | M |
 | 2.4 | `ui_task` skeleton on core 1: `lv_timer_handler()` loop with `vTaskDelay(5 ms)`; splash S0 | S |
 
 ### Phase 3: Settings, Wi-Fi, web portal
@@ -579,18 +604,18 @@ Sizes: S ≤ 0.5 d, M ≈ 1–2 d, L ≈ 3+ d.
 | # | Task | Size |
 |---|---|---|
 | 4.1 | `lib/creality_model`: `PrinterModel` struct with `has_value` flags; `coerce_number()`; `merge(JsonObjectConst)`; `connect` valid flag; chamber capability by late discovery (protocol doc §3); filename basename plus UTF-8-safe truncation (≤ 63 bytes); model/board-code detection; firmware string parsing; offered printer update (`linuxOtaInfo.version`) | M |
-| 4.2 | `derive_state()` per protocol doc §5.4/5.5, including the sub-label, debounce, freshness, error acknowledgement, and new-job detection | M |
+| 4.2 | `derive_state()` per protocol doc §5.4/5.5, including separate first-reach heater latches/nozzle priority, calibration preempting stale results, unconditional ready-printer ERROR precedence, sub-label, debounce, freshness, local acknowledgement without suppressing ERROR, and new-job detection | M |
 | 4.3 | Unit tests (`test/test_creality_model`): coercion (number / string / "" / null / "007"), delta merge, every rule in protocol doc §5.4, and **replay of each fixture against a reviewed `*.expected.txt` sequence**. The protocol doc §5.5 legacy sequences are not the fixture baselines; generate the baselines from the checked-in 1.3.5.19 JSONL with `tools/derive_prototype.py`, review them, and commit them during Phase 0.4. The C++ port must produce the identical sequence for every fixture.<br>The replay harness reads §4.2 files with ArduinoJson:<br>• Each `rx` text goes through the same ≤ 4 KB limit as the client.<br>• The injected clock advances to each event's `t` (250 ms steps for legacy files), so debounce and freshness are tested with the real timing.<br>• A `close` event acts as a disconnect: `reset()`, then `OFFLINE`, as `derive_prototype.py` does. | M |
 | 4.4 | `lib/ws_stream` frame parser/encoder + native unit tests (protocol doc §4, plan §9.2), then the `creality_client` adapter: connect/resolve, handshake, heartbeat, silence watchdog, backoff, JSON filter with the static arena, snapshot publish, statistics (frames, skipped large frames with their first key, reconnects, max frame size) exposed in `/api/status` | L |
-| 4.5 | `tools/fake_printer.py`: replays §4.2 capture files at 1–50× speed, including the checked-in 23–28.7 KB history/timelapse frames. The earlier 78 KB file-list frame is not in the fixtures; cover the same path with a scripted 78 KB or larger synthetic frame.<br>• Each `open`…`close` segment serves one client connection; `rx` events are sent at their recorded `t`.<br>• A server-side `close` closes the socket with the recorded code.<br>• A `connect_failed` gap refuses connections for its duration (printer reboot).<br>• `tx`, `note`, and `error` events are skipped, and notes are echoed to the console.<br>Scripted faults (silence, close, oversized frame, fragmented frames, blank fields, the 1.3.5.x placeholder dump with `connect:0`, `ok` frames, heartbeat on/off) | S |
+| 4.5 | `tools/fake_printer.py`: replays §4.2 capture files at 1–50× speed, including checked-in 23–28.7 KB history/timelapse frames and the boot capture's **79,463-byte file lists / connect:0 placeholder**. Also test synthetic frames larger than the observed maximum.<br>• Each `open`…`close` segment serves one client connection; `rx` events are sent at their recorded `t`.<br>• A server-side `close` closes the socket with the recorded code.<br>• A `connect_failed` gap refuses connections for its duration (printer reboot).<br>• `tx`, `note`, and `error` events are skipped, and notes are echoed to the console.<br>Scripted faults (silence, close, oversized frame, fragmented frames, blank fields, `ok` frames, heartbeat on/off) | S |
 
 ### Phase 5: UI screens and state machine
 
 | # | Task | Size |
 |---|---|---|
-| 5.1 | `theme`: colors, fonts, styles, shared widgets (outer arc, temperature row, centered status label) | S |
+| 5.1 | `theme`: role-specific colors/fonts/styles and reference-derived widgets; green decorative/progress arcs, native red heater fills excluded from recoloring, warm-yellow primary numerals. Follow `docs/SCREENS.md` | S |
 | 5.2 | `ui_manager`: screen FSM per §8.1, page rotation, result timeout, interstitial GIF sequencing, transition guard, single GIF object | L |
-| 5.3 | Screens S5–S12 per §8.2 | L |
+| 5.3 | Screens S5–S12 per §8.2 and `docs/SCREENS.md`; closely match original read-only compositions, compare LVGL renders, then verify on S3. New fields/pages must not crowd the original heating/progress layouts | L |
 | 5.4 | `KNOMI_HEAP_OVERLAY` (debug): small heap/fps text at the bottom | S |
 
 ### Phase 6: Button
@@ -630,17 +655,17 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| TFT_eSPI is not stable on Arduino core 3.x | Display broken | Phase 0.1 gate; fall back to LovyanGFX or to Arduino 2.0.17 (`espressif32@7.1.3`) |
+| Full-firmware display migration regresses accepted S3 behavior | Display broken | Retain native IDF SPI2/software CS, tested reset/init and swapped RGB565; rerun visible playback/cold-boot gates after migration. Historical TFT_eSPI path failed rendering. |
 | Heap fragmentation from repeated GIF switching | GIF fails to load after hours | One GIF object; similar canvas sizes (35–88 KB); fallback icon; 24 h soak; downscale GIFs if needed. The idle rotation swaps `gif_creality` (88 KB) ↔ `gif_standby_green` (35 KB) every `page_secs`, so the soak test runs mostly idle. |
 | Printer firmware differences in state codes | Wrong screen | K1 Max fixtures verify `state:7` (stopping) and `state:9` (pre-job transient), in addition to the documented print states; unknown codes → PROCESSING if a file is set, else IDLE; log unknown codes. **K2 captures still needed.** |
-| Large unsolicited list frames (23.4–28.7 KB in checked-in 1.3.5.19 fixtures; earlier 78 KB file-list observation, not reproduced in fixtures) | Reconnect churn or heap exhaustion | Own streaming client skips frames > 4 KB without allocating (§9.2); fixture replay tests observed frames and a synthetic ≥78 KB frame |
-| Placeholder dump on 1.3.5.x (`connect:0`, all values 0) | 0 °C shown, chamber hidden, or a false IDLE during startup/print | `NOT_READY` state until `connect:1`; capabilities re-evaluated on every merge; one `ReqPrinterPara` at `connect` 0 → 1; validate with a capture made immediately after printer boot, since mid-print connects have not shown the placeholder |
-| Stale error or result after a reconnect | Misleading screen | Freshness rules (§5.5), error acknowledgement, error badge during active jobs |
+| Large unsolicited list frames (23.4–28.7 KB history/timelapse and 79,463-byte file lists in fixtures) | Reconnect churn or heap exhaustion | Own streaming client skips frames > 4 KB without allocating (§9.2); replay observed frames and larger synthetic cases; live device validation is still required |
+| Placeholder dump on 1.3.5.x (`connect:0`, zero/empty/invalid values) | Invalid temperatures, hidden chamber or false IDLE during startup | Boot fixture verifies NOT_READY until `connect:1`, with capabilities arriving first. Re-evaluate on every merge; one proposed `ReqPrinterPara` at 0 -> 1 remains an unverified safety net for active-job fields, not a captured request |
+| Stale error or result after a reconnect | Misleading screen | Freshness rules (§5.5); never suppress a valid nonzero ERROR because a job is paused/printing or locally acknowledged. A new idle calibration clears the old result latch |
 | Concurrent-client limit on the printer | KNOMI or Creality Print disconnected | Verify in Phase 0.4; only one socket from KNOMI; backoff |
 | Creality firmware update changes the protocol | Data missing | Tolerant parser (unknown/missing fields → `--`); fixtures make regressions visible |
 | No auth on the web page (owner decision) | Anyone on the LAN can change settings | LAN-only device, JSON-only POST, no secrets returned; can be added later |
 | Asset licensing: BTT KNOMI has no LICENSE; reference projects are (A)GPL; `gif_creality` shows the Creality logo (trademark) | Distribution issues | Personal/private use of the BTT GIFs and the logo animation; implement the protocol from facts, no copied code; Inter font is OFL (include the license) |
-| GPIO3 is both UART0 RX and the tested production display-reset pin | Serial logging can interfere with display reset or boot diagnostics can be misleading | Disable UART/bootloader logging in the production pin mode; use the alternate wiring for serial-debug builds; confirm repeated cold boots in HIL |
+| S3 GPIO3 is a strapping pin used for display DC | External pulls could affect the strap sampled at reset | Repeated cold boots passed with the attached display; recheck after hardware/pull changes. Use native USB Serial/JTAG on GPIO19/20 for logs. |
 | GPIO0 held at power-up | Boots into the ROM bootloader | Documented in the README |
 | Long browser capture lost or cut (tab closed, laptop sleeps, Wi-Fi drop) | Missing or incomplete fixture | The logger warns before the page closes with unsaved events, holds a screen wake lock, and auto-reconnects (gaps are recorded as `close`/`connect_failed`). Save intermediate copies during long prints. |
 
@@ -650,17 +675,18 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 |---|---|---|
 | `docs/CREALITY_WS_PROTOCOL.md` | ✅ written and revised with legacy and checked-in K1 Max evidence (state 2 = completed; fixture-verified states 7/9; large-frame handling; fixture limitations). Extend with K2 findings and update as remaining captures resolve open points. | 0.4 |
 | `README.md` | Overview, photo, features, supported printers, hardware and wiring, build and flash (PlatformIO + ESP Web Flasher), first setup walkthrough, button actions, troubleshooting (Wi-Fi, printer unreachable, blank screen, colors inverted), licenses and credits | 8.1 |
-| `docs/HARDWARE.md` | Production and serial-debug pin tables, GPIO3 UART/reset note, GPIO5/GPIO0 strapping, 3.3 V signal/5 V power caveat, hard-wired backlight, GC9A01 SPI mode/CS/40 MHz settings, enclosure notes | 0.1 / 8.1 |
+| `docs/HARDWARE.md` | S3-Zero 4 MB/2 MB configuration, single GPIO1–5 SPI pin table, native USB logging, GPIO3/GPIO0 strapping, 3.3 V signal/5 V power caveat, hard-wired backlight, GC9A01 SPI mode/CS/40 MHz settings, enclosure notes | 0.1 / 8.1 |
 | `docs/ARCHITECTURE.md` | Tasks and cores, data flow, snapshot and queue contracts, memory budget (Phase 0.3 numbers), Phase 0.1 platform decision, module responsibilities | 0.3 / 8.1 |
-| `docs/SCREENS.md` | Expanded §8: mockups (PNG from the LVGL simulator or photos) for each screen and page, state → screen table, button table | 5.3 |
+| `docs/SCREENS.md` | **Written 2026-11-10:** source-derived measurements/mapping for all 12 adaptable screens, v1 runtime progress override, approved styling/thermal-red exception, measured keep assets and pre-cleanup gate. Full-screen native LVGL previews/device photos and final composed layouts remain pending, not claimed as generated screenshots | Before 1.2 / 5.3 |
 | `docs/TESTING.md` | Native tests, fake printer usage, capture walkthrough (`tools/WebSocketLogger.html`, scenarios, markers, naming; §4.2), HIL checklist (§13) | 4.5 / 7.4 |
-| `tools/fonts.md` | Exact `lv_font_conv` commands and glyph ranges | 0.5 |
+| `tools/fonts.md` | Written: pinned Inter 4.1/OFL, converter commands, glyph ranges/exclusions, GIF regeneration and repeatable S3 compile-check instructions | 0.5 |
 | `CHANGELOG.md` | From 2.0.0-creality onward | 8.3 |
 
 ## 13. Test and acceptance
 
 ### 13.1 Automated
 
+- **Current Python reference checks:** `python -m unittest discover -s test -p test_derive_prototype.py -v` passes 16 focused tests. All 14 owner-approved baseline files match fresh `tools/derive_prototype.py` replay. They assert pre-debounce logical sequences, not wall-clock timing, physical UI transitions or production C++ behavior.
 - **Native unit tests** (`pio test -e native`): coercion, merge, derivation rules, freshness/debounce (with an injected clock), fixture replays, settings validation, time and temperature formatting.
 - **Fake-printer integration** (manual run against the device on the LAN): all scenarios in Phase 4.5.
 
@@ -676,16 +702,18 @@ Phase 4.1–4.3 (pure logic, native tests) can be developed in parallel with Pha
 | H6 | Full print on K1-family and K2 | idle → (self-test) → processing (heating/homing) → printing pages → completed sequence → idle after `result_min` |
 | H7 | Pause/resume | Amber paused styling, then back to printing |
 | H8 | Cancel during printing and during heating | Stopped screen (no false "completed"); "Stopping…" while the printer reports state 7 |
-| H9 | Printer error (e.g. runout or a CFS error) | Error screen, or error badge during an active job; a click acknowledges it |
+| H9 | Nonzero printer error, including initial connect while paused and while printing | S11 ERROR always visible while the valid error remains nonzero; a local acknowledgement never clears/suppresses it. Printer clears error -> derive the current job state |
 | H10 | KNOMI reboot after a print finished hours ago | Idle with "Last: … ✓", **not** the Completed screen |
 | H11 | Creality Print / Home Assistant connected at the same time | Both keep working |
 | H12 | Button: click / double / hold 5 s / hold 15 s | Info / next page / setup mode / factory reset |
 | H13 | Accented filename (e.g. `Fogaskerék_PLA.gcode`) | Rendered correctly and scrolling |
 | H14 | 24 h soak while idle + one long print | No reset; heap stable; GIFs always load |
-| H15 | K1 Max 1.3.5.19 connect and job start/end (`historyList` / `elapseVideoList`); open the file list in Creality Print if it triggers a large push | No WS reconnect; skipped-frame counter increases for observed oversized frames. Do not require the 78 KB file-list push, which is not reproduced in the checked-in fixtures. |
+| H15 | K1 Max 1.3.5.19 boot/connect and job start/end, or fake-printer replay of captured history/timelapse/79,463-byte file lists | No WS reconnect; skipped-frame counter increases. The boot fixture contains the list push, but a live push is not required on every connection |
 | H16 | Print with calibration vs without | Self-test screen shows steps 1–5 vs 1–4 with names |
-| H17 | Fake-printer sends a 78 KB or larger frame; if a live post-reboot placeholder (`connect:0`) is observed, connect during that startup window | Oversized frame is discarded without reconnect. For the placeholder, show NOT_READY with no stale/zero values until valid data (`connect:1`) arrives; record if the placeholder is not observed. |
-| H18 | Repeated cold boots using the production pin map with serial logging disabled | Display resets and firmware starts reliably; no firmware UART console is expected, though the ROM may emit its initial boot message |
+| H17 | Replay the boot fixture's two 79,463-byte lists and placeholder, plus a larger synthetic frame; repeat live startup when practical | Oversized frame discarded without reconnect. NOT_READY hides zero/empty/stale fields until `connect:1`; capabilities discovered in earlier deltas remain usable. Do not infer request behavior from receive-only captures |
+| H18 | Repeated cold boots on S3-Zero with the single GPIO1–5 display map and native USB logging enabled | Display resets and firmware starts reliably; USB logs return after re-enumeration; 4 MB flash and 2 MB PSRAM initialized each boot |
+| H19 | Menu-started leveling/input shaping after a completed print, with old job fields retained | DeviceState 3/4 selects the corresponding PROCESSING operation, clears stale result latch, keeps selected nozzle/bed heater sub-label until first target reach, and returns IDLE when deviceState becomes 0 |
+| H20 | Original-visual comparison: nozzle/bed fill 0/25/50/100%, overshoot/unknown/zero target; print 0/57/100% and paused; short/long times and extra pages | Matches the source/reference compositions in `docs/SCREENS.md`; native heater fill remains red, decorative arcs green, warm-yellow numerals legible, no clipping/overlap, no old sensor/control widgets or added cooldown threshold behavior |
 
 ### 13.3 Requirement → acceptance mapping
 

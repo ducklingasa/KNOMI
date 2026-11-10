@@ -2,3 +2,6 @@ dependencies:
   idf: "==5.5.5"
   espressif/arduino-esp32: "==3.3.12"
   lvgl/lvgl: "==8.4.0"
+  esp32async/asynctcp: "==3.5.0"
+  esp32async/espasyncwebserver: "==3.12.1"
+  bblanchon/arduinojson: "==7.4.3"

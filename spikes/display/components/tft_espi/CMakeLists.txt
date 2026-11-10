@@ -4,3 +4,4 @@ idf_component_register(
     REQUIRES arduino-esp32 driver
 )
 target_compile_options(${COMPONENT_LIB} PUBLIC "-include${PROJECT_DIR}/main/tft_setup.h")
+target_compile_options(${COMPONENT_LIB} PRIVATE "-Wno-error=misleading-indentation")

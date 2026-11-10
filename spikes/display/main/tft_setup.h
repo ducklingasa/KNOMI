@@ -3,14 +3,15 @@
 
 #define USER_SETUP_LOADED
 #define GC9A01_DRIVER
+#define USE_HSPI_PORT
 #define TFT_WIDTH 240
 #define TFT_HEIGHT 240
 #define TFT_MISO -1
-#define TFT_SCLK 18
-#define TFT_MOSI 23
-#define TFT_DC 26
-#define TFT_CS 5
-#define TFT_RST 33
+#define TFT_SCLK 1
+#define TFT_MOSI 2
+#define TFT_DC 3
+#define TFT_CS 4
+#define TFT_RST 5
 #define TFT_RGB_ORDER TFT_BGR
 #define TFT_INVERSION_ON
 #define SPI_FREQUENCY 40000000

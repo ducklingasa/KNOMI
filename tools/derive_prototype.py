@@ -35,6 +35,28 @@ class Deriver:
         self.job = None
         self.sub = ""
         self.trans = None
+        self.heaters = {}
+
+    def heating(self):
+        active = []
+        for name, actual_key, target_key in (
+            ("Nozzle", "nozzleTemp", "targetNozzleTemp"),
+            ("Bed", "bedTemp0", "targetBedTemp0"),
+        ):
+            target = num(self.m.get(target_key))
+            actual = num(self.m.get(actual_key))
+            if target is None or target <= 0:
+                self.heaters.pop(name, None)
+                continue
+            previous_target, reached = self.heaters.get(name, (None, False))
+            if target != previous_target:
+                reached = False
+            if actual is not None and actual >= target:
+                reached = True
+            self.heaters[name] = (target, reached)
+            if actual is not None and not reached:
+                active.append(name)
+        return f"{active[0]} heating" if active else ""
 
     def derive(self):
         m = self.m
@@ -50,25 +72,25 @@ class Deriver:
         if f and job_id != self.job:
             if self.job is not None:
                 self.latch = None
+                self.heaters.clear()
             self.job = job_id
         self.sub = ""
         if st != 0:
             self.trans = None
         if m.get("connect", 1) == 0:
             return "NOT_READY"
-        if err and st not in (1, 5):
+        heating = self.heating()
+        if err:
             return "ERROR"
         if st == 1 and 1 <= wst <= 99:
-            self.sub = f"step {wst}"
+            self.sub = f"step {wst}" + (f"; {heating}" if heating else "")
             return "SELF_TESTING"
         if st == 1:
             self.latch = None
             if lay == 0 and prog == 0:
-                tn, tb = m.get("targetNozzleTemp", 0), m.get("targetBedTemp0", 0)
-                heating = (tn and (num(m.get("nozzleTemp")) or 0) < tn - 3) or \
-                          (tb and (num(m.get("bedTemp0")) or 0) < tb - 3)
-                self.sub = "Heating" if heating else "Preparing"
+                self.sub = heating or "Preparing"
                 return "PROCESSING"
+            self.sub = heating
             return "PRINTING"
         if st in (5, 6):
             self.latch = None
@@ -85,6 +107,14 @@ class Deriver:
             return "IDLE"
         if st in (7, 8):
             self.sub = "Stopping" if st == 7 else "Resuming"
+            if st == 8 and heating:
+                self.sub += f"; {heating}"
+            return "PROCESSING"
+        if st == 0 and dev in (3, 4, 7):
+            self.latch = None
+            self.sub = {3: "Bed leveling", 4: "Input shaping", 7: "Homing"}[dev]
+            if heating:
+                self.sub += f"; {heating}"
             return "PROCESSING"
         if self.latch:
             return self.latch
@@ -105,6 +135,7 @@ class Deriver:
         if dev == 3:
             self.sub = "Bed leveling"
             return "PROCESSING"
+        self.sub = heating
         return "IDLE"
 
 

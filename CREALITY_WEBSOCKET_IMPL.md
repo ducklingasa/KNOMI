@@ -1,97 +1,146 @@
 # Creality WebSocket implementation
 
-## 2026-11-06: Phase 0.1 display spike
+Final hardware: **ESP32-S3-Zero**, 4 MiB flash / 2 MiB PSRAM, GC9A01 on SCK1/MOSI2/DC3/CS4/RST5; native USB Serial/JTAG **COM8**. This log records S3 implementation and validation only.
 
-Status: **Phase 0.1 completed and accepted by the owner on 2026-11-06.** All device checks, including the stopwatch, 10-minute stability run, and manual reset test, passed as expected.
+## 2026-11-10: Original KNOMI visual-reference preservation
 
-- Owner approved ESP-IDF with Arduino as a component for an isolated display spike.
-- Existing ESP-IDF 5.5.5 and its Python 3.11 environment activated successfully; no PlatformIO installation needed.
-- Dependencies: Arduino 3.3.12, LVGL 8.4.0, TFT_eSPI V2.5.43 (commit `6ae4c97c5a07bd64fce8993e9cfa95d9a81e7c81`).
-- Project: `spikes/display`; existing firmware, assets, and PlatformIO configuration are unchanged.
-- Owner authorized flashing COM7 and confirmed serial-debug wiring: SCK18, MOSI23, DC26, CS5, RST33; no MISO or backlight control.
-- Uses two internal DMA RGB565 buffers of 240 x 24 pixels (23,040 bytes total), internal-heap LVGL allocation, one UI task on core 1, and one GIF object.
-- Initial 30-second RGB pattern precedes repeated 30-second swaps between `gif_creality` and `gif_standby_green`.
-- Serial logs every five seconds: free internal byte-addressable heap, largest free block, minimum free heap, and completed LVGL refreshes per second. Static-pattern FPS is expected to settle to zero; GIF FPS measures refreshes, not SPI transactions or decoder-only performance.
-- Wi-Fi, web server, and WebSocket are deliberately absent: these measurements are a display-only baseline, not Phase 0.3 acceptance.
-- English, Celsius, 24-hour time, and the 10-minute result timeout confirmed; existing protocol evidence gaps remain deferred.
-- Current branch retained; no tag or commit created.
+- Owner chose **all adaptable read-only screens**, close original geometry/typography, remaining + elapsed time in place of printing X/Y/Z sensors, and **original red heater fills only** (no new hot/cooldown thresholds or warnings). Green remains the decorative/theme/progress accent; thermal/error red is not shifted to green. Keep the original warm-yellow numeric emphasis.
+- Created `docs/SCREENS.md` from generated C, runtime overlays and existing exported assets. It records the 12 adaptable sources, original heater icon/value geometry, printing rings/typography, temperature panels, network/QR/GIF/info/notification references, deliberate adaptation differences and the pre-cleanup comparison gate. It is not a full-screen renderer, simulator output or physical rendering acceptance.
+- Runtime evidence matters: sensor-free v1 centers the print percentage and deletes X/Y/Z widgets, unlike the generated v2 y=50 layout. The legacy theme helper also recolors heating indicators; the hand-written version must explicitly exempt native heater red instead of copying that grouping. Preserve appearance, not old callbacks, duplicate GIF objects or stray style assignments.
+- Array/dimension checks measured four large heater images at **167,652 bytes**, six required nozzle/bed images/icons at **172,335 bytes**. Together with selected GIFs this is **630,532 payload bytes**, excluding fonts/code/descriptors. The full-screen decorative background alone is 172,800 bytes; retain/redraw choices require visual comparison. These are flash payload measurements, not linked-firmware or live-memory claims.
+- Updated plan colors/screens/asset layout, cleanup keep inventory, Phase 1 preservation prerequisite, Phase 5 reference requirements and visual HIL gate. Keep generated sources until selected LVGL screen renders or photos are saved and assets moved. The missing SquareLine project does not prevent extracting the design from its C output.
+- Checked core geometry and local guide references against existing files. No generated screen, firmware source, image, GIF, font, raw capture or expected baseline was modified. Whole-screen previews and S3 visual checks remain pending; no cleanup/next implementation phase or flash was started.
 
-## Validation
+## 2026-11-10: Two new captures and owner-approved baseline revisions
 
-- ESP-IDF environment activation: passed (`ESP-IDF v5.5.5`, Python 3.11.2, dependency checks OK).
-- TFT_eSPI version resolution: passed; upstream tag is uppercase `V2.5.43`, at the pinned commit above.
-- First command: `idf.py -C spikes/display build`.
-- Build result: blocked before compilation while CMake FetchContent downloaded TFT_eSPI. GitHub redirected the archive request to `codeload.github.com`, which the Zscaler gateway rejected with HTTP 403. No network security settings were changed or bypassed.
-- At the initial failure, Arduino and LVGL dependency resolution had not yet been reached. The owner did not manually approve or arrange access for any download; the network automatically approved the archives after processing time.
-- Retry after automatic network approval of TFT_eSPI: the pinned archive downloaded and extracted successfully. Its upstream CMake tried registering an IDF component before IDF initialization; added FetchContent `SOURCE_SUBDIR knomi_fetch_only` so the existing local wrapper registers it at the correct stage.
-- Focused validation: `idf.py -C spikes/display reconfigure` passed the previous CMake failure and resolved 34 dependency entries (including the installed IDF). Versions are recorded in `spikes/display/dependencies.lock`.
-- Earlier blocker: HTTP 403 downloading Arduino 3.3.12 from `https://components-file.espressif.com/components/espressif/arduino-esp32/3.3.12/espressif__arduino-esp32-v3.3.12.zip`; resolved after automatic network approval, without manual owner approval.
-- LVGL 8.4.0 published download link: `https://components.espressif.com/api/downloads/?object_type=component&object_id=dcc10114-d4e5-443e-9fb0-d7fac09493fa` (archive download not yet reached by the build).
-- The network processes individual packages rather than broadly allowing URL prefixes. Exact archive URLs are listed below, resolved from registry JSON for the locked versions. Metadata queries do not download package archives.
-- Latest `idf.py -C spikes/display reconfigure`: Arduino 3.3.12 downloaded successfully; stopped at HTTP 403 on `espressif/cbor` 0.6.1~4. `chmorgan/esp-libhelix-mp3` 1.0.3 is already available. No further blocked-archive retries or bypass attempted.
-- An earlier independent LVGL 8.4.0 archive test ended with a connection reset before ZIP validation. The temporary download was removed. The later component-manager retry downloaded LVGL successfully after automatic network approval.
-- A standalone Python metadata probe could not validate the server certificate using its default certificate bundle. Windows-trusted HTTPS metadata requests succeeded with certificate validation enabled; no certificate checks were disabled.
-- Owner explained the network's automatic approval process: an initial archive request can be blocked while scanning; retry after approximately 30 seconds. Package-specific approval remains in effect; no broad allowlisting is required.
-- Made one normal GET request per known archive to initiate approval, without downloading response bodies in that pass. Used the interval to inspect TFT_eSPI DMA completion and GC9A01 rotation behavior, then retried the IDF component manager. No timed wait command or network-security changes were used.
-- Result: all 34 dependency entries processed successfully, including LVGL 8.4.0; `idf.py -C spikes/display reconfigure` completed successfully (147.1 s configuring, 12.5 s generating). Earlier CBOR/Arduino blocks and LVGL connection reset are no longer active blockers.
-- Initial build compiled the broad Arduino dependency set; resumed completed objects after interrupting the filtered-output command. Library selection was not changed.
-- Found `CONFIG_LV_CONF_SKIP=y` in IDF defaults. Added `LV_KCONFIG_IGNORE` so the spike's custom `lv_conf.h` controls allocation, byte swapping, logging, and GIF support. Compile-time assertions enforce swapped RGB565, custom allocation, and GIF support. Paused the GIF timer before replacing the source to avoid a null-decoder timer callback after failed allocation.
-- `idf.py -C spikes/display -p COM7 flash`: passed. Application binary is 560,320 bytes (`0x88cc0`), with 86% of the factory app partition free. Esptool identified ESP32-D0WD-V3 revision 3.1, 40 MHz crystal; bootloader, application, and partition-table hashes verified. Flash completed and hard reset succeeded. No full-chip erase was performed.
-- Coredump support is disabled (`CONFIG_ESP_COREDUMP_ENABLE_TO_NONE=y`); the final 64 KiB partition remains reserved.
-- Initial 75-second custom pyserial capture was empty; this did not prove a firmware failure. Standard `idf.py -C spikes/display -p COM7 monitor` with its reset handling receives boot and runtime logs normally at 115200 baud.
-- Runtime confirms IDF 5.5.5, LVGL 8.4.0, TFT_eSPI 2.5.43, DIO 40 MHz flash, 4 MB capacity, 240 MHz CPU, and the intended serial-debug pin map. Owner confirmed startup bars are red/green/blue left-to-right, text is upright and white on black, and both GIFs animate and switch without the listed visible problems.
-- Baseline internal byte-addressable heap (bytes): before display free 288,540 / largest 155,648 / minimum 288,540; after DMA buffers free 267,140 / largest 155,648 / minimum 263,756; static pattern free 262,784 / largest 155,648 / minimum 262,660. Static refresh FPS settles toward zero, as expected. GIF and long-run measurements follow below when available.
-- Boot warning: detected Boya flash uses the generic driver; boot and upload succeed. No crash or DMA error appeared in the initial startup capture. This is not yet a 10-minute stability pass or the network-loaded Phase 0.3 budget.
-- Standard monitor captured through firmware uptime 111,022 ms without another boot, DMA error, or GIF decoding failure, then was stopped cleanly with Ctrl+]. COM7 is released. This covers the initial pattern, both GIFs, and a return to the Creality GIF, not the full 10-minute gate.
-- Steady samples, excluding five-second windows containing a source transition:
+Status: **all 14 fixture baselines revalidated and owner-approved** after iterative review; 16 focused Python tests pass. This extends Phase 0.4 evidence only. No firmware flash, production C++ port, fake printer, live oversized-frame device test or next implementation phase was started. Raw captures were not changed.
 
-| Stage | Free internal heap (bytes) | Largest block (bytes) | Minimum-ever heap (bytes) | Completed-refresh FPS |
-|---|---|---|---|---|
-| RGB pattern after initial settling | 262,584 | 155,648 | 262,584 | 0.00 |
-| Creality GIF, first and second visits | 168,316 | 98,304 | 143,724 | 7.93-8.20 |
-| Green standby GIF | 223,612 | 98,304 | 143,724 | 26.92-27.19 |
+### Connect during error, recover, complete and menu leveling
 
-The repeated Creality visit had the same heap values as the first visit. Its approximately 8 FPS matches the asset's 120 ms frame delay. These are display-only measurements and do not establish the later Wi-Fi/web/WebSocket memory budget.
+- Added `test/fixtures/k1max_1.3.5.19_error-resume-finish-idle-auto-leveling_20261110-0842.expected.txt` for the supplied K1 Max FW 1.3.5.19 capture: one connection, 2,833 received JSON messages, one oversized 23,382-byte history frame, `tx:0`, no operator notes.
+- #1 at t=0 already contains valid `connect:1`, paused `state:5`, `deviceState:1`, self-test step 1 and `errcode:101/key:104/value:""`. This proves that this error, present before the logger connected, is exported in the initial dump. It does not prove every error survives reboot.
+- Owner manually solved the fault and resumed. #25 at 24,233 ms clears the error while still paused; #26 at 24,280 ms resumes `state:1` / step 1, **47 ms later**, without stopping the job. The approved sequence starts `ERROR -> PAUSED -> SELF_TESTING`.
+- #1313 at 500,923 ms reports completed `state:2`, progress 100, targets/layers/deviceState 0 and elapsed 137 s. #1745 at 1,234,402 ms first reports raw `state:0`: **733,479 ms (12 min 13.479 s) after completion**. The filename/progress are retained. The owner clarified that the printer's completion **OK was pressed soon after finishing**, not after twelve minutes. No exact button marker exists: neither OK-induced flag effects nor a universal automatic timeout is established.
+- #1749 at 1,245,539 ms starts menu leveling (`state:0/deviceState:3`), **11.137 s after raw idle**. The old filename/progress remain; elapsed time is now 0. Point strings run from #2447 `1:0.42` to #2783 `36:0.09`; #2791 at 1,756,964 ms returns deviceState/targets to 0. The approved prototype now releases the stale completion latch for this operation and returns IDLE afterwards. Client closes at 1,804,760 ms.
 
-### Playback stopwatch follow-up
+### Boot placeholder, file lists and complete calibration
 
-- Added a centered white stopwatch below the GIFs, now formatted as zero-padded `MM:SS` (e.g. `01:03`), in a fixed 170 x 18 label at y=200. The largest GIF ends at y=195, leaving a gap above the label.
-- Hidden during the RGB startup pattern. Starts at `00:00` with the first GIF, updates once per second using `esp_timer_get_time()`, and continues across source changes. A device restart resets it; startup's 30 seconds do not count as playback time.
-- Validation: `idf.py -C spikes/display build` passed; `idf.py -C spikes/display -p COM7 flash` passed with verified hashes. New application size: 560,528 bytes (`0x88d90`). The upload restarted the device and begins a new stability run.
-- Owner confirmed stopwatch visibility and continuity, uninterrupted playback through the 10-minute test, and successful manual reset behavior with the original format. At `10:00`, ten minutes of GIF playback have elapsed since boot, excluding the startup pattern. The earlier measured heap/FPS table predates the stopwatch; its label adds allocations and up to one additional refresh per second.
-- 2026-11-07: changed only the initial text and running formatter from `Xm Ys` to zero-padded `MM:SS`. Build passed; this format-only update has not been reflashed or visually rechecked. Minutes continue beyond 99 rather than wrapping.
+- Added the sibling baseline for `k1max_1.3.5.19_boot-idle-complete-calibration_20261110-1011.jsonl`: logger started before printer boot; one connection, 1,797 JSON messages, two oversized frames, `tx:0`, no notes.
+- #1 at 52 ms is a **1,426-byte / 76-field placeholder**, `connect:0`, temperatures `""`, `err:{}`. Identity/version, `boxConfig`, temperature/motion/error, `linuxOtaInfo`, `tfCard` and max-temperature capability deltas arrive before readiness. Only the existing whitelist is needed; do not retain file-list/boxConfig payloads for the display.
+- #11/#12 at 15,314/16,412 ms are unsolicited **79,463-byte `retGcodeFileInfo2`** frames. #13 at 18,191 ms reports `connect:1`. The read-only logger sends no requests and stays connected; the prototype skips the two oversized lists and advances NOT_READY -> IDLE. This reproduces the previously missing placeholder/list evidence, not a guarantee of those pushes on every connect or proof that an active job's fields are all re-sent.
+- Owner-associated `deviceState:4` Input Shaping runs #25 (46,760 ms) -> #822 (296,657 ms), raw state 0. `deviceState:3` Bed Leveling begins #824 (296,776 ms), receives 36 string point updates #1490 -> #1769, and ends #1771 (782,614 ms), returning targets/deviceState to 0. Client closes at 796,334 ms. Mappings are specific to reviewed K1 Max FW 1.3.5.19 evidence, not all models.
 
-**Acceptance:** the owner reports every device test completed successfully and as expected, and accepts Phase 0.1 as complete. The 10-minute run and reset acceptance are owner-observed results; the recorded serial capture still covers only 111 seconds, not ten minutes. No longer serial trace or additional heap measurements are claimed. Phase 0.3's network-loaded memory budget and later phases are not completed by this acceptance.
+### Revised prototype and verification
 
-From an activated ESP-IDF 5.5.5 PowerShell:
+- Separate first-reach heater flags for nozzle/bed; **nozzle priority**, consistent with the legacy UI. Actual >= target completes that heater once; later dips do not retrigger. Changed targets, off/on and new jobs re-arm it; unknown temperatures cannot prove completion. Self-test/calibration/resume stay the primary operation, with the selected heater appended.
+- Idle deviceState 3/4/7 selects Bed leveling/Input shaping/Homing and clears an old COMPLETED/STOPPED latch before the result rule. Result timeout/UI animations are not simulated by this Python prototype.
+- Owner explicitly required **ERROR for every nonzero errcode in valid data**, including paused/printing; a badge alone or locally suppressed fault is insufficient. NOT_READY still hides invalid placeholder fields. Local acknowledgement cannot clear/suppress a real error or send printer control. The November 9 baseline now enters ERROR at #1115, not #1159; this supersedes the older 51-ms-only ERROR observation below, without changing its raw capture.
+- Regenerated all 14 baselines with `tools/derive_prototype.py`; five older sequences remained identical, the others changed where the revised labels/rules apply. All 14 match independent fresh replay. Owner reviewed and approved the final versions before documentation was updated.
+- Added `test/test_derive_prototype.py`; **16/16 tests pass** via `python -m unittest discover -s test -p test_derive_prototype.py -v`. Covers exact/above-target completion, priority/rearm/no retrigger, unknown/placeholder data, new jobs, calibration/result precedence, resume labels and error precedence across raw states 0–9/clearing. Milestone timestamps were checked against raw event numbering. Editor diagnostics and whitespace checks pass; production timing/debounce, parser and hardware checks remain separate.
+- Updated protocol evidence/fields/rules/open points and plan screens/acceptance criteria. Preserved the current owner-edited self-test label table in the protocol. Earlier log entries below describe their then-current prototype and acceptance, not today's baseline set.
+
+## 2026-11-09: Phase 0.5 asset preparation
+
+Status: **offline asset gate passed**; no firmware flash or next phase started.
+
+- The ten selected source GIFs in `docs/screens/gif/` already match the embedded C arrays byte-for-byte. Kept their bytes, filenames and symbols unchanged; no resize or needless regeneration. `tools/check_assets.py` checks descriptor dimensions/byte count/color format, all frames through Pillow and the existing GIF parser, durations, infinite looping and budgets.
+- Measured GIF payload **458,197 bytes (447.46 KiB)** versus 470 KiB allowed; maximum `4*width*height` canvas/frame estimate **90,000 bytes** versus 90,000 allowed. This excludes the transient LZW table and other runtime allocations; Phase 0.3 remains the S3 network-loaded PSRAM evidence.
+- Regenerated `ui_font_InterSemiBold14/18/24/48` using upstream **Inter 4.1 SemiBold** and **lv_font_conv 1.5.3**, all at **4 bpp**, uncompressed. Public font symbols retained. Included the pinned unmodified TTF and upstream OFL license under `tools/fonts/`; exact generation/source hashes in `tools/fonts.md`.
+- Glyph sets: 318 each at 14/18 px (printable ASCII, supported Latin-1/Extended-A, Celsius), 97 at 24 px (ASCII/degree/Celsius), 16 at 48 px (numeric/percent/colon/C/space/degree/Celsius). Explicit upstream exclusions U+00AD and U+0149 are documented. Legacy 16/20/32 px fonts remain untouched for later cleanup.
+- Installed Pillow 12.0.0 in the configured Python 3.14.6 environment; pinned font/converter downloads succeeded with normal TLS. Validation initially exposed the Wi-Fi descriptor's legacy `gif_welcome_map` array name; the checker now follows `.data` rather than guessing array names. No GIF changes were required.
+- `python tools/check_assets.py --compile` passed: all GIF/font checks and **14/14 syntax compiles** using the accepted S3 build database (ESP-IDF 5.5.5 / LVGL 8.4.0). No firmware/build objects overwritten. Generated fonts were not added to the running two-GIF spike workload; all-asset on-device playback, new-screen rendering, full-firmware linking and soak remain later checks.
+
+## 2026-11-09: Phase 0.4 owner acceptance and step labels
+
+- Owner reviewed all **12** `.expected.txt` baselines and confirmed they look correct. The accepted files and prototype remain unchanged.
+- Owner-confirmed K1 Max self-test labels: **1 Foreign object detection; 2 Homing; 3 Nozzle cleaning in progress; 4 Homing; 5 Bed leveling**. Replaced inferred labels in the protocol and screen plan; the planned `gif_qgling_green` leveling animation now maps to step 5, not step 4. No assets or firmware were changed.
+- Owner believes naturally occurring errors require user interaction with the printer and do not clear automatically. Recorded as an owner-reported expectation, not a universal firmware guarantee. The November 9 capture proves clearing during stopping only; KNOMI acknowledgement must remain local display behavior and cannot resolve a printer fault.
+- All other protocol open points are deferred by the owner. Phase 0.4 is complete and owner-accepted within its fixture-review scope; no next phase was started.
+
+## 2026-11-09: Phase 0.4 additional error fixture
+
+- Reviewed owner-provided `test/fixtures/k1max_1.3.5.19_error_20261109-1120.jsonl` and added its sibling `.expected.txt`, extending the fixture/baseline set from 11 to **12**. The unchanged prototype reproduces all 12 saved sequences; no firmware build/flash or live capture acquisition was needed.
+- Capture: K1 Max FW 1.3.5.19, one connection, 1,205 JSON messages, three oversized messages (maximum 23,402 bytes), two operator notes, final client-initiated close at 697,768 ms. Raw capture was not changed.
+- #1114 (`t=587582`) reports paused `state:5`; #1115 (`t=587638`) reports `errcode:101`, `key:104`, `value:""`. Operator note at `t=643092` identifies a foreign-object detection on the printing plate with printing paused. This is observed association, not a universal code catalogue.
+- #1159 (`t=657861`) reports stopping `state:7` while the error is still merged; #1160 (`t=657912`) clears the error; #1164 (`t=659655`) reports stopped `state:4`. The operator later notes selecting stop. Preserve the prototype's **51 ms `ERROR` transition** before `PROCESSING(Stopping)` in the baseline; no prototype/UI rule changes were made.
+- Updated plan and protocol evidence/open points: nonzero payload and clearing during this stop flow are now captured. Spontaneous clearing, acknowledgement and reconnect persistence remain unverified. All baselines describe frame-numbered prototype states, not UI timing or production C++ acceptance.
+
+## 2026-11-08: Native IDF display repair and accepted S3 rerun
+
+Status: **Phase 0.3 S3 rerun passed:** build/COM8 flash, network-loaded memory margin, owner-confirmed rendering/ten-minute playback, and repeated cold boots. No later implementation phase was started; 24-hour soak, other GIF assets, and oversized-message coverage remain separate work.
+
+- Owner supplied the working local `C:/D_Drive/Temp/net-clock` S3-Zero project with identical GPIO1–5 wiring. Inspected only source/default hardware settings, not saved credentials; that project was not modified. Its display path uses native IDF SPI2 throughout, software CS, mode 0 / 40 MHz / `SPI_DEVICE_NO_DUMMY`, reset low 20 ms then high 120 ms, software reset plus 150 ms delay, and the full GC9A01 initialization table (`MADCTL=0x48`, pixel format `0x55`, inversion on, sleep-out/display-on delays).
+- Replaced the spike's failing mixed TFT_eSPI/Arduino register path with this native IDF setup. Kept LVGL 8.4.0, PSRAM allocation, the network workload, original GIFs, and two internal 240×24 RGB565 buffers. Address-window and memory-write commands are blocking; each pre-swapped pixel strip is queued as a persistent DMA transaction, with CS held low until `spi_device_get_trans_result` returns it. Only then release CS and call `lv_disp_flush_ready`; no full-frame buffer or 32 KiB application cap was introduced. The bus maximum is sized for one 11,520-byte strip.
+- Build passed: **1,269,200 bytes (`0x135dd0`)**, 69% factory-partition headroom. Initial upload failed because COM8 was absent; owner reconnected it and retry verified all bootloader/application/partition hashes. No full-chip erase. Boot confirms native IDF SPI2 panel initialization, 4 MiB flash, 2 MiB PSRAM with passing memory test, 240 MHz / 2 cores.
+- **Owner confirmed all visible checks pass:** RGB bars red/green/blue left-to-right, upright white text, both GIFs clean, continuous `MM:SS`, and ten minutes of uninterrupted playback. Repeated cold boots were checked after capture closure and passed by owner observation; no separate cold-boot serial traces are claimed.
+- Saved serial log: `spikes/display/build/s3/log.knomi_display_spike.20261108082526.txt`, through **1,554,715 ms uptime (~25.9 min)**. One boot record, one printer connection attempt, **369** received messages, all links active, zero JSON errors / observed oversized messages, and no panic/watchdog/decoder failure. Monitor/log closed cleanly and COM8 is released. This is not a 24-hour soak or proof of oversized-frame behavior.
+- Stable samples exclude the first five seconds after each source change. FPS is completed-refresh rate, not decoder-only speed. 129 Creality and 125 standby samples were summarized from the saved log.
+
+| Workload | Internal free (bytes) | Internal largest | PSRAM free | PSRAM largest | Refresh FPS |
+|---|---|---|---|---|---|
+| Boot | 296,199 | 204,800 | 2,095,000 | 2,064,384 | 0.00 |
+| Network ready, before first GIF | 203,499 | 131,072 | 2,090,348 | 2,064,384 | 0.00 |
+| Creality stable samples, including final HTTP workload | 203,159–203,519 | 126,976–131,072 | 1,998,128 | 1,966,080 | 8.52–9.40 |
+| Standby stable samples | 203,459–203,519 | 131,072 | 2,052,400 | 1,966,080 | 31.66–32.60 |
+
+Five diagnostic HTTP requests passed during Creality playback at `http://192.168.0.74/api/status`: internal free **199,207–199,483**, largest **122,880–126,976**; PSRAM free **1,997,668–1,998,128**, largest **1,966,080**; internal DMA free **191,419–191,695**, largest **122,880–126,976**. Final internal minimum **160,768**, PSRAM minimum **1,973,536**. After requests completed, the serial DMA sample recovered to free **195,371**, largest **126,976**. Internal and DMA capability masks overlap; do not add them as separate pools. PSRAM margin comfortably exceeds **112,500 bytes** before first load and under GIF/HTTP workload: retain original assets, no resize required by this gate.
+
+TFT_eSPI no longer drives the spike display. Its unused pinned fetch/component wrapper remains for later cleanup; the old SPI3 image and measurements in the next section are historical failed-rendering evidence, not current configuration. Full-firmware build-system migration remains a separate decision.
+
+## 2026-11-08: Phase 0.3 ESP32-S3-Zero rerun
+
+Status: **historical S3 TFT_eSPI attempt: memory margin passed, physical rendering failed. Superseded by the accepted native IDF repair above.**
+
+- Owner reports ESP32-S3 QFN56 revision v0.2, embedded XMC 4 MB flash and AP_3v3 2 MB PSRAM, 40 MHz crystal. Native USB VID `303a`, PID `1001`; Windows detects **COM8**. Native USB-C flashing/reset authorized. BOOT GPIO0, display/backlight/no-MISO arrangement, local Wi-Fi credentials, and printer `192.168.0.55:9999` unchanged.
+- Single GC9A01 SPI map: SCL/SCK1, SDA/MOSI2, DC3, CS4, RST5. SCL/SDA are SPI module labels. Keep 40 MHz display SPI, swapped RGB565, rotation 0, BGR/inversion configuration, and original Creality/standby assets; revalidate physically on S3.
+- IDF target `esp32s3`, Arduino variant `esp32s3`, DIO 40 MHz / 4 MB flash, quad-SPI PSRAM at 40 MHz with boot initialization/memory test, USB Serial/JTAG console. LVGL/GIF allocators explicitly request `MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT` with no internal fallback. Two 240 x 24 DMA buffers remain internal. Static JSON/WS reserves and workload unchanged.
+- Investigated and removed the provisional 32 KiB application cap after owner clarification. Installed ESP-IDF 5.5.5 validates against the bus maximum; TFT_eSPI 2.5.43 S3 requests 65,536 bytes. Its `pushImageDMA` overload used here applies blocking 1,024-pixel chunks above 16,384 pixels (32 KiB), then queues the remainder as DMA; the implementation threshold differs from its 32,768-pixel comment. This is not a fixed IDF restriction. Keep existing 11,520-byte strips, which avoid the library fallback; no transfer-size guard or buffer enlargement was retained.
+- Startup checks detected flash and initialized PSRAM capacities before launching tasks. Serial logs now include separate PSRAM total/free/largest/minimum and internal DMA free/largest; `/api/status` retains `heap` as internal and adds `psram` and `dma` groups.
+- S3 build/configuration live under ignored `spikes/display/build/s3`; load private local credential defaults first when needed, then tracked S3 defaults last so hardware values take precedence. Do not print/read credential fields or distribute configured binaries. An initial defaults-order error disabled PSRAM and selected the wrong target/console; corrected only hardware fields and regenerated. Defaults do not override an already populated `sdkconfig`.
+- S3 dependency resolution updates `dependencies.lock`. Initial `cjson`, `esp-dl`, and `esp_new_jpeg` archive requests returned HTTP 403; ordinary retries succeeded after automatic network processing. All required downloads completed. No manual approval or TLS/security bypass.
+- GCC 14 reports misleading indentation in pinned TFT_eSPI S3 macros. The local component wrapper keeps this warning visible but non-fatal using PRIVATE `-Wno-error=misleading-indentation`; application/other components retain their warning policy. No downloaded dependency sources were edited.
+- Initial default-SPI runtime failed with `StoreProhibited` at address `0x10`: TFT_eSPI's default S3 register selection uses Arduino's `FSPI` enumeration, now 0 in Arduino 3.3.12, where IDF expects raw register index 2/3. Explicit `USE_FSPI_PORT` removed that invalid-address fault but stalled during the first SPI command with watchdog reports. `USE_HSPI_PORT` (SPI3) completed initialization/refresh counters but failed physical rendering. None of these TFT_eSPI configurations is accepted; the native SPI2 repair supersedes them. The FSPI stall's full cause is not established; watchdog checks remain enabled.
+- Final SPI3 application: **1,317,440 bytes (`0x141a40`)**, 68% factory-partition headroom. COM8 upload verified bootloader/application/partition-table hashes and reset the device, with no full-chip erase. Native USB logs confirm 2 cores, revision 2 (v0.2), 240 MHz CPU, 4,194,304-byte flash, 2,097,152-byte PSRAM at 40 MHz, and a passing SPI SRAM memory test. IDF reserves 32 KiB internal heap for DMA/internal allocations; this is a memory reserve, not a 32 KiB SPI transfer cap.
+- Allocation margin is measured against **PSRAM**: before Creality load, require largest block ≥112,500 bytes. This attempt passed that margin with 2,064,384 bytes before first load and 1,966,080 bytes during GIF/HTTP workloads, but failed rendering despite completed-refresh counters. It did not establish acceptance; the native IDF repair above subsequently passed.
+
+### S3 measurement results
+
+Saved serial evidence: `spikes/display/build/s3/log.knomi_display_spike.20261108015910.txt`. First segment reached uptime **276,687 ms**, with repeated source swaps and printer messages increasing to **61**, one connection attempt, all links active, zero JSON errors and zero observed oversized messages. No panic, watchdog report, or decoder failure appeared in that segment. A USB disconnect/reconnect then showed `reset=1` (power-on), followed by a separate segment through 46,361 ms; do not treat the combined log as one uninterrupted stability run or infer the power cycle's cause. The monitor was stopped and its log closed; COM8 is released.
+
+All heap values are bytes. Internal capability mask is `MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT`; PSRAM is `MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT`. FPS excludes source-transition windows and counts completed LVGL refreshes, **not verified panel frames**.
+
+| Workload | Internal free | Internal largest | PSRAM free | PSRAM largest | Refresh FPS |
+|---|---|---|---|---|---|
+| Boot | 286,103 | 188,416 | 2,095,000 | 2,064,384 | 0.00 |
+| Network ready, pattern, before first GIF | 192,851 | 118,784 | 2,090,348 | 2,064,384 | 0.00 |
+| Creality after HTTP requests / repeated swaps | 192,519–192,555 | 114,688 | 1,998,128 | 1,966,080 | 8.75–9.20 |
+| Standby after HTTP requests / repeated swaps | 192,495–192,555 | 114,688 | 2,052,400 | 1,966,080 | 31.59–32.20 |
+
+- Minimum-ever internal heap after the five HTTP requests: **150,120**; PSRAM minimum: **1,973,536**. Steady internal DMA free is approximately **184,743–184,767**, with largest block **114,688**. Capability groups overlap; do not add internal and DMA figures as if they were separate pools.
+- Five consecutive GET requests to `http://192.168.0.74/api/status` passed during the first Creality visit. Response-time internal free: **188,539–188,819**, largest **114,688**; PSRAM free: **1,973,536–1,998,128**, largest **1,966,080**; DMA free **180,751–181,031**, largest **114,688**. These samples include HTTP/JSON/network transient allocations and are not the quiescent serial baseline.
+- **Owner physical checks failed on this S3 image:** stale mirrored content and static multicolored random pixels despite confirmed GPIO1–5 wiring, common ground and backlight power. Both-GIF/stopwatch and ten-minute playback failed. These failures were resolved by the native IDF repair above; heap/FPS counters alone did not prove working rendering.
+- Follow-up used the owner's working native IDF panel sequence, then repeated the display/heap gates successfully. Long-term soak and oversized-message coverage remain untested.
+
+From an activated ESP-IDF 5.5.5 PowerShell at the repository root:
 
 ```powershell
-Set-Location spikes/display
-idf.py build
-idf.py -p COM7 flash
-idf.py -p COM7 monitor
+$spike = Join-Path $PWD 'spikes/display'
+$build = Join-Path $spike 'build/s3'
+idf.py -C $spike -B $build -D IDF_TARGET=esp32s3 -D "SDKCONFIG=$build/sdkconfig" -D 'SDKCONFIG_DEFAULTS=sdkconfig;sdkconfig.defaults' build
+idf.py -C $spike -B $build -p COM8 flash
+idf.py -C $spike -B $build -p COM8 monitor
 ```
 
-If an approved local TFT_eSPI V2.5.43 source tree is supplied instead, configure with `idf.py -D FETCHCONTENT_SOURCE_DIR_TFT_ESPI=C:/path/to/TFT_eSPI reconfigure` before building. Arduino and LVGL still require their pinned managed components.
+The first `sdkconfig` defaults file is only for existing local credentials; a fresh checkout should use tracked defaults alone (`SDKCONFIG_DEFAULTS=sdkconfig.defaults`) and configure credentials through `idf.py -C $spike -B $build menuconfig`. Open **KNOMI Phase 0.3 heap spike**, enter credentials locally and confirm printer `192.168.0.55:9999`. Do not share credentials or screenshots containing them. Generated SDK configuration is ignored but plaintext locally and embedded in the binary; keep it out of tracked defaults/logs/distributed artifacts. Verify generated hardware fields after configuration changes; defaults alone do not replace saved settings.
 
-The spike uses a factory-only 4 MiB partition layout with reserved coredump space. Flash replaces the current application; no full-chip erase is performed automatically.
+## Current S3 workload and display checks
 
-## 2026-11-06: Phase 0.2 SPI speed decision
-
-Status: **completed; retain 40 MHz display SPI.**
-
-- Owner chose to keep the validated 40 MHz baseline, using the accepted Phase 0.1 GIF stability test as evidence. Existing `SPI_FREQUENCY=40000000` remains unchanged; no rebuild or flash is needed for this decision.
-- Higher speeds, such as 80 MHz, are untested and deferred as an optional future improvement if rendering performance requires it. They are not required for current implementation or acceptance; any future increase needs renewed panel/wiring stability testing.
-
-## Device checks (owner-confirmed passed)
-
-1. After reset, observe the first 30 seconds: three bars must be red, green, blue from left to right, with white `TOP - RGB` / `DMA 40 MHz` text above on a black background. Check upright, readable text and expected colors, not inverted or tinted colors.
-2. At approximately 30 seconds, the centered Creality animation and `00:00` stopwatch appear; at approximately 60 seconds, the green standby animation appears. GIFs then alternate every 30 seconds while the stopwatch keeps counting once per second. Both must animate repeatedly, rather than display one frozen frame. Check that the stopwatch remains readable below either GIF and does not reset at a GIF switch.
-3. Check both animations for random pixels, flicker, torn horizontal bands, trails after a source change, clipping, or label overlap. No `GIF allocation failed` message should appear.
-4. Leave it powered until the stopwatch reaches at least `10:00`. There must be no reset to the initial RGB pattern, lockup, blank screen, or progressive corruption. Compare heap values at repeated visits to the same GIF; values for different GIFs are expected to differ. The minimum-ever heap need not recover.
-5. After the run, use the board's RESET/EN button once and confirm the RGB pattern and GIF sequence start again reliably. Do not hold BOOT during reset, as GPIO0 selects the ROM bootloader.
-
-The owner confirmed all checks above passed. This spike has no printer connection or button-driven application UI.
+- Network task on core 0 (6 KiB stack), UI task on core 1 (8 KiB); only the UI task calls LVGL. Plain diagnostic snapshots are copied under a short critical section; no lock spans LVGL/HTTP/socket operations.
+- Wi-Fi STA, ESPAsyncWebServer 3.12.1 / AsyncTCP 3.5.0, GET-only `/api/status`, read-only WS to `192.168.0.55:9999`. WS validates upgrade/accept headers, handles continuation/ping/pong/close, masks client messages, and discards oversized/binary messages in 512-byte chunks using a static 4 KiB text buffer. Outbound application messages are heartbeat `ok` and the read-only `ReqPrinterPara` silence probe.
+- Filtered ArduinoJson 7.4.3 parsing uses a static 8 KiB arena; web responses exercise transient async-task allocations. First GIF/stopwatch wait for Wi-Fi, server, WS and at least one text message. One GIF alternates Creality/standby every 30 seconds; `MM:SS` updates once per second from monotonic time and continues across swaps.
+- Five-second logs report internal/PSRAM/DMA heaps, FPS, link flags and message/error/oversized/connection counters. `reconnects` counts attempts including the initial connection. Only active-link samples with continuing printer traffic qualify as network-loaded evidence.
+- Owner-confirmed S3 checks: correct startup RGB/text orientation, clean animation and readable continuous stopwatch for both GIFs, uninterrupted playback through `10:00`, and repeated cold boots with display attached. Do not hold BOOT during normal boot; GPIO0 selects the ROM bootloader.
+- This remains a measurement spike: fixed one-second retries, not production backoff/model/state derivation or completed Phase 4 protocol hardening. Other assets, live oversized-frame tests and the 24-hour soak remain pending. Higher SPI speeds are untested; retain the accepted 40 MHz configuration.
 
 ## Network download behavior
 
@@ -101,44 +150,8 @@ For future package downloads, including redownloads of these same versions:
 
 1. Attempt the normal package download. A temporary block or connection failure may initiate network processing rather than indicate a permanent denial.
 2. Allow processing time, then retry the same download normally. If progress needs to pause, tell the user which package is pending, let the user wait, and retry when they return; waiting does not mean they must manually approve it.
-3. Keep certificate validation and network controls enabled. If failures persist after the processing interval and retry, report the exact package, URL, and error instead of assuming approval or attempting a bypass.
+3. Keep certificate validation and network controls enabled. If a package still fails after several normal download attempts with processing time allowed between retries, report the attempted **package name, version, exact download URL, and error** to the user instead of assuming approval or attempting a bypass.
 
 This behavior applies to other packages as well. A previous successful download does not guarantee immediate availability on a future clean build or redownload.
 
-## Package-specific download approvals
-
-These are exact archive URLs returned by registry metadata for `spikes/display/dependencies.lock`, retained for future clean builds. All are now downloaded successfully through the component manager after automatic approval. IDF is installed; TFT_eSPI, Arduino, and the MP3 dependency are omitted here. The broad dependency set comes from Arduino's component manifest, not from intended KNOMI application features.
-
-| Package | Version | Archive URL |
-|---|---|---|
-| espressif/cbor | 0.6.1~4 | https://components-file.espressif.com/components/espressif/cbor/0.6.1~4/espressif__cbor-v0.6.1_4.zip |
-| espressif/esp-dsp | 1.8.2 | https://components-file.espressif.com/components/espressif/esp-dsp/1.8.2/espressif__esp-dsp-v1.8.2.zip |
-| espressif/esp-modbus | 2.1.4 | https://components-file.espressif.com/components/espressif/esp-modbus/2.1.4/espressif__esp-modbus-v2.1.4.zip |
-| espressif/esp-zboss-lib | 1.6.4 | https://components-file.espressif.com/components/espressif/esp-zboss-lib/1.6.4/espressif__esp-zboss-lib-v1.6.4.zip |
-| espressif/esp-zigbee-lib | 1.6.8 | https://components-file.espressif.com/components/espressif/esp-zigbee-lib/1.6.8/espressif__esp-zigbee-lib-v1.6.8.zip |
-| espressif/esp_daylight | 1.0.1 | https://components-file.espressif.com/components/espressif/esp_daylight/1.0.1/espressif__esp_daylight-v1.0.1.zip |
-| espressif/esp_diag_data_store | 1.1.1 | https://components-file.espressif.com/components/espressif/esp_diag_data_store/1.1.1/espressif__esp_diag_data_store-v1.1.1.zip |
-| espressif/esp_diagnostics | 1.3.4 | https://components-file.espressif.com/components/espressif/esp_diagnostics/1.3.4/espressif__esp_diagnostics-v1.3.4.zip |
-| espressif/esp_insights | 1.3.4 | https://components-file.espressif.com/components/espressif/esp_insights/1.3.4/espressif__esp_insights-v1.3.4.zip |
-| espressif/esp_modem | 2.1.0 | https://components-file.espressif.com/components/espressif/esp_modem/2.1.0/espressif__esp_modem-v2.1.0.zip |
-| espressif/esp_rainmaker | 2.1.0 | https://components-file.espressif.com/components/espressif/esp_rainmaker/2.1.0/espressif__esp_rainmaker-v2.1.0.zip |
-| espressif/esp_schedule | 1.3.3 | https://components-file.espressif.com/components/espressif/esp_schedule/1.3.3/espressif__esp_schedule-v1.3.3.zip |
-| espressif/esp_secure_cert_mgr | 2.9.3 | https://components-file.espressif.com/components/espressif/esp_secure_cert_mgr/2.9.3/espressif__esp_secure_cert_mgr-v2.9.3.zip |
-| espressif/jsmn | 1.2.0 | https://components-file.espressif.com/components/espressif/jsmn/1.2.0/espressif__jsmn-v1.2.0.zip |
-| espressif/json_generator | 2.1.0 | https://components-file.espressif.com/components/espressif/json_generator/2.1.0/espressif__json_generator-v2.1.0.zip |
-| espressif/json_parser | 2.0.0 | https://components-file.espressif.com/components/espressif/json_parser/2.0.0/espressif__json_parser-v2.0.0.zip |
-| espressif/lan867x | 2.1.0 | https://components-file.espressif.com/components/espressif/lan867x/2.1.0/espressif__lan867x-v2.1.0.zip |
-| espressif/lan86xx_common | 1.0.1 | https://components-file.espressif.com/components/espressif/lan86xx_common/1.0.1/espressif__lan86xx_common-v1.0.1.zip |
-| espressif/libsodium | 1.0.22~1 | https://components-file.espressif.com/components/espressif/libsodium/1.0.22~1/espressif__libsodium-v1.0.22_1.zip |
-| espressif/mdns | 1.15.1 | https://components-file.espressif.com/components/espressif/mdns/1.15.1/espressif__mdns-v1.15.1.zip |
-| espressif/network_provisioning | 1.0.2 | https://components-file.espressif.com/components/espressif/network_provisioning/1.0.2/espressif__network_provisioning-v1.0.2.zip |
-| espressif/qrcode | 0.1.0~2 | https://components-file.espressif.com/components/espressif/qrcode/0.1.0~2/espressif__qrcode-v0.1.0_2.zip |
-| espressif/rmaker_cmd_resp | 1.0.0 | https://components-file.espressif.com/components/espressif/rmaker_cmd_resp/1.0.0/espressif__rmaker_cmd_resp-v1.0.0.zip |
-| espressif/rmaker_common | 1.12.0 | https://components-file.espressif.com/components/espressif/rmaker_common/1.12.0/espressif__rmaker_common-v1.12.0.zip |
-| espressif/rmaker_common_events | 1.2.0 | https://components-file.espressif.com/components/espressif/rmaker_common_events/1.2.0/espressif__rmaker_common_events-v1.2.0.zip |
-| espressif/rmaker_console | 1.1.0 | https://components-file.espressif.com/components/espressif/rmaker_console/1.1.0/espressif__rmaker_console-v1.1.0.zip |
-| espressif/rmaker_system_ctrl | 1.0.0 | https://components-file.espressif.com/components/espressif/rmaker_system_ctrl/1.0.0/espressif__rmaker_system_ctrl-v1.0.0.zip |
-| espressif/rmaker_time_sync | 1.0.2 | https://components-file.espressif.com/components/espressif/rmaker_time_sync/1.0.2/espressif__rmaker_time_sync-v1.0.2.zip |
-| espressif/rmaker_work_queue | 1.1.0 | https://components-file.espressif.com/components/espressif/rmaker_work_queue/1.1.0/espressif__rmaker_work_queue-v1.1.0.zip |
-| joltwallet/littlefs | 1.23.1 | https://components-file.espressif.com/components/joltwallet/littlefs/1.23.1/joltwallet__littlefs-v1.23.1.zip |
-| lvgl/lvgl | 8.4.0 | https://components-file.espressif.com/components/lvgl/lvgl/8.4.0/lvgl__lvgl-v8.4.0.zip |
+For S3 clean builds, use `spikes/display/dependencies.lock` as the authoritative resolved dependency list. Arduino's broad component manifest supplies dependencies beyond KNOMI's intended application features; no separate archive-approval history is retained here.
